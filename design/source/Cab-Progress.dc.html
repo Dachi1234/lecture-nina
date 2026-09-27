@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ka">
+<head>
+<meta charset="utf-8">
+<title>Cabinet · Progress</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap">
+<style>
+@font-face{font-family:'FiraGO';src:url(/_blob/03b6d26b02554995b6d3636b925c47f1) format('woff2');font-weight:400;font-display:swap;unicode-range:U+10A0-10FF,U+1C90-1CBF}
+@font-face{font-family:'FiraGO';src:url(/_blob/727c84beb3fcb64e3bb41707306e1e2a) format('woff2');font-weight:500;font-display:swap;unicode-range:U+10A0-10FF,U+1C90-1CBF}
+@font-face{font-family:'FiraGO';src:url(/_blob/3aebab4e8c84e7b7ee4184ba204621ec) format('woff2');font-weight:600;font-display:swap;unicode-range:U+10A0-10FF,U+1C90-1CBF}
+@font-face{font-family:'FiraGO';src:url(/_blob/a79aa21764b3df0f253baf5e218f5120) format('woff2');font-weight:700;font-display:swap;unicode-range:U+10A0-10FF,U+1C90-1CBF}
+body{margin:0;background:#FCF7E6;color:#0A414F;font-family:'FiraGO','Montserrat',system-ui,sans-serif}
+h1,h2,p{margin:0}
+.hand{font-family:'Caveat',cursive;font-weight:600;line-height:1}
+.nav{height:48px;padding:0 14px;display:flex;align-items:center;gap:12px;border-radius:12px;color:#0A414F;text-decoration:none;font-size:15px;font-weight:500}
+.nav:hover{background:#EFE3CB}
+.nav.on{background:#196166;color:#FCF7E6;font-weight:600}
+.card{border-radius:16px;background:#FFFCF3;border:1.5px solid #E4D3B4;padding:22px}
+.stat{display:flex;flex-direction:column;gap:4px}
+.big{font:700 40px Montserrat,sans-serif;line-height:1}
+.b{display:grid;grid-template-columns:40px 220px 1fr 80px;gap:14px;align-items:center;height:40px}
+.tr{height:10px;border-radius:5px;background:#E4D3B4}
+.tr>div{height:10px;border-radius:5px}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; overflow: hidden; background: #FCF7E6; display: flex">
+  <aside style="width: 248px; flex-shrink: 0; background: #F6EDD3; border-right: 1px solid #E4D3B4; padding: 24px 16px; box-sizing: border-box; display: flex; flex-direction: column; gap: 4px">
+    <img src="/_blob/9f506bb9b8be2b84cb329cc1eaf189a3" alt="Nina – Tu Profe de Español" style="width: 84px; margin: 0 0 24px 10px">
+    <a class="nav" href="Cab-Home.dc.html">მთავარი</a>
+    <a class="nav" href="Cab-Lessons.dc.html">გაკვეთილები</a>
+    <a class="nav" href="Cab-Library.dc.html">მასალები</a>
+    <a class="nav" href="Cab-Vocabulary.dc.html">ლექსიკა</a>
+    <a class="nav on" href="Cab-Progress.dc.html" aria-current="page">პროგრესი</a>
+    <div style="margin-top: auto; padding: 12px 10px; border-top: 1px solid #E4D3B4; font-size: 14px; font-weight: 600">მარიამი</div>
+  </aside>
+  <main style="flex-grow: 1; padding: 44px 56px; box-sizing: border-box; display: flex; flex-direction: column; gap: 22px">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end">
+      <div style="display: flex; flex-direction: column; gap: 6px"><span class="hand" style="font-size: 32px; color: #841B22">Poco a poco</span><h1 style="font-size: 34px; font-weight: 700">ჩემი პროგრესი · A1</h1></div>
+      <img src="/_blob/55089b377a14de0b666d634b6d40a297" alt="" style="height: 120px; margin-bottom: -20px">
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px">
+      <div class="card stat"><span class="big">7</span><span style="font-size: 14px; color: #4A6268">გაკვეთილი</span></div>
+      <div class="card stat"><span class="big">16<span style="font-size: 22px; color: #4A6268"> / 45</span></span><span style="font-size: 14px; color: #4A6268">თემა გავლილი</span></div>
+      <div class="card stat"><span class="big">45<span style="font-size: 22px; color: #4A6268"> / 59</span></span><span style="font-size: 14px; color: #4A6268">მასალა დასრულებული</span></div>
+      <div class="card stat" style="background: #E0EAE3; border-color: #C9DBCF"><span class="big" style="color: #34605A">2</span><span style="font-size: 14px; color: #34605A">checkpoint ჩაბარებული</span></div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1.6fr 1fr; gap: 20px">
+      <section class="card" style="display: flex; flex-direction: column; gap: 6px">
+        <h2 style="font-size: 18px; font-weight: 700; margin-bottom: 8px">ბლოკები</h2>
+        <div class="b"><span style="font: 700 14px Montserrat, sans-serif; color: #34605A">1</span><span style="font-size: 15px">¡Hola! · მისალმება</span><div class="tr"><div style="width: 100%; background: #5B8A81"></div></div><span style="font-size: 13px; color: #34605A">✓ 4/4</span></div>
+        <div class="b"><span style="font: 700 14px Montserrat, sans-serif; color: #34605A">2</span><span style="font-size: 15px">Me presento</span><div class="tr"><div style="width: 100%; background: #5B8A81"></div></div><span style="font-size: 13px; color: #34605A">✓ 5/5</span></div>
+        <div class="b"><span style="font: 700 14px Montserrat, sans-serif; color: #7A4A00">3</span><b style="font-size: 15px">En el café</b><div class="tr"><div style="width: 60%; background: #F5B246"></div></div><span style="font-size: 13px">3/5</span></div>
+        <div class="b"><span style="font: 700 14px Montserrat, sans-serif; color: #4A6268">4</span><span style="font-size: 15px; color: #4A6268">¿Dónde está?</span><div class="tr"></div><span style="font-size: 13px; color: #4A6268">0/4</span></div>
+        <div class="b"><span style="font: 700 14px Montserrat, sans-serif; color: #4A6268">5</span><span style="font-size: 15px; color: #4A6268">Mi día</span><div class="tr"></div><span style="font-size: 13px; color: #4A6268">0/5</span></div>
+        <div class="b"><span style="font: 700 14px Montserrat, sans-serif; color: #4A6268">6</span><span style="font-size: 15px; color: #4A6268">Mi familia</span><div class="tr"></div><span style="font-size: 13px; color: #4A6268">0/4</span></div>
+        <div class="b"><span style="font: 700 14px Montserrat, sans-serif; color: #4A6268">…</span><span style="font-size: 15px; color: #4A6268">ბლოკები 7–10</span><div class="tr"></div><span style="font-size: 13px; color: #4A6268"></span></div>
+        <p style="font-size: 12px; color: #4A6268; margin-top: 8px">ბლოკების სახელები სამუშაოა — საბოლოოს ნინა განსაზღვრავს.</p>
+      </section>
+      <section class="card" style="display: flex; flex-direction: column; gap: 12px">
+        <h2 style="font-size: 18px; font-weight: 700">Checkpoints</h2>
+        <div style="display: flex; gap: 12px; align-items: center; padding: 12px; border-radius: 12px; background: #E0EAE3"><span style="width: 36px; height: 36px; border-radius: 50%; background: #5B8A81; color: #FCF7E6; display: flex; align-items: center; justify-content: center">✓</span><div style="flex-grow: 1"><b style="font-size: 15px">ბლოკი 1</b><div style="font-size: 13px; color: #34605A">19 / 20</div></div></div>
+        <div style="display: flex; gap: 12px; align-items: center; padding: 12px; border-radius: 12px; background: #E0EAE3"><span style="width: 36px; height: 36px; border-radius: 50%; background: #5B8A81; color: #FCF7E6; display: flex; align-items: center; justify-content: center">✓</span><div style="flex-grow: 1"><b style="font-size: 15px">ბლოკი 2</b><div style="font-size: 13px; color: #34605A">17 / 20</div></div></div>
+        <div style="display: flex; gap: 12px; align-items: center; padding: 12px; border-radius: 12px; border: 1.5px dashed #D0AC84"><span style="width: 36px; height: 36px; box-sizing: border-box; border-radius: 50%; border: 2px solid #D0AC84; display: flex; align-items: center; justify-content: center; color: #4A6268">3</span><div style="flex-grow: 1"><b style="font-size: 15px">ბლოკი 3</b><div style="font-size: 13px; color: #4A6268">გაიხსნება ბლოკის ბოლოს</div></div></div>
+        <div style="margin-top: auto; padding: 14px; border-radius: 12px; background: #FCE8C0; display: flex; gap: 12px; align-items: center"><span class="hand" style="font-size: 30px; color: #841B22">A1</span><span style="font-size: 14px; line-height: 1.5">საბოლოო შემოწმება — კურსის ბოლოს</span></div>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic { renderVals() { return {}; } }
+</script>
+</body>
+</html>

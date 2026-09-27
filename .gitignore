@@ -1,0 +1,16 @@
+node_modules
+.turbo
+.next
+dist
+out
+coverage
+*.tsbuildinfo
+.pnpm-store
+.env
+.env.local
+.env.*.local
+apps/api/.data
+apps/api/scripts/seed-content/.cache
+.DS_Store
+Thumbs.db
+.neon

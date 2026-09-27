@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ka">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Booking modal · form</title>
+<link rel="stylesheet" href="../assets/fonts/fonts.css">
+<style>
+body{margin:0;background:#FCF7E6;color:#0A414F;font-family:'FiraGO','Montserrat',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3,p{margin:0}
+.hand{font-family:'Caveat',cursive;font-weight:600;line-height:1}
+input,textarea,button{font-family:'FiraGO','Montserrat',sans-serif}
+input:focus,textarea:focus{outline:none;border-color:#196166 !important;box-shadow:0 0 0 4px #DCEAE6;background:#FFFFFF !important}
+button:focus-visible{outline:3px solid #F5B246;outline-offset:3px}
+.chip{cursor:pointer;transition:background-color .15s ease}.chip:hover{border-color:#196166 !important}
+.submit:hover{background:#124D51 !important}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{animation:spin .8s linear infinite}
+@keyframes pop{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+.pop{animation:pop .35s ease both}
+@media (prefers-reduced-motion:reduce){*{animation:none !important}}
+</style>
+</head>
+<body>
+
+<div style="width: 1440px; height: 1000px; position: relative; overflow: hidden; background: #FCF7E6">
+  
+  <div style="position: absolute; inset: 0; filter: blur(3px)">
+    <div style="position: absolute; left: 80px; top: 180px; font: 700 120px Montserrat, sans-serif; color: #0A414F">Nina</div>
+    <div style="position: absolute; left: 80px; top: 320px; font: 700 54px Montserrat, sans-serif; color: #0A414F">Tu Profe de Español</div>
+    <img src="../assets/illustrations/nina-standing.webp" alt="" style="position: absolute; left: 860px; top: 130px; height: 760px">
+  </div>
+  <div style="position: absolute; inset: 0; background: rgba(10,65,79,.55)"></div>
+
+  <div class="pop" role="dialog" aria-modal="true" aria-labelledby="bk-title" style="position: absolute; left: 220px; top: 60px; width: 1000px; height: 880px; border-radius: 24px; background: #FCF7E6; box-shadow: 0 40px 80px -30px rgba(0,0,0,.5); display: flex; overflow: hidden">
+    
+    <div style="width: 300px; flex-shrink: 0; background: #FCE8C0; position: relative; display: flex; flex-direction: column; padding: 36px 28px; box-sizing: border-box; gap: 14px">
+      <div class="hand" style="font-size: 44px; color: #841B22; transform: rotate(-4deg); transform-origin: left">¡Hola!</div>
+      <p style="font-size: 17px; line-height: 1.6; font-weight: 500">პირველი 2 გაკვეთილი — საჩუქრად.</p>
+      <p style="font-size: 15px; line-height: 1.6; color: #4A6268">შეავსე ფორმა და ნინა თავად დაგიკავშირდება, რომ შეთანხმდეთ დროზე.</p>
+      <svg style="position: absolute; left: 30px; bottom: 30px" width="250" height="250" viewBox="0 0 120 120" fill="none" aria-hidden="true"><path d="M96 22 A 50 50 0 1 0 108 70" stroke="#F5B246" stroke-width="3" stroke-linecap="round"></path></svg>
+      <img src="../assets/spots/spot-standing.webp" alt="" style="position: absolute; left: 70px; bottom: 16px; height: 440px">
+    </div>
+
+    
+    <div style="flex-grow: 1; position: relative; padding: 32px 40px; box-sizing: border-box">
+      <button aria-label="დახურვა" style="position: absolute; right: 20px; top: 20px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: #F1E3C8; color: #0A414F; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+
+      
+        <form style="display: flex; flex-direction: column; gap: 16px; opacity: 1">
+          <div style="display: flex; flex-direction: column; gap: 6px; padding-right: 56px">
+            <h2 id="bk-title" style="font-size: 30px; line-height: 1.2; font-weight: 700">დაჯავშნე საცდელი გაკვეთილი</h2>
+            
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+            <div style="display: flex; flex-direction: column; gap: 6px"><label for="bk-name" style="font-size: 14px; font-weight: 600">სახელი *</label><input id="bk-name" value="მარიამი" placeholder="მაგ. მარიამი" aria-invalid="false" style="height: 50px; box-sizing: border-box; padding: 0 14px; border-radius: 12px; border: 1.5px solid #D0AC84; background: #FFFCF3; font-size: 16px; color: #0A414F"></div>
+            <div style="display: flex; flex-direction: column; gap: 6px"><label for="bk-phone" style="font-size: 14px; font-weight: 600">ტელეფონი *</label><input id="bk-phone" type="tel" value="+995 555 12 34 56" placeholder="+995 5__ __ __ __" aria-invalid="false" style="height: 50px; box-sizing: border-box; padding: 0 14px; border-radius: 12px; border: 1.5px solid #D0AC84; background: #FFFCF3; font-size: 16px; color: #0A414F"></div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+            <div style="display: flex; flex-direction: column; gap: 6px"><label for="bk-email" style="font-size: 14px; font-weight: 600">ელ-ფოსტა <span style="font-weight: 400; color: #4A6268">(არასავალდებულო)</span></label><input id="bk-email" type="email" placeholder="name@mail.com" style="height: 50px; box-sizing: border-box; padding: 0 14px; border-radius: 12px; border: 1.5px solid #D0AC84; background: #FFFCF3; font-size: 16px"></div>
+            <div style="display: flex; flex-direction: column; gap: 6px"><span style="font-size: 14px; font-weight: 600">დღის მონაკვეთი</span>
+              <div style="display: flex; gap: 8px"><button type="button" class="chip" aria-pressed="false" style="flex-grow: 1; height: 50px; border-radius: 12px; border: 1.5px solid #D0AC84; background: #FFFCF3; color: #0A414F; font-size: 15px; font-weight: 500">დილა</button><button type="button" class="chip" aria-pressed="false" style="flex-grow: 1; height: 50px; border-radius: 12px; border: 1.5px solid #D0AC84; background: #FFFCF3; color: #0A414F; font-size: 15px; font-weight: 500">დღე</button><button type="button" class="chip" aria-pressed="true" style="flex-grow: 1; height: 50px; border-radius: 12px; border: 1.5px solid #196166; background: #196166; color: #FCF7E6; font-size: 15px; font-weight: 500">საღამო</button></div>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; font-weight: 600">როგორ დაგიკავშირდე?</span>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap"><button type="button" class="chip" aria-pressed="false" style="height: 44px; padding: 0 16px; border-radius: 12px; border: 1.5px solid #D0AC84; background: #FFFCF3; color: #0A414F; font-size: 15px; font-weight: 500">ტელეფონი</button><button type="button" class="chip" aria-pressed="true" style="height: 44px; padding: 0 16px; border-radius: 12px; border: 1.5px solid #196166; background: #196166; color: #FCF7E6; font-size: 15px; font-weight: 500">WhatsApp</button><button type="button" class="chip" aria-pressed="false" style="height: 44px; padding: 0 16px; border-radius: 12px; border: 1.5px solid #D0AC84; background: #FFFCF3; color: #0A414F; font-size: 15px; font-weight: 500">Telegram</button><button type="button" class="chip" aria-pressed="false" style="height: 44px; padding: 0 16px; border-radius: 12px; border: 1.5px solid #D0AC84; background: #FFFCF3; color: #0A414F; font-size: 15px; font-weight: 500">ელ-ფოსტა</button></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; font-weight: 600">რისთვის გინდა ესპანური?</span>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap"><button type="button" class="chip" aria-pressed="true" style="height: 44px; padding: 0 16px; border-radius: 12px; border: 1.5px solid #196166; background: #196166; color: #FCF7E6; font-size: 15px; font-weight: 500">მოგზაურობა</button><button type="button" class="chip" aria-pressed="false" style="height: 44px; padding: 0 16px; border-radius: 12px; border: 1.5px solid #D0AC84; background: #FFFCF3; color: #0A414F; font-size: 15px; font-weight: 500">სწავლა</button><button type="button" class="chip" aria-pressed="false" style="height: 44px; padding: 0 16px; border-radius: 12px; border: 1.5px solid #D0AC84; background: #FFFCF3; color: #0A414F; font-size: 15px; font-weight: 500">გადასვლა</button><button type="button" class="chip" aria-pressed="false" style="height: 44px; padding: 0 16px; border-radius: 12px; border: 1.5px solid #D0AC84; background: #FFFCF3; color: #0A414F; font-size: 15px; font-weight: 500">გართობისთვის</button><button type="button" class="chip" aria-pressed="false" style="height: 44px; padding: 0 16px; border-radius: 12px; border: 1.5px solid #D0AC84; background: #FFFCF3; color: #0A414F; font-size: 15px; font-weight: 500">სხვა</button></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; font-weight: 600">სასურველი დღეები</span>
+            <div style="display: flex; gap: 8px"><button type="button" class="chip" aria-pressed="false" style="width: 64px; height: 44px; border-radius: 12px; border: 1.5px solid #D0AC84; background: #FFFCF3; color: #0A414F; font-size: 14px; font-weight: 500">ორშ</button><button type="button" class="chip" aria-pressed="true" style="width: 64px; height: 44px; border-radius: 12px; border: 1.5px solid #196166; background: #196166; color: #FCF7E6; font-size: 14px; font-weight: 500">სამ</button><button type="button" class="chip" aria-pressed="false" style="width: 64px; height: 44px; border-radius: 12px; border: 1.5px solid #D0AC84; background: #FFFCF3; color: #0A414F; font-size: 14px; font-weight: 500">ოთხ</button><button type="button" class="chip" aria-pressed="true" style="width: 64px; height: 44px; border-radius: 12px; border: 1.5px solid #196166; background: #196166; color: #FCF7E6; font-size: 14px; font-weight: 500">ხუთ</button><button type="button" class="chip" aria-pressed="false" style="width: 64px; height: 44px; border-radius: 12px; border: 1.5px solid #D0AC84; background: #FFFCF3; color: #0A414F; font-size: 14px; font-weight: 500">პარ</button><button type="button" class="chip" aria-pressed="false" style="width: 64px; height: 44px; border-radius: 12px; border: 1.5px solid #D0AC84; background: #FFFCF3; color: #0A414F; font-size: 14px; font-weight: 500">შაბ</button><button type="button" class="chip" aria-pressed="false" style="width: 64px; height: 44px; border-radius: 12px; border: 1.5px solid #D0AC84; background: #FFFCF3; color: #0A414F; font-size: 14px; font-weight: 500">კვ</button></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px"><label for="bk-note" style="font-size: 14px; font-weight: 600">შენიშვნა <span style="font-weight: 400; color: #4A6268">(არასავალდებულო)</span></label><textarea id="bk-note" placeholder="მაგ. სექტემბერში ვალენსიაში გადავდივარ" style="height: 64px; box-sizing: border-box; padding: 12px 14px; border-radius: 12px; border: 1.5px solid #D0AC84; background: #FFFCF3; font-size: 15px; resize: none"></textarea></div>
+          <button type="button" role="checkbox" aria-checked="true" style="display: flex; gap: 12px; align-items: center; border: 0; background: transparent; padding: 0; text-align: left; font-size: 14px; color: #0A414F; cursor: pointer">
+            <span style="width: 24px; height: 24px; flex-shrink: 0; box-sizing: border-box; border-radius: 6px; border: 2px solid #196166; background: #196166; display: flex; align-items: center; justify-content: center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FCF7E6" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"></path></svg></span>
+            ვეთანხმები, რომ ნინამ ჩემი მონაცემები გამოიყენოს დასაკავშირებლად *
+          </button>
+          <button type="button" class="submit" style="height: 58px; border: 0; border-radius: 14px; background: #196166; color: #FCF7E6; font-size: 17px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 12px; cursor: pointer">
+            გაგზავნა</button>
+        </form>
+      
+
+      
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>

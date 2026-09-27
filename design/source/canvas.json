@@ -1,0 +1,348 @@
+{
+ "v": 3,
+ "attachments": {},
+ "boards": {
+  "Booking-Mobile.dc.html": {
+   "h": 1180,
+   "page": "landing",
+   "title": "Booking sheet · Mobile",
+   "w": 390,
+   "x": 2500,
+   "y": 1120,
+   "is_interactive": true
+  },
+  "Booking-Success-Mobile.dc.html": {
+   "h": 844,
+   "page": "landing",
+   "title": "Booking success · Mobile",
+   "w": 390,
+   "x": 2970,
+   "y": 1120,
+   "is_interactive": true
+  },
+  "Booking.dc.html": {
+   "h": 1000,
+   "is_interactive": true,
+   "page": "landing",
+   "title": "Booking modal · Desktop",
+   "w": 1440,
+   "x": 2500,
+   "y": 0
+  },
+  "Cab-Exercises.dc.html": {
+   "h": 2560,
+   "page": "cabinet",
+   "title": "C6 · Exercise player + layouts",
+   "w": 1440,
+   "x": 1520,
+   "y": 1800
+  },
+  "Cab-Home.dc.html": {
+   "h": 1000,
+   "page": "cabinet",
+   "title": "C2 · Home — ჩემი ესპანური",
+   "w": 1440,
+   "x": 1520,
+   "y": 0,
+   "is_interactive": true
+  },
+  "Cab-Lesson.dc.html": {
+   "h": 1400,
+   "page": "cabinet",
+   "title": "C4 · Lesson page (core)",
+   "w": 1440,
+   "x": 4560,
+   "y": 0,
+   "is_interactive": true
+  },
+  "Cab-Lessons.dc.html": {
+   "h": 1000,
+   "page": "cabinet",
+   "title": "C3 · My lessons",
+   "w": 1440,
+   "x": 3040,
+   "y": 0,
+   "is_interactive": true
+  },
+  "Cab-Library.dc.html": {
+   "h": 900,
+   "page": "cabinet",
+   "title": "C7 · My materials (library)",
+   "w": 1440,
+   "x": 3040,
+   "y": 1800,
+   "is_interactive": true
+  },
+  "Cab-Login.dc.html": {
+   "h": 900,
+   "page": "cabinet",
+   "title": "C1 · Login",
+   "w": 1440,
+   "x": 0,
+   "y": 0,
+   "is_interactive": true
+  },
+  "Cab-Progress.dc.html": {
+   "h": 900,
+   "page": "cabinet",
+   "title": "C9 · Progress",
+   "w": 1440,
+   "x": 3040,
+   "y": 2820,
+   "is_interactive": true
+  },
+  "Cab-States.dc.html": {
+   "h": 900,
+   "page": "cabinet",
+   "title": "C10 · Empty / loading / error",
+   "w": 1440,
+   "x": 4560,
+   "y": 2820
+  },
+  "Cab-Viewers.dc.html": {
+   "h": 1760,
+   "page": "cabinet",
+   "title": "C5 · Material viewers",
+   "w": 1440,
+   "x": 0,
+   "y": 1800
+  },
+  "Cab-Vocabulary.dc.html": {
+   "h": 900,
+   "page": "cabinet",
+   "title": "C8 · Vocabulary",
+   "w": 1440,
+   "x": 4560,
+   "y": 1800,
+   "is_interactive": true
+  },
+  "DesignSystem.dc.html": {
+   "h": 5200,
+   "page": "system",
+   "title": "Nina Design System · Style guide",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "Landing-Mobile.dc.html": {
+   "h": 5000,
+   "page": "landing",
+   "title": "Landing · Mobile 390 (1/2)",
+   "w": 390,
+   "x": 1560,
+   "y": 0,
+   "is_interactive": true
+  },
+  "M-Card.dc.html": {
+   "h": 844,
+   "page": "cabinet",
+   "title": "M · Image card viewer",
+   "w": 390,
+   "x": 940,
+   "y": 4760
+  },
+  "M-Exercise.dc.html": {
+   "h": 844,
+   "page": "cabinet",
+   "title": "M · Exercise",
+   "w": 390,
+   "x": 1410,
+   "y": 4760
+  },
+  "M-Home.dc.html": {
+   "h": 844,
+   "page": "cabinet",
+   "title": "M · Home",
+   "w": 390,
+   "x": 0,
+   "y": 4760,
+   "is_interactive": true
+  },
+  "M-Lesson.dc.html": {
+   "h": 844,
+   "page": "cabinet",
+   "title": "M · Lesson",
+   "w": 390,
+   "x": 470,
+   "y": 4760,
+   "is_interactive": true
+  },
+  "Main.dc.html": {
+   "guides": [
+    {
+     "count": 12,
+     "gutter": 24,
+     "hidden": true,
+     "kind": "columns",
+     "margin": 80
+    }
+   ],
+   "h": 5540,
+   "is_interactive": true,
+   "page": "landing",
+   "title": "Landing · Desktop 1440 (1/2)",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "Mobile-Menu.dc.html": {
+   "h": 844,
+   "page": "landing",
+   "title": "Mobile menu (open)",
+   "w": 390,
+   "x": 2030,
+   "y": 0,
+   "is_interactive": true
+  },
+  "Main-2.dc.html": {
+   "x": 0,
+   "y": 5600,
+   "w": 1440,
+   "h": 4940,
+   "title": "Landing · Desktop 1440 (2/2)",
+   "page": "landing",
+   "is_interactive": true
+  },
+  "Landing-Mobile-2.dc.html": {
+   "x": 1560,
+   "y": 5080,
+   "w": 390,
+   "h": 7200,
+   "title": "Landing · Mobile 390 (2/2)",
+   "page": "landing",
+   "is_interactive": true
+  }
+ },
+ "createdOnFiles": {
+  "at": "2026-09-26T12:00:00Z",
+  "v": 1
+ },
+ "designSystems": [],
+ "launch": {
+  "page": "landing",
+  "view": "canvas"
+ },
+ "notes": {
+  "n_cab_data": {
+   "fill": "teal",
+   "maxH": 900,
+   "page": "cabinet",
+   "text": "DATA MODEL (for devs)\nStudent → Assignments (lesson | material, ready_for_student = true) → shown in cabinet.\nLesson: id, number, date, title, note_from_nina, topics[], materials[] (ordered by Nina), homework[].\nMaterial: id, type (card | vocab | dialogue | story | video | audio | document | grammar | exercise | game | pronunciation | reader | review | checkpoint), title, files[], topics[], is_personal, is_homework, due_date.\nProgress per student×material: not_started | opened | completed.\nExercise: structured JSON + template_id → rendered by the shared Exercise Frame (C6). New templates plug into the frame; no cabinet redesign.\n\nNavigation (max 5): Home · Lessons · Materials · Vocabulary · Progress. Desktop = left sidebar; mobile = bottom tab bar.\nNo public sign-up. No dark mode. No textbook names anywhere.",
+   "w": 420,
+   "x": 6100,
+   "y": 0
+  },
+  "n_cab_status": {
+   "fill": "green",
+   "maxH": 560,
+   "page": "cabinet",
+   "text": "STATUS LANGUAGE\nLesson: ახალი (new, teal-soft) · მიმდინარე (in progress, mustard-soft) · დასრულებული (done, sage).\nMaterial: not started = empty ring · opened = half ring · completed = sage check.\n„Mark as done“ = student action; exercises auto-complete on the completion screen.\nHomework: burgundy-soft chip + due date.",
+   "w": 420,
+   "x": 6100,
+   "y": 1000
+  },
+  "n_landing": {
+   "fill": "orange",
+   "maxH": 640,
+   "page": "landing",
+   "text": "Rhythm: Lively → Calm alternates.\nHero (L) · Meet Nina (C) · Different (L) · Stories (L, navy) · How a lesson works (C) · Materials (L) · Cabinet (C) · Poco a Poco path (C) · Gift (L) · Pricing (C) · FAQ (C) · Final CTA (L) · Footer.\n\nPrimary CTA „დაჯავშნე საცდელი გაკვეთილი“ appears 6× (header, hero, stories, gift, pricing, final). Every CTA opens the Booking modal (desktop) / full-screen sheet (mobile).\n\nDesktop is split in two artboards only because of canvas height limits — it is one continuous page.\n\nInteractive on desktop (press Play): dialogue translation toggle, Spanish in Action pad, FAQ accordion.\n\nHeader on scroll: 88→68px, cream bg, 1px sand divider (see Design system › Header states).",
+   "w": 380,
+   "x": 4060,
+   "y": 0
+  },
+  "n_mobile": {
+   "fill": "blue",
+   "maxH": 520,
+   "page": "cabinet",
+   "text": "Mobile rules\n• Bottom tab bar, 5 items, 64px + safe area.\n• Image card viewer: full-screen 9:16, pinch-zoom, swipe ← → between cards of the same lesson.\n• Exercises: continuous scroll, sticky Check button above the tab bar.\n• Touch targets ≥ 44px.",
+   "w": 380,
+   "x": 1900,
+   "y": 4760
+  },
+  "t_cab1": {
+   "kind": "title1",
+   "maxW": 6000,
+   "page": "cabinet",
+   "text": "Student cabinet — developer reference (mid-fi)",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t_cab2": {
+   "kind": "title1",
+   "maxW": 6000,
+   "page": "cabinet",
+   "text": "Viewers, exercises, library, vocabulary, progress, states",
+   "w": 240,
+   "x": 0,
+   "y": 1500
+  },
+  "t_cab3": {
+   "kind": "title1",
+   "maxW": 1800,
+   "page": "cabinet",
+   "text": "Mobile — key screens (bottom tab bar)",
+   "w": 240,
+   "x": 0,
+   "y": 4460
+  },
+  "t_landing": {
+   "kind": "title1",
+   "maxW": 3900,
+   "page": "landing",
+   "text": "Landing page — high fidelity",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t_system": {
+   "kind": "title1",
+   "maxW": 1440,
+   "page": "system",
+   "text": "Nina Design System",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  }
+ },
+ "order": [
+  "Main.dc.html",
+  "Main-2.dc.html",
+  "Landing-Mobile.dc.html",
+  "Landing-Mobile-2.dc.html",
+  "Mobile-Menu.dc.html",
+  "Booking.dc.html",
+  "Booking-Mobile.dc.html",
+  "Booking-Success-Mobile.dc.html",
+  "DesignSystem.dc.html",
+  "Cab-Login.dc.html",
+  "Cab-Home.dc.html",
+  "Cab-Lessons.dc.html",
+  "Cab-Lesson.dc.html",
+  "Cab-Viewers.dc.html",
+  "Cab-Exercises.dc.html",
+  "Cab-Library.dc.html",
+  "Cab-Vocabulary.dc.html",
+  "Cab-Progress.dc.html",
+  "Cab-States.dc.html",
+  "M-Home.dc.html",
+  "M-Lesson.dc.html",
+  "M-Card.dc.html",
+  "M-Exercise.dc.html"
+ ],
+ "pages": [
+  {
+   "id": "landing",
+   "name": "Landing page"
+  },
+  {
+   "id": "system",
+   "name": "Design system"
+  },
+  {
+   "id": "cabinet",
+   "name": "Student cabinet"
+  }
+ ],
+ "title": "Nina – Tu Profe de Español · Website"
+}

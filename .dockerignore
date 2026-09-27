@@ -1,0 +1,13 @@
+node_modules
+**/node_modules
+**/.next
+**/dist
+**/.turbo
+.git
+apps/web
+apps/api/.data
+apps/api/scripts/seed-content/.cache
+design
+docs
+.agents
+.cursor

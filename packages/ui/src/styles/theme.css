@@ -1,0 +1,61 @@
+﻿/* Nina â€“ Tu Profe de EspaÃ±ol Â· Tailwind v4 theme (CSS-first).
+   Usage: in your globals.css â†’  @import "tailwindcss";  @import "./tailwind-v4-theme.css";  */
+
+@theme {
+  --color-paper: #FCF7E6;
+  --color-paper-deep: #F6EDD3;
+  --color-card: #FFFCF3;
+  --color-exercise: #F3EAD6;
+  --color-teal-deep: #196166;
+  --color-teal-hover: #124D51;
+  --color-teal-soft: #DCEAE6;
+  --color-teal-softer: #E4EFEC;
+  --color-navy: #0A414F;
+  --color-burgundy: #841B22;
+  --color-burgundy-hover: #6C141A;
+  --color-burgundy-soft: #F4DEDA;
+  --color-mustard: #F5B246;
+  --color-mustard-deep: #E89A2E;
+  --color-mustard-soft: #FCE8C0;
+  --color-mustard-ink: #7A4A00;
+  --color-sand: #D0AC84;
+  --color-sand-soft: #F1E3C8;
+  --color-line: #E4D3B4;
+  --color-line-soft: #EFE3CB;
+  --color-tile: #C9B08E;
+  --color-sage: #5B8A81;
+  --color-sage-soft: #E0EAE3;
+  --color-sage-ink: #34605A;
+  --color-pronunciation: #D6E9C9;
+  --color-terracotta: #C8734B;
+  --color-ink: #0A414F;
+  --color-ink-muted: #4A6268;
+  --color-on-dark: #FCF7E6;
+  --color-on-dark-muted: #CFE0DB;
+
+  --font-sans: "FiraGO", "Montserrat", system-ui, sans-serif;
+  --font-latin: "Montserrat", system-ui, sans-serif;
+  --font-hand: "Caveat", cursive;
+
+  --text-display: 64px;  --text-display--line-height: 1.1;
+  --text-h1: 48px;       --text-h1--line-height: 1.15;
+  --text-h2-landing: 46px; --text-h2-landing--line-height: 1.2;
+  --text-h2: 36px;       --text-h2--line-height: 1.2;
+  --text-h3: 24px;       --text-h3--line-height: 1.3;
+  --text-body-l: 20px;   --text-body-l--line-height: 1.6;
+  --text-body: 18px;     --text-body--line-height: 1.6;
+  --text-small: 14px;    --text-small--line-height: 1.5;
+  --text-overline: 12px; --text-overline--letter-spacing: 0.08em;
+
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --radius-xl: 20px; --radius-2xl: 24px;
+
+  --shadow-lift: 0 18px 36px -22px rgba(10,65,79,.5);
+  --shadow-card-hover: 0 22px 44px -24px rgba(10,65,79,.45);
+  --shadow-device: 0 30px 60px -30px rgba(10,65,79,.6);
+  --shadow-modal: 0 40px 80px -30px rgba(0,0,0,.5);
+
+  --animate-write: write 1.2s .35s cubic-bezier(.6,.1,.3,1) both;
+  --animate-floaty: floaty 7s ease-in-out infinite;
+  @keyframes write { from { clip-path: inset(0 100% 0 0) } to { clip-path: inset(0 -10% 0 0) } }
+  @keyframes floaty { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
+}

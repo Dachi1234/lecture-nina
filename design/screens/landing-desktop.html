@@ -1,0 +1,816 @@
+<!doctype html>
+<html lang="ka">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nina – Tu Profe de Español · Landing (desktop)</title>
+<link rel="stylesheet" href="../assets/fonts/fonts.css">
+<style>
+body{margin:0;background:#FCF7E6;color:#0A414F;font-family:'FiraGO','Montserrat',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#196166}a:hover{color:#0A414F}
+h1,h2,h3,h4,p{margin:0}
+.hand{font-family:'Caveat',cursive;font-weight:600;line-height:1}
+.btn{transition:transform .18s ease,background-color .18s ease,box-shadow .18s ease;cursor:pointer}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary:hover{background:#124D51 !important;box-shadow:0 10px 24px -10px rgba(10,65,79,.55)}
+.btn-burgundy:hover{background:#6C141A !important;box-shadow:0 10px 24px -10px rgba(132,27,34,.55)}
+.btn-ghost:hover{background:#E4EFEC !important}
+.btn-cream:hover{background:#FFFFFF !important}
+.navlink{transition:color .15s ease}.navlink:hover{color:#841B22 !important}
+.lift{transition:transform .25s ease,box-shadow .25s ease}.lift:hover{transform:translateY(-4px) rotate(0deg) !important;box-shadow:0 22px 44px -24px rgba(10,65,79,.45) !important}
+.pad-btn{transition:background-color .15s ease,transform .15s ease;cursor:pointer}.pad-btn:hover{background:#F5B246 !important;color:#0A414F !important}
+.faq-q{cursor:pointer}.faq-q:hover .faq-title{color:#841B22}
+button:focus-visible,a:focus-visible{outline:3px solid #F5B246;outline-offset:3px}
+@keyframes write{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 -10% 0 0)}}
+.write{animation:write 1.2s .35s cubic-bezier(.6,.1,.3,1) both}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.floaty{animation:floaty 7s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
+
+
+body{margin:0;background:#FCF7E6;color:#0A414F;font-family:'FiraGO','Montserrat',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#196166}a:hover{color:#0A414F}
+h1,h2,h3,h4,p{margin:0}
+.hand{font-family:'Caveat',cursive;font-weight:600;line-height:1}
+.btn{transition:transform .18s ease,background-color .18s ease,box-shadow .18s ease;cursor:pointer}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary:hover{background:#124D51 !important;box-shadow:0 10px 24px -10px rgba(10,65,79,.55)}
+.btn-burgundy:hover{background:#6C141A !important;box-shadow:0 10px 24px -10px rgba(132,27,34,.55)}
+.btn-ghost:hover{background:#E4EFEC !important}
+.btn-cream:hover{background:#FFFFFF !important}
+.navlink{transition:color .15s ease}.navlink:hover{color:#841B22 !important}
+.lift{transition:transform .25s ease,box-shadow .25s ease}.lift:hover{transform:translateY(-4px) rotate(0deg) !important;box-shadow:0 22px 44px -24px rgba(10,65,79,.45) !important}
+.pad-btn{transition:background-color .15s ease,transform .15s ease;cursor:pointer}.pad-btn:hover{background:#F5B246 !important;color:#0A414F !important}
+.faq-q{cursor:pointer}.faq-q:hover .faq-title{color:#841B22}
+button:focus-visible,a:focus-visible{outline:3px solid #F5B246;outline-offset:3px}
+@keyframes write{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 -10% 0 0)}}
+.write{animation:write 1.2s .35s cubic-bezier(.6,.1,.3,1) both}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.floaty{animation:floaty 7s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
+</style>
+</head>
+<body>
+
+
+<div style="width: 1440px; height: auto; position: relative; overflow: hidden; background: rgb(252, 247, 230);">
+
+
+<header style="position: relative; z-index: 20; height: 88px; box-sizing: border-box; padding: 0 80px; display: flex; align-items: center; justify-content: space-between; background: #FCF7E6">
+  <a href="#top" aria-label="Nina – Tu Profe de Español, მთავარი" style="display: flex; align-items: center">
+    <img src="../assets/logo/nina-logo.webp" alt="Nina – Tu Profe de Español" style="height: 68px; width: auto; display: block">
+  </a>
+  <nav aria-label="მთავარი ნავიგაცია" style="display: flex; gap: 36px; font-size: 16px; font-weight: 500">
+    <a class="navlink" href="#nina" style="color: #0A414F; text-decoration: none">ნინა</a>
+    <a class="navlink" href="#method" style="color: #0A414F; text-decoration: none">მეთოდი</a>
+    <a class="navlink" href="#stories" style="color: #0A414F; text-decoration: none">სიუჟეტები</a>
+    <a class="navlink" href="#materials" style="color: #0A414F; text-decoration: none">მასალები</a>
+    <a class="navlink" href="#price" style="color: #0A414F; text-decoration: none">ფასი</a>
+    <a class="navlink" href="#faq" style="color: #0A414F; text-decoration: none">კითხვები</a>
+  </nav>
+  <div style="display: flex; align-items: center; gap: 12px">
+    <a class="btn btn-ghost" href="cabinet-c1-login.html" style="height: 48px; padding: 0 20px; display: flex; align-items: center; gap: 8px; border-radius: 12px; color: #196166; text-decoration: none; font-weight: 600; font-size: 15px; background: transparent">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg>
+      შესვლა
+    </a>
+    <a class="btn btn-primary" href="booking-desktop-form.html" style="height: 48px; padding: 0 22px; display: flex; align-items: center; border-radius: 12px; background: #196166; color: #FCF7E6; text-decoration: none; font-weight: 600; font-size: 15px">დაჯავშნე საცდელი გაკვეთილი</a>
+  </div>
+</header>
+
+
+<section id="top" style="position: relative; height: 832px; overflow: hidden">
+  
+  <div style="position: absolute; left: 790px; top: 70px; width: 600px; height: 640px; background: #F3E4C8; border-radius: 52% 48% 44% 56% / 46% 52% 48% 54%"></div>
+  <svg style="position: absolute; left: 760px; top: 40px" width="660" height="700" viewBox="0 0 660 700" fill="none" aria-hidden="true">
+    <path d="M520 92 C 420 20, 230 18, 128 118 C 22 222, 30 430, 120 540" stroke="#F5B246" stroke-width="7" stroke-linecap="round"></path>
+    <path d="M536 108 C 450 40, 262 30, 150 124" stroke="#E89A2E" stroke-width="2.5" stroke-linecap="round" opacity=".7"></path>
+    <path d="M190 610 C 300 690, 470 680, 570 580 C 640 505, 650 400, 630 320" stroke="#F5B246" stroke-width="6" stroke-linecap="round"></path>
+  </svg>
+  <img class="floaty" src="../assets/illustrations/nina-standing.webp" alt="ნინა — ხვეული თმით, სათვალით, რვეულითა და კალმით ხელში, იღიმება" style="position: absolute; left: 860px; top: 44px; height: 760px; width: auto">
+  
+  <div class="hand" style="position: absolute; left: 1210px; top: 150px; font-size: 34px; color: #841B22; transform: rotate(6deg)">soy Nina</div>
+  <svg style="position: absolute; left: 1160px; top: 186px" width="80" height="70" viewBox="0 0 80 70" fill="none" aria-hidden="true"><path d="M66 6 C 58 36, 36 52, 10 58" stroke="#841B22" stroke-width="2.5" stroke-linecap="round"></path><path d="M20 48 L 9 58 L 23 63" stroke="#841B22" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+  <svg style="position: absolute; left: 812px; top: 250px" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M12 2v6M12 16v6M2 12h6M16 12h6"></path></svg>
+  <svg style="position: absolute; left: 1330px; top: 560px" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#F5B246" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 2v6M12 16v6M2 12h6M16 12h6"></path></svg>
+
+  <div style="position: absolute; left: 80px; top: 92px; width: 700px; display: flex; flex-direction: column; gap: 28px">
+    <div>
+      <div class="hand write" style="font-size: 56px; color: #841B22; transform: rotate(-5deg); transform-origin: left; margin-bottom: 4px; width: 160px">¡Hola!</div>
+      <h1 aria-label="Nina – Tu Profe de Español" style="font-family: 'Montserrat', sans-serif; color: #0A414F; font-weight: 700; letter-spacing: -0.02em">
+        <span style="display: block; font-size: 120px; line-height: 1">Nina</span>
+        <span style="display: block; font-size: 54px; line-height: 1.15; margin-top: 6px; position: relative">Tu Profe de <span style="position: relative; display: inline-block">Español<svg style="position: absolute; left: -6px; bottom: -14px" width="250" height="22" viewBox="0 0 300 22" preserveAspectRatio="none" aria-hidden="true"><path d="M4 13 C 70 6, 160 3, 296 8 C 298 12, 292 15, 286 14 C 190 12, 96 14, 9 19 C 3 19, 1 15, 4 13 Z" fill="#F5B246"></path></svg></span></span>
+      </h1>
+    </div>
+    <div style="display: flex; gap: 14px; align-items: flex-start; margin-top: 8px">
+      <div class="hand" style="font-size: 72px; color: #F5B246; line-height: .7; margin-top: 6px">“</div>
+      <p style="font-size: 25px; line-height: 1.5; font-weight: 500; color: #0A414F; max-width: 600px">„ესპანურ ენას კი არ ვასწავლი, ვასწავლი ესპანურ სამყაროს“</p>
+    </div>
+    <p style="font-size: 19px; line-height: 1.6; color: #4A6268">ინდივიდუალური ონლაინ გაკვეთილები ნულიდან — ზრდასრულებისთვის, ნაბიჯ-ნაბიჯ, Poco a Poco.</p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap">
+      <span style="padding: 8px 16px; border-radius: 999px; background: #FFFCF3; border: 1.5px solid #E4D3B4; font-size: 15px; font-weight: 500">ნულიდან</span>
+      <span style="padding: 8px 16px; border-radius: 999px; background: #FFFCF3; border: 1.5px solid #E4D3B4; font-size: 15px; font-weight: 500">ინდივიდუალური</span>
+      <span style="padding: 8px 16px; border-radius: 999px; background: #FFFCF3; border: 1.5px solid #E4D3B4; font-size: 15px; font-weight: 500">ონლაინ</span>
+      <span style="padding: 8px 16px; border-radius: 999px; background: #FFFCF3; border: 1.5px solid #E4D3B4; font-size: 15px; font-weight: 500">75 წუთი</span>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 14px; margin-top: 6px">
+      <a class="btn btn-primary" href="booking-desktop-form.html" style="height: 62px; padding: 0 32px; white-space: nowrap; display: flex; align-items: center; gap: 12px; border-radius: 14px; background: #196166; color: #FCF7E6; text-decoration: none; font-weight: 600; font-size: 18px">
+        დაჯავშნე საცდელი გაკვეთილი
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+      </a>
+      <div style="display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 600; color: #841B22">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#841B22" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="5" rx="1"></rect><path d="M5 13v7h14v-7M12 8v12M12 8c-1-3-5-4-5-1.5S10 8 12 8zM12 8c1-3 5-4 5-1.5S14 8 12 8z"></path></svg>
+        პირველი 2 გაკვეთილი — საჩუქრად
+      </div>
+    </div>
+    <a href="#method" style="display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 600; color: #196166; text-decoration: underline; text-decoration-color: #F5B246; text-decoration-thickness: 2px; text-underline-offset: 6px; width: fit-content">
+      როგორ მიმდინარეობს გაკვეთილი
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"></path></svg>
+    </a>
+  </div>
+</section>
+
+
+<section id="nina" style="position: relative; height: 760px; background: #FCF7E6">
+  <div style="position: absolute; left: 80px; top: 60px; width: 520px; height: 640px">
+    <svg style="position: absolute; left: -30px; top: -26px" width="590" height="700" viewBox="0 0 590 700" fill="none" aria-hidden="true"><path d="M90 640 C 10 560, 0 330, 40 200 C 80 70, 230 10, 360 26" stroke="#F5B246" stroke-width="5" stroke-linecap="round"></path></svg>
+    <img src="../assets/illustrations/scene-study-room.webp" alt="ნინა თავის ოთახში — წიგნების თაროები, „¡Hola España!“ პოსტერი, ქალაქის ხედი" style="position: absolute; inset: 0; width: 520px; height: 640px; object-fit: cover; object-position: 30% 38%; border-radius: 46% 54% 40% 60% / 34% 36% 64% 66%">
+  </div>
+  <div style="position: absolute; left: 700px; top: 110px; width: 660px; display: flex; flex-direction: column; gap: 22px">
+    <div class="hand" style="font-size: 40px; color: #196166">Conóceme</div>
+    <h2 style="font-size: 46px; line-height: 1.2; font-weight: 700; color: #0A414F">გამარჯობა, მე ნინა ვარ</h2>
+    <p style="font-size: 19px; line-height: 1.7; color: #0A414F">მთელი ცხოვრება ენებს ვსწავლობ. ქართულის გარდა ვისწავლე გერმანული, რუსული, ინგლისური, ესპანური და იტალიური.</p>
+    <p style="font-size: 19px; line-height: 1.7; color: #4A6268">ყოველთვის მინდოდა, რომ ჩემი სწავლა ყოფილიყო საინტერესო, მხიარული, მრავალფეროვანი და ჩემს მიზნებზე მორგებული. ზუსტად ასეთ გაკვეთილებს ვქმნი ჩემი მოსწავლეებისთვის.</p>
+    <div style="display: flex; gap: 16px; margin-top: 14px">
+      <div style="width: 108px; height: 128px; box-sizing: border-box; padding: 14px 10px; background: #FFFCF3; border: 2px dashed #D0AC84; border-radius: 6px; transform: rotate(-4deg); display: flex; flex-direction: column; justify-content: space-between; align-items: center">
+        <div style="font-family: Montserrat, sans-serif; font-size: 20px; font-weight: 700; color: #0A414F">Hallo</div>
+        <div style="width: 34px; height: 3px; background: #0A414F; border-radius: 2px"></div>
+        <div style="font-size: 13px; color: #4A6268">გერმანული</div>
+      </div>
+      <div style="width: 108px; height: 128px; box-sizing: border-box; padding: 14px 10px; background: #FFFCF3; border: 2px dashed #D0AC84; border-radius: 6px; transform: rotate(3deg); display: flex; flex-direction: column; justify-content: space-between; align-items: center">
+        <div style="font-family: Montserrat, sans-serif; font-size: 20px; font-weight: 700; color: #0A414F">Привет</div>
+        <div style="width: 34px; height: 3px; background: #5B8A81; border-radius: 2px"></div>
+        <div style="font-size: 13px; color: #4A6268">რუსული</div>
+      </div>
+      <div style="width: 108px; height: 128px; box-sizing: border-box; padding: 14px 10px; background: #FFFCF3; border: 2px dashed #D0AC84; border-radius: 6px; transform: rotate(-2deg); display: flex; flex-direction: column; justify-content: space-between; align-items: center">
+        <div style="font-family: Montserrat, sans-serif; font-size: 20px; font-weight: 700; color: #0A414F">Hello</div>
+        <div style="width: 34px; height: 3px; background: #196166; border-radius: 2px"></div>
+        <div style="font-size: 13px; color: #4A6268">ინგლისური</div>
+      </div>
+      <div style="width: 108px; height: 128px; box-sizing: border-box; padding: 14px 10px; background: #FCE8C0; border: 2px dashed #F5B246; border-radius: 6px; transform: rotate(4deg) translateY(-8px); display: flex; flex-direction: column; justify-content: space-between; align-items: center">
+        <div class="hand" style="font-size: 30px; color: #841B22">¡Hola!</div>
+        <div style="width: 34px; height: 3px; background: #841B22; border-radius: 2px"></div>
+        <div style="font-size: 13px; color: #0A414F; font-weight: 600">ესპანური</div>
+      </div>
+      <div style="width: 108px; height: 128px; box-sizing: border-box; padding: 14px 10px; background: #FFFCF3; border: 2px dashed #D0AC84; border-radius: 6px; transform: rotate(-3deg); display: flex; flex-direction: column; justify-content: space-between; align-items: center">
+        <div style="font-family: Montserrat, sans-serif; font-size: 20px; font-weight: 700; color: #0A414F">Ciao</div>
+        <div style="width: 34px; height: 3px; background: #D0AC84; border-radius: 2px"></div>
+        <div style="font-size: 13px; color: #4A6268">იტალიური</div>
+      </div>
+    </div>
+    <div class="hand" style="font-size: 44px; color: #196166; margin-top: 14px; transform: rotate(-2deg); transform-origin: left">Un día a la vez.</div>
+  </div>
+</section>
+
+
+<section id="method" style="position: relative; height: 900px; background: #FCF7E6">
+  <div style="position: absolute; left: 80px; top: 88px; width: 1280px; display: flex; justify-content: space-between; align-items: flex-end">
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <div class="hand" style="font-size: 40px; color: #841B22">¿Por qué conmigo?</div>
+      <h2 style="font-size: 52px; line-height: 1.15; font-weight: 700; color: #0A414F">რატომ ნინასთან</h2>
+    </div>
+    <p style="font-size: 20px; line-height: 1.6; color: #4A6268; max-width: 440px; text-align: right">ეს არ არის ენის სკოლა. ეს ნინას ესპანური სამყაროა — და შენ მისი ნაწილი ხდები.</p>
+  </div>
+  <div style="position: absolute; left: 80px; top: 290px; width: 1280px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+    <article class="lift" style="height: 240px; box-sizing: border-box; border-radius: 16px; background: #FFFCF3; border: 1.5px solid #E4D3B4; display: flex; overflow: hidden">
+      <div style="width: 140px; flex-shrink: 0; background: #DCEAE6; display: flex; align-items: flex-end; justify-content: center"><img src="../assets/spots/spot-pockets.webp" alt="" style="height: 220px; width: auto"></div>
+      <div style="padding: 26px 24px; display: flex; flex-direction: column; gap: 10px">
+        <div class="hand" style="font-size: 30px; color: #196166">01</div>
+        <h3 style="font-size: 21px; line-height: 1.3; font-weight: 700">ესპანური ნულიდან</h3>
+        <p style="font-size: 16px; line-height: 1.6; color: #4A6268">წინასწარი ცოდნა არ გჭირდება. ვიწყებთ პირველი „¡Hola!“-დან.</p>
+      </div>
+    </article>
+    <article class="lift" style="height: 240px; box-sizing: border-box; border-radius: 16px; background: #FFFCF3; border: 1.5px solid #E4D3B4; display: flex; overflow: hidden">
+      <div style="width: 140px; flex-shrink: 0; background: #FCE8C0; display: flex; align-items: flex-end; justify-content: center"><img src="../assets/spots/spot-map.webp" alt="" style="height: 220px; width: auto"></div>
+      <div style="padding: 26px 24px; display: flex; flex-direction: column; gap: 10px">
+        <div class="hand" style="font-size: 30px; color: #841B22">02</div>
+        <h3 style="font-size: 21px; line-height: 1.3; font-weight: 700">სიუჟეტები და არა წესები</h3>
+        <p style="font-size: 16px; line-height: 1.6; color: #4A6268">ენას სიტუაციებსა და პერსონაჟებში ხვდები — წესი მერე თავად ჩნდება.</p>
+      </div>
+    </article>
+    <article class="lift" style="height: 240px; box-sizing: border-box; border-radius: 16px; background: #FFFCF3; border: 1.5px solid #E4D3B4; display: flex; overflow: hidden">
+      <div style="width: 140px; flex-shrink: 0; background: #F4DEDA; display: flex; align-items: flex-end; justify-content: center"><img src="../assets/spots/spot-phone.webp" alt="" style="height: 220px; width: auto"></div>
+      <div style="padding: 26px 24px; display: flex; flex-direction: column; gap: 10px">
+        <div class="hand" style="font-size: 30px; color: #196166">03</div>
+        <h3 style="font-size: 21px; line-height: 1.3; font-weight: 700">შენზე მორგებული</h3>
+        <p style="font-size: 16px; line-height: 1.6; color: #4A6268">ტემპი და ლექსიკა შენი მიზნით: მოგზაურობა, სწავლა თუ გადასვლა.</p>
+      </div>
+    </article>
+    <article class="lift" style="height: 240px; box-sizing: border-box; border-radius: 16px; background: #FFFCF3; border: 1.5px solid #E4D3B4; display: flex; overflow: hidden">
+      <div style="width: 140px; flex-shrink: 0; background: #E0EAE3; display: flex; align-items: center; justify-content: center"><img src="../assets/spots/spot-notebook.webp" alt="" style="width: 124px; height: auto"></div>
+      <div style="padding: 26px 24px; display: flex; flex-direction: column; gap: 10px">
+        <div class="hand" style="font-size: 30px; color: #841B22">04</div>
+        <h3 style="font-size: 21px; line-height: 1.3; font-weight: 700">ლამაზი მასალები</h3>
+        <p style="font-size: 16px; line-height: 1.6; color: #4A6268">ბარათები, დიალოგები და ვიდეოები — სპეციალურად ამ კურსისთვის.</p>
+      </div>
+    </article>
+    <article class="lift" style="height: 240px; box-sizing: border-box; border-radius: 16px; background: #FFFCF3; border: 1.5px solid #E4D3B4; display: flex; overflow: hidden">
+      <div style="width: 140px; flex-shrink: 0; background: #F1E3C8; display: flex; align-items: center; justify-content: center"><img src="../assets/spots/spot-backpack.webp" alt="" style="width: 110px; height: auto"></div>
+      <div style="padding: 26px 24px; display: flex; flex-direction: column; gap: 10px">
+        <div class="hand" style="font-size: 30px; color: #196166">05</div>
+        <h3 style="font-size: 21px; line-height: 1.3; font-weight: 700">შენი კაბინეტი</h3>
+        <p style="font-size: 16px; line-height: 1.6; color: #4A6268">ყველა გაკვეთილი და მასალა ერთ პირად სივრცეში.</p>
+      </div>
+    </article>
+    <article class="lift" style="height: 240px; box-sizing: border-box; border-radius: 16px; background: #0A414F; display: flex; overflow: hidden">
+      <div style="width: 140px; flex-shrink: 0; background: #196166; display: flex; align-items: flex-end; justify-content: center"><img src="../assets/spots/spot-walking.webp" alt="" style="height: 220px; width: auto"></div>
+      <div style="padding: 26px 24px; display: flex; flex-direction: column; gap: 10px">
+        <div class="hand" style="font-size: 34px; color: #F5B246">Poco a Poco</div>
+        <h3 style="font-size: 21px; line-height: 1.3; font-weight: 700; color: #FCF7E6">ნაბიჯ-ნაბიჯ</h3>
+        <p style="font-size: 16px; line-height: 1.6; color: #E6DEC8">ყოველი ახალი „აგური“ წინაზე დგას. მყარი საფუძველი — თავიდანვე.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+
+<section id="stories" style="position: relative; height: 1040px; background: #0A414F; color: #FCF7E6">
+  <svg style="position: absolute; left: 0; top: -1px" width="1440" height="40" viewBox="0 0 1440 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 0 H1440 V14 C 1200 34, 980 6, 720 20 C 460 34, 240 8, 0 24 Z" fill="#FCF7E6"></path></svg>
+  <div style="position: absolute; left: 80px; top: 90px; width: 600px; height: 700px">
+    <img src="../assets/illustrations/scene-cafe-friends.webp" alt="კაფეს ტერასა: ლაურა, ნინა, ანა და ლუკასი ყავით, ქალაქის ხედით" style="width: 600px; height: 700px; object-fit: cover; object-position: 50% 88%; border-radius: 300px 300px 24px 24px; display: block">
+    <div style="position: absolute; left: 22px; top: 318px; display: flex; flex-direction: column; align-items: center"><span class="hand" style="background: #FCF7E6; color: #0A414F; font-size: 24px; padding: 4px 14px 6px; border-radius: 999px">Laura</span><span style="width: 2px; height: 18px; background: #FCF7E6"></span></div>
+    <div style="position: absolute; left: 146px; top: 262px; display: flex; flex-direction: column; align-items: center"><span class="hand" style="background: #F5B246; color: #0A414F; font-size: 24px; padding: 4px 14px 6px; border-radius: 999px">Nina</span><span style="width: 2px; height: 18px; background: #F5B246"></span></div>
+    <div style="position: absolute; left: 330px; top: 296px; display: flex; flex-direction: column; align-items: center"><span class="hand" style="background: #FCF7E6; color: #841B22; font-size: 24px; padding: 4px 14px 6px; border-radius: 999px">Ana</span><span style="width: 2px; height: 18px; background: #FCF7E6"></span></div>
+    <div style="position: absolute; left: 478px; top: 318px; display: flex; flex-direction: column; align-items: center"><span class="hand" style="background: #FCF7E6; color: #0A414F; font-size: 24px; padding: 4px 14px 6px; border-radius: 999px">Lucas</span><span style="width: 2px; height: 18px; background: #FCF7E6"></span></div>
+  </div>
+
+  
+  <div style="position: absolute; left: 80px; top: 820px; width: 600px; height: 168px; box-sizing: border-box; padding: 20px 24px; border-radius: 20px; background: #125259; display: flex; gap: 24px; align-items: center">
+    <div style="position: relative; width: 236px; height: 128px; flex-shrink: 0; border-radius: 12px; background: #0A414F; border: 1.5px dashed #5B8A81">
+      <div style="position: absolute; left: 100px; top: 46px; width: 36px; height: 36px; border-radius: 50%; background: #F5B246; display: flex; align-items: center; justify-content: center; transition: left .35s cubic-bezier(.5,1.6,.4,1), top .35s cubic-bezier(.5,1.6,.4,1)" class="sia-figure">
+        <svg width="24" height="12" viewBox="0 0 24 12" fill="none" stroke="#0A414F" stroke-width="1.8" aria-hidden="true"><circle cx="6" cy="6" r="4.2"></circle><circle cx="18" cy="6" r="4.2"></circle><path d="M10.2 6h3.6"></path></svg>
+      </div>
+      <div class="hand sia-word" style="position: absolute; right: 8px; bottom: 4px; font-size: 22px; color: #F5B246"></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px; flex-grow: 1">
+      <div style="display: flex; align-items: baseline; gap: 10px"><span class="hand" style="font-size: 28px; color: #F5B246">Spanish in Action</span><span style="font-size: 13px; color: #CFE0DB">დააჭირე და იცეკვე</span></div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+        <button class="pad-btn" style="height: 40px; border: 0; border-radius: 10px; background: #FCF7E6; color: #0A414F; font: 600 15px Montserrat, sans-serif">← izquierda</button>
+        <button class="pad-btn" style="height: 40px; border: 0; border-radius: 10px; background: #FCF7E6; color: #0A414F; font: 600 15px Montserrat, sans-serif">derecha →</button>
+        <button class="pad-btn" style="height: 40px; border: 0; border-radius: 10px; background: #FCF7E6; color: #0A414F; font: 600 15px Montserrat, sans-serif">↑ arriba</button>
+        <button class="pad-btn" style="height: 40px; border: 0; border-radius: 10px; background: #FCF7E6; color: #0A414F; font: 600 15px Montserrat, sans-serif">↓ abajo</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="position: absolute; left: 760px; top: 96px; width: 600px; display: flex; flex-direction: column; gap: 20px">
+    <div class="hand" style="font-size: 40px; color: #F5B246">Nuestras historias</div>
+    <h2 style="font-size: 46px; line-height: 1.2; font-weight: 700; color: #FCF7E6">ესპანური, რომელიც ისტორიასთან ერთად იზრდება</h2>
+    <p style="font-size: 19px; line-height: 1.65; color: #E6DEC8">ესენი არიან ლაურა, ანა და ლუკასი. გაკვეთილიდან გაკვეთილზე ისევ შეხვდები მათ — კაფეში, ქუჩაში, სამსახურში. შენი ესპანური მათ ისტორიასთან ერთად იზრდება.</p>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 24px; margin-top: 4px">
+      <div style="display: flex; gap: 12px; align-items: flex-start"><span style="width: 10px; height: 10px; border-radius: 50%; background: #F4DEDA; margin-top: 8px; flex-shrink: 0"></span><div><div style="font-family: Montserrat, sans-serif; font-weight: 700; font-size: 17px">Ana</div><div style="font-size: 15px; color: #CFE0DB; line-height: 1.5">ქართველი ვებ-დიზაინერი ბარსელონაში</div></div></div>
+      <div style="display: flex; gap: 12px; align-items: flex-start"><span style="width: 10px; height: 10px; border-radius: 50%; background: #F5B246; margin-top: 8px; flex-shrink: 0"></span><div><div style="font-family: Montserrat, sans-serif; font-weight: 700; font-size: 17px">Nina</div><div style="font-size: 15px; color: #CFE0DB; line-height: 1.5">შენი პროფე — ყოველთვის გვერდით</div></div></div>
+      <div style="display: flex; gap: 12px; align-items: flex-start"><span style="width: 10px; height: 10px; border-radius: 50%; background: #D0AC84; margin-top: 8px; flex-shrink: 0"></span><div><div style="font-family: Montserrat, sans-serif; font-weight: 700; font-size: 17px">Laura</div><div style="font-size: 15px; color: #CFE0DB; line-height: 1.5">[ლაურას მოკლე აღწერა]</div></div></div>
+      <div style="display: flex; gap: 12px; align-items: flex-start"><span style="width: 10px; height: 10px; border-radius: 50%; background: #5B8A81; margin-top: 8px; flex-shrink: 0"></span><div><div style="font-family: Montserrat, sans-serif; font-weight: 700; font-size: 17px">Lucas</div><div style="font-size: 15px; color: #CFE0DB; line-height: 1.5">[ლუკასის მოკლე აღწერა]</div></div></div>
+    </div>
+
+    
+    <div style="margin-top: 10px; border-radius: 20px; background: #FCF7E6; color: #0A414F; padding: 22px 26px; display: flex; flex-direction: column; gap: 14px">
+      <div style="display: flex; justify-content: space-between; align-items: center">
+        <div style="display: flex; align-items: center; gap: 10px"><span style="font-family: Montserrat, sans-serif; font-weight: 700; font-size: 15px; letter-spacing: .04em">DIÁLOGO</span><span style="font-size: 14px; color: #4A6268">· En el café</span></div>
+        <button class="btn en-toggle" aria-pressed="true" style="height: 36px; padding: 0 14px; border-radius: 999px; border: 1.5px solid #196166; background: #196166; color: #FCF7E6; font: 600 13px Montserrat, sans-serif; display: flex; align-items: center; gap: 6px">EN ✓</button>
+      </div>
+      
+        <div style="display: flex; gap: 12px; align-items: flex-start">
+          <span style="width: 30px; height: 30px; border-radius: 50%; background: #F4DEDA; color: #841B22; display: flex; align-items: center; justify-content: center; font: 700 13px Montserrat, sans-serif; flex-shrink: 0">A</span>
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <div style="font-family: Montserrat, sans-serif; font-size: 17px; font-weight: 600; line-height: 1.45">Ana: ¡Hola! ¿Qué tal? Soy Ana.</div>
+            <div style="font-family: Montserrat, sans-serif; font-size: 15px; font-style: italic; color: #4A6268" class="en-line">Hi! How are you? I’m Ana.</div>
+          </div>
+        </div>
+      
+        <div style="display: flex; gap: 12px; align-items: flex-start">
+          <span style="width: 30px; height: 30px; border-radius: 50%; background: #DCEAE6; color: #196166; display: flex; align-items: center; justify-content: center; font: 700 13px Montserrat, sans-serif; flex-shrink: 0">L</span>
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <div style="font-family: Montserrat, sans-serif; font-size: 17px; font-weight: 600; line-height: 1.45">Lucas: ¡Hola, Ana! Yo soy Lucas. ¿De dónde eres?</div>
+            <div style="font-family: Montserrat, sans-serif; font-size: 15px; font-style: italic; color: #4A6268" class="en-line">Hi, Ana! I’m Lucas. Where are you from?</div>
+          </div>
+        </div>
+      
+        <div style="display: flex; gap: 12px; align-items: flex-start">
+          <span style="width: 30px; height: 30px; border-radius: 50%; background: #F4DEDA; color: #841B22; display: flex; align-items: center; justify-content: center; font: 700 13px Montserrat, sans-serif; flex-shrink: 0">A</span>
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <div style="font-family: Montserrat, sans-serif; font-size: 17px; font-weight: 600; line-height: 1.45">Ana: Soy de Georgia, pero vivo en Barcelona.</div>
+            <div style="font-family: Montserrat, sans-serif; font-size: 15px; font-style: italic; color: #4A6268" class="en-line">I’m from Georgia, but I live in Barcelona.</div>
+          </div>
+        </div>
+      
+        <div style="display: flex; gap: 12px; align-items: flex-start">
+          <span style="width: 30px; height: 30px; border-radius: 50%; background: #DCEAE6; color: #196166; display: flex; align-items: center; justify-content: center; font: 700 13px Montserrat, sans-serif; flex-shrink: 0">L</span>
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <div style="font-family: Montserrat, sans-serif; font-size: 17px; font-weight: 600; line-height: 1.45">Lucas: ¡Qué bien! ¿Tomamos un café?</div>
+            <div style="font-family: Montserrat, sans-serif; font-size: 15px; font-style: italic; color: #4A6268" class="en-line">How nice! Shall we grab a coffee?</div>
+          </div>
+        </div>
+      
+    </div>
+    <a class="btn btn-burgundy" href="booking-desktop-form.html" style="margin-top: 8px; height: 58px; padding: 0 28px; width: fit-content; display: flex; align-items: center; gap: 10px; border-radius: 14px; background: #841B22; color: #FCF7E6; text-decoration: none; font-weight: 600; font-size: 17px">დაჯავშნე საცდელი გაკვეთილი</a>
+  </div>
+  <svg style="position: absolute; left: 0; bottom: -1px" width="1440" height="40" viewBox="0 0 1440 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40 H1440 V20 C 1180 4, 960 30, 700 16 C 440 2, 220 30, 0 12 Z" fill="#FCF7E6"></path></svg>
+</section>
+
+
+<section style="position: relative; height: 1000px; background: #FCF7E6">
+  <div style="position: absolute; left: 80px; top: 100px; width: 1280px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center">
+    <div class="hand" style="font-size: 40px; color: #196166">Paso a paso</div>
+    <h2 style="font-size: 46px; line-height: 1.2; font-weight: 700">როგორ მიმდინარეობს გაკვეთილი</h2>
+    <p style="font-size: 19px; line-height: 1.6; color: #4A6268">ჯერ სიტუაცია, მერე წესი. ასე ენა ბუნებრივად „ჯდება“.</p>
+  </div>
+  <svg style="position: absolute; left: 80px; top: 300px" width="1280" height="120" viewBox="0 0 1280 120" fill="none" aria-hidden="true"><path d="M160 60 C 260 10, 380 110, 480 60 S 700 10, 800 60 S 1020 110, 1120 60" stroke="#D0AC84" stroke-width="2.5" stroke-dasharray="2 10" stroke-linecap="round"></path></svg>
+  <div style="position: absolute; left: 80px; top: 300px; width: 1280px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px">
+    <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px">
+      <div style="position: relative; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #FFFCF3">
+        <svg style="position: absolute; inset: 0" width="120" height="120" viewBox="0 0 120 120" fill="none" aria-hidden="true"><path d="M96 22 A 50 50 0 1 0 108 70" stroke="#F5B246" stroke-width="4" stroke-linecap="round"></path></svg>
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"></rect><path d="M16 10l5-3v10l-5-3"></path></svg>
+      </div>
+      <div class="hand" style="font-size: 26px; color: #841B22">1 · Mira</div>
+      <h3 style="font-size: 21px; font-weight: 700">ხედავ სიტუაციას</h3>
+      <p style="font-size: 16px; line-height: 1.6; color: #4A6268; max-width: 250px">ვიდეო-დიალოგი, სადაც ესპანური ცოცხლად ჟღერს.</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px">
+      <div style="position: relative; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #FFFCF3">
+        <svg style="position: absolute; inset: 0" width="120" height="120" viewBox="0 0 120 120" fill="none" aria-hidden="true"><path d="M96 22 A 50 50 0 1 0 108 70" stroke="#F5B246" stroke-width="4" stroke-linecap="round"></path></svg>
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="M20 20l-4.2-4.2"></path></svg>
+      </div>
+      <div class="hand" style="font-size: 26px; color: #841B22">2 · Observa</div>
+      <h3 style="font-size: 21px; font-weight: 700">ამჩნევ კანონზომიერებას</h3>
+      <p style="font-size: 16px; line-height: 1.6; color: #4A6268; max-width: 250px">თავად პოულობ, რა მეორდება და როგორ იცვლება.</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px">
+      <div style="position: relative; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #FFFCF3">
+        <svg style="position: absolute; inset: 0" width="120" height="120" viewBox="0 0 120 120" fill="none" aria-hidden="true"><path d="M96 22 A 50 50 0 1 0 108 70" stroke="#F5B246" stroke-width="4" stroke-linecap="round"></path></svg>
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"></path></svg>
+      </div>
+      <div class="hand" style="font-size: 26px; color: #841B22">3 · Entiende</div>
+      <h3 style="font-size: 21px; font-weight: 700">იგებ წესს</h3>
+      <p style="font-size: 16px; line-height: 1.6; color: #4A6268; max-width: 250px">მოკლე, ვიზუალური ახსნა — როცა უკვე გესმის, რატომ.</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px">
+      <div style="position: relative; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #FFFCF3">
+        <svg style="position: absolute; inset: 0" width="120" height="120" viewBox="0 0 120 120" fill="none" aria-hidden="true"><path d="M96 22 A 50 50 0 1 0 108 70" stroke="#F5B246" stroke-width="4" stroke-linecap="round"></path></svg>
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h11a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H9l-4 3v-3H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"></path><path d="M19 9h1a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-1v3l-4-3h-3"></path></svg>
+      </div>
+      <div class="hand" style="font-size: 26px; color: #841B22">4 · Habla</div>
+      <h3 style="font-size: 21px; font-weight: 700">იყენებ</h3>
+      <p style="font-size: 16px; line-height: 1.6; color: #4A6268; max-width: 250px">ლაპარაკობ, თამაშობ, აწყობ საკუთარ დიალოგებს.</p>
+    </div>
+  </div>
+
+  
+  <div style="position: absolute; left: 80px; top: 640px; width: 1280px; height: 290px; box-sizing: border-box; border-radius: 24px; background: #F1E3C8; padding: 34px 40px; display: flex; gap: 32px; align-items: center">
+    <div style="width: 230px; flex-shrink: 0; display: flex; flex-direction: column; gap: 10px">
+      <div class="hand" style="font-size: 40px; color: #841B22">Mis reglas</div>
+      <h3 style="font-size: 26px; line-height: 1.3; font-weight: 700">ნინას ოთხი წესი</h3>
+      <p style="font-size: 15px; line-height: 1.55; color: #4A6268">ჩვენი საკლასო ოთახის — თუნდაც ონლაინ — წესები.</p>
+    </div>
+    <div style="flex-grow: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px">
+      <div style="position: relative; height: 206px; box-sizing: border-box; padding: 26px 18px 18px; background: #FFFCF3; border-radius: 4px; transform: rotate(-2.5deg); box-shadow: 0 10px 20px -14px rgba(10,65,79,.5); display: flex; flex-direction: column; gap: 10px">
+        <span style="position: absolute; left: 50%; top: -10px; width: 70px; height: 22px; margin-left: -35px; background: rgba(245,178,70,.65); transform: rotate(3deg)"></span>
+        <div class="hand" style="font-size: 30px; color: #196166">¡Nos divertimos!</div>
+        <p style="font-size: 16px; line-height: 1.5; font-weight: 600">ვერთობით</p>
+        <p style="font-size: 14px; line-height: 1.5; color: #4A6268">სერიოზული სწავლა სიამოვნების გარეშე არ გამოდის.</p>
+      </div>
+      <div style="position: relative; height: 206px; box-sizing: border-box; padding: 26px 18px 18px; background: #DCEAE6; border-radius: 4px; transform: rotate(2deg); box-shadow: 0 10px 20px -14px rgba(10,65,79,.5); display: flex; flex-direction: column; gap: 10px">
+        <span style="position: absolute; left: 50%; top: -10px; width: 70px; height: 22px; margin-left: -35px; background: rgba(208,172,132,.7); transform: rotate(-4deg)"></span>
+        <div class="hand" style="font-size: 30px; color: #196166">Con calma</div>
+        <p style="font-size: 16px; line-height: 1.5; font-weight: 600">ვსწავლობთ საფუძვლიანად</p>
+        <p style="font-size: 14px; line-height: 1.5; color: #4A6268">კომფორტულ ტემპში, მყარ საფუძველზე.</p>
+      </div>
+      <div style="position: relative; height: 206px; box-sizing: border-box; padding: 26px 18px 18px; background: #FCE8C0; border-radius: 4px; transform: rotate(-1.5deg); box-shadow: 0 10px 20px -14px rgba(10,65,79,.5); display: flex; flex-direction: column; gap: 10px">
+        <span style="position: absolute; left: 50%; top: -10px; width: 70px; height: 22px; margin-left: -35px; background: rgba(91,138,129,.5); transform: rotate(2deg)"></span>
+        <div class="hand" style="font-size: 30px; color: #841B22">¡Viva el error!</div>
+        <p style="font-size: 16px; line-height: 1.5; font-weight: 600">გვიყვარს შეცდომები</p>
+        <p style="font-size: 14px; line-height: 1.5; color: #4A6268">თქვი, რაც თავში მოგივა — შეცდომა გვიჩვენებს, სად ვიმუშაოთ.</p>
+      </div>
+      <div style="position: relative; height: 206px; box-sizing: border-box; padding: 26px 18px 18px; background: #FFFCF3; border-radius: 4px; transform: rotate(2.5deg); box-shadow: 0 10px 20px -14px rgba(10,65,79,.5); display: flex; flex-direction: column; gap: 10px">
+        <span style="position: absolute; left: 50%; top: -10px; width: 70px; height: 22px; margin-left: -35px; background: rgba(245,178,70,.65); transform: rotate(-2deg)"></span>
+        <div class="hand" style="font-size: 30px; color: #841B22">¡Desde el día uno!</div>
+        <p style="font-size: 16px; line-height: 1.5; font-weight: 600">ესპანურად პირველივე გაკვეთილიდან</p>
+        <p style="font-size: 14px; line-height: 1.5; color: #4A6268">ვლაპარაკობ და ვთარგმნი — ყური ნელ-ნელა ეჩვევა.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section id="materials" style="position: relative; height: 920px; background: #F1E3C8">
+  <div style="position: absolute; left: 80px; top: 110px; width: 380px; display: flex; flex-direction: column; gap: 18px">
+    <div class="hand" style="font-size: 40px; color: #841B22">Materiales</div>
+    <h2 style="font-size: 42px; line-height: 1.2; font-weight: 700">მასალები, რომლებიც ამ კურსისთვის იქმნება</h2>
+    <p style="font-size: 18px; line-height: 1.65; color: #4A6268">ყველა ბარათი, დიალოგი და სავარჯიშო ნინას სამყაროს ნაწილია — და ყოველ მოსწავლეს თავისი ტემპითა და მიზნით ერგება.</p>
+    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px">
+      <span style="padding: 6px 12px; border-radius: 999px; background: #FFFCF3; font-size: 14px; font-weight: 500">ბარათები</span>
+      <span style="padding: 6px 12px; border-radius: 999px; background: #FFFCF3; font-size: 14px; font-weight: 500">ლექსიკა</span>
+      <span style="padding: 6px 12px; border-radius: 999px; background: #FFFCF3; font-size: 14px; font-weight: 500">დიალოგები</span>
+      <span style="padding: 6px 12px; border-radius: 999px; background: #FFFCF3; font-size: 14px; font-weight: 500">აუდიო</span>
+      <span style="padding: 6px 12px; border-radius: 999px; background: #FFFCF3; font-size: 14px; font-weight: 500">ვიდეო</span>
+      <span style="padding: 6px 12px; border-radius: 999px; background: #FFFCF3; font-size: 14px; font-weight: 500">სავარჯიშოები</span>
+      <span style="padding: 6px 12px; border-radius: 999px; background: #FFFCF3; font-size: 14px; font-weight: 500">გამოთქმა</span>
+    </div>
+  </div>
+
+  <div style="position: absolute; left: 520px; top: 80px; width: 840px; height: 780px">
+    
+    <div class="lift" style="position: absolute; left: 0; top: 40px; width: 250px; height: 444px; border-radius: 14px; background: #FFFCF3; overflow: hidden; transform: rotate(-3deg); box-shadow: 0 18px 36px -22px rgba(10,65,79,.5); display: flex; flex-direction: column">
+      <div style="height: 96px; background: #0A414F; padding: 18px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between">
+        <span style="font: 600 11px Montserrat, sans-serif; letter-spacing: .1em; color: #F5B246">TEMA 1</span>
+        <span style="font: 700 24px Montserrat, sans-serif; color: #FCF7E6">Los saludos</span>
+      </div>
+      <div style="padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; font-family: Montserrat, sans-serif">
+        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #E4D3B4; padding-bottom: 8px"><b style="font-size: 16px">¡Hola!</b><span style="font-size: 14px; color: #4A6268">გამარჯობა</span></div>
+        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #E4D3B4; padding-bottom: 8px"><b style="font-size: 16px">Buenos días</b><span style="font-size: 14px; color: #4A6268">დილა მშვიდობისა</span></div>
+        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #E4D3B4; padding-bottom: 8px"><b style="font-size: 16px">Buenas tardes</b><span style="font-size: 14px; color: #4A6268">შუადღე მშვ.</span></div>
+        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #E4D3B4; padding-bottom: 8px"><b style="font-size: 16px">Buenas noches</b><span style="font-size: 14px; color: #4A6268">ღამე მშვ.</span></div>
+        <div style="display: flex; justify-content: space-between"><b style="font-size: 16px">¡Adiós!</b><span style="font-size: 14px; color: #4A6268">ნახვამდის</span></div>
+      </div>
+      <div style="margin-top: auto; height: 96px; background: #DCEAE6; display: flex; align-items: flex-end; justify-content: center"><img src="../assets/spots/spot-portrait.webp" alt="" style="height: 92px; width: auto"></div>
+    </div>
+    
+    <div class="lift" style="position: absolute; left: 280px; top: 0; width: 290px; box-sizing: border-box; padding: 20px; border-radius: 14px; background: #FFFCF3; transform: rotate(2deg); box-shadow: 0 18px 36px -22px rgba(10,65,79,.5); font-family: Montserrat, sans-serif; display: flex; flex-direction: column; gap: 10px">
+      <div style="display: flex; justify-content: space-between; align-items: center"><span style="font-weight: 700; font-size: 18px">En el café</span><span style="font-size: 11px; font-weight: 600; letter-spacing: .08em; color: #196166">VOCABULARIO</span></div>
+      <div style="display: flex; gap: 10px; align-items: center"><span style="width: 8px; height: 8px; border-radius: 50%; background: #841B22"></span><b style="font-size: 15px">el café</b><span style="font-size: 13px; color: #4A6268; margin-left: auto">ყავა</span></div>
+      <div style="display: flex; gap: 10px; align-items: center"><span style="width: 8px; height: 8px; border-radius: 50%; background: #196166"></span><b style="font-size: 15px">la tostada</b><span style="font-size: 13px; color: #4A6268; margin-left: auto">ტოსტი</span></div>
+      <div style="display: flex; gap: 10px; align-items: center"><span style="width: 8px; height: 8px; border-radius: 50%; background: #841B22"></span><b style="font-size: 15px">la cuenta</b><span style="font-size: 13px; color: #4A6268; margin-left: auto">ანგარიში</span></div>
+      <div style="display: flex; gap: 10px; align-items: center"><span style="width: 8px; height: 8px; border-radius: 50%; background: #196166"></span><b style="font-size: 15px">el vaso de agua</b><span style="font-size: 13px; color: #4A6268; margin-left: auto">ჭიქა წყალი</span></div>
+    </div>
+    
+    <div class="lift" style="position: absolute; left: 600px; top: 20px; width: 240px; box-sizing: border-box; padding: 16px; border-radius: 14px; background: #0A414F; color: #FCF7E6; transform: rotate(-2deg); box-shadow: 0 18px 36px -22px rgba(10,65,79,.6); display: flex; flex-direction: column; gap: 12px; font-family: Montserrat, sans-serif">
+      <div style="display: flex; gap: 12px; align-items: center">
+        <span style="width: 42px; height: 42px; border-radius: 50%; background: #F5B246; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="#0A414F" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"></path></svg></span>
+        <div><div style="font-weight: 600; font-size: 14px">Diálogo 3</div><div style="font-size: 12px; color: #CFE0DB">En el café · 1:24</div></div>
+      </div>
+      <div style="display: flex; gap: 3px; align-items: center; height: 28px">
+        <span style="width: 3px; height: 10px; background: #F5B246; border-radius: 2px"></span><span style="width: 3px; height: 20px; background: #F5B246; border-radius: 2px"></span><span style="width: 3px; height: 14px; background: #F5B246; border-radius: 2px"></span><span style="width: 3px; height: 26px; background: #F5B246; border-radius: 2px"></span><span style="width: 3px; height: 18px; background: #F5B246; border-radius: 2px"></span><span style="width: 3px; height: 12px; background: #F5B246; border-radius: 2px"></span><span style="width: 3px; height: 22px; background: #F5B246; border-radius: 2px"></span><span style="width: 3px; height: 16px; background: #5B8A81; border-radius: 2px"></span><span style="width: 3px; height: 24px; background: #5B8A81; border-radius: 2px"></span><span style="width: 3px; height: 10px; background: #5B8A81; border-radius: 2px"></span><span style="width: 3px; height: 18px; background: #5B8A81; border-radius: 2px"></span><span style="width: 3px; height: 14px; background: #5B8A81; border-radius: 2px"></span><span style="width: 3px; height: 20px; background: #5B8A81; border-radius: 2px"></span><span style="width: 3px; height: 8px; background: #5B8A81; border-radius: 2px"></span><span style="width: 3px; height: 16px; background: #5B8A81; border-radius: 2px"></span><span style="width: 3px; height: 12px; background: #5B8A81; border-radius: 2px"></span><span style="width: 3px; height: 22px; background: #5B8A81; border-radius: 2px"></span><span style="width: 3px; height: 10px; background: #5B8A81; border-radius: 2px"></span>
+      </div>
+    </div>
+    
+    <div class="lift" style="position: absolute; left: 600px; top: 190px; width: 240px; box-sizing: border-box; padding: 18px; border-radius: 14px; background: #FFFCF3; transform: rotate(3deg); box-shadow: 0 18px 36px -22px rgba(10,65,79,.5); display: flex; flex-direction: column; gap: 12px">
+      <span style="font: 600 11px Montserrat, sans-serif; letter-spacing: .08em; color: #196166">PRONUNCIACIÓN</span>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+        <span style="height: 58px; display: flex; align-items: center; justify-content: center; background: #D6E9C9; border-radius: 58% 42% 55% 45% / 48% 60% 40% 52%; font: 600 24px Montserrat, sans-serif">ll</span>
+        <span style="height: 58px; display: flex; align-items: center; justify-content: center; background: #D6E9C9; border-radius: 45% 55% 42% 58% / 58% 44% 56% 42%; font: 600 24px Montserrat, sans-serif">ñ</span>
+        <span style="height: 58px; display: flex; align-items: center; justify-content: center; background: #D6E9C9; border-radius: 52% 48% 60% 40% / 42% 56% 44% 58%; font: 600 24px Montserrat, sans-serif">j</span>
+        <span style="height: 58px; display: flex; align-items: center; justify-content: center; background: #D6E9C9; border-radius: 40% 60% 48% 52% / 55% 45% 55% 45%; font: 600 24px Montserrat, sans-serif">rr</span>
+        <span style="height: 58px; display: flex; align-items: center; justify-content: center; background: #D6E9C9; border-radius: 56% 44% 40% 60% / 50% 58% 42% 50%; font: 600 24px Montserrat, sans-serif">ce</span>
+        <span style="height: 58px; display: flex; align-items: center; justify-content: center; background: #D6E9C9; border-radius: 48% 52% 58% 42% / 44% 50% 50% 56%; font: 600 24px Montserrat, sans-serif">gu</span>
+      </div>
+    </div>
+    
+    <div class="lift" style="position: absolute; left: 250px; top: 300px; width: 330px; box-sizing: border-box; padding: 20px; border-radius: 14px; background: #FFFCF3; transform: rotate(-2deg); box-shadow: 0 18px 36px -22px rgba(10,65,79,.5); display: flex; flex-direction: column; gap: 12px; font-family: Montserrat, sans-serif">
+      <span style="font-size: 11px; font-weight: 600; letter-spacing: .08em; color: #841B22">DIÁLOGO · ES / EN</span>
+      <div><div style="font-weight: 600; font-size: 15px"><span style="color: #841B22">Ana:</span> ¿Me pones un café, por favor?</div><div style="font-size: 13px; font-style: italic; color: #4A6268; margin-top: 2px">Can I have a coffee, please?</div></div>
+      <div><div style="font-weight: 600; font-size: 15px"><span style="color: #196166">Lucas:</span> ¡Claro! ¿Con leche?</div><div style="font-size: 13px; font-style: italic; color: #4A6268; margin-top: 2px">Sure! With milk?</div></div>
+      <div><div style="font-weight: 600; font-size: 15px"><span style="color: #841B22">Ana:</span> Sí, gracias.</div><div style="font-size: 13px; font-style: italic; color: #4A6268; margin-top: 2px">Yes, thank you.</div></div>
+    </div>
+    
+    <div class="lift" style="position: absolute; left: 470px; top: 500px; width: 370px; box-sizing: border-box; padding: 20px; border-radius: 14px; background: #FFFCF3; transform: rotate(1.5deg); box-shadow: 0 18px 36px -22px rgba(10,65,79,.5); display: flex; flex-direction: column; gap: 14px; font-family: Montserrat, sans-serif">
+      <div style="display: flex; justify-content: space-between"><span style="font-size: 11px; font-weight: 600; letter-spacing: .08em; color: #196166">EJERCICIO · 3 / 8</span><span style="font-size: 12px; color: #4A6268">ააწყე წინადადება</span></div>
+      <div style="min-height: 44px; border-bottom: 2px solid #196166; display: flex; gap: 8px; align-items: center; flex-wrap: wrap">
+        <span style="padding: 6px 12px; border: 1.5px solid #196166; border-radius: 8px; font-size: 15px; font-weight: 600; background: #DCEAE6">Soy</span>
+        <span style="padding: 6px 12px; border: 1.5px solid #196166; border-radius: 8px; font-size: 15px; font-weight: 600; background: #DCEAE6">de</span>
+      </div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap">
+        <span style="padding: 6px 12px; border: 1px solid #D0AC84; border-radius: 8px; font-size: 15px; font-weight: 500">Georgia</span>
+        <span style="padding: 6px 12px; border: 1px solid #D0AC84; border-radius: 8px; font-size: 15px; font-weight: 500">pero</span>
+        <span style="padding: 6px 12px; border: 1px solid #D0AC84; border-radius: 8px; font-size: 15px; font-weight: 500">vivo</span>
+        <span style="padding: 6px 12px; border: 1px solid #D0AC84; border-radius: 8px; font-size: 15px; font-weight: 500">en</span>
+        <span style="padding: 6px 12px; border: 1px solid #D0AC84; border-radius: 8px; font-size: 15px; font-weight: 500">Barcelona</span>
+      </div>
+      <span style="align-self: flex-end; height: 38px; padding: 0 18px; display: flex; align-items: center; border-radius: 10px; background: #196166; color: #FCF7E6; font-size: 14px; font-weight: 600">შემოწმება</span>
+    </div>
+    <div class="hand" style="position: absolute; left: 30px; top: 560px; width: 380px; font-size: 30px; color: #196166; transform: rotate(-3deg)">hecho con cariño, para ti</div>
+  </div>
+</section>
+
+
+
+
+
+
+<section style="position: relative; height: 820px; background: #FCF7E6">
+  <div style="position: absolute; left: 80px; top: 150px; width: 470px; display: flex; flex-direction: column; gap: 18px">
+    <div class="hand" style="font-size: 40px; color: #196166">Tu espacio</div>
+    <h2 style="font-size: 46px; line-height: 1.2; font-weight: 700">შენი პირადი კაბინეტი</h2>
+    <p style="font-size: 18px; line-height: 1.65; color: #4A6268">გაკვეთილის შემდეგ ყველაფერი შენთან რჩება — გადახედე, გაიმეორე, გააგრძელე.</p>
+    <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 10px">
+      <div style="display: flex; gap: 14px; align-items: center"><span style="width: 44px; height: 44px; border-radius: 12px; background: #DCEAE6; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg></span><span style="font-size: 18px; font-weight: 500">ყველა გაკვეთილი ერთ ადგილას</span></div>
+      <div style="display: flex; gap: 14px; align-items: center"><span style="width: 44px; height: 44px; border-radius: 12px; background: #FCE8C0; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#841B22" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"></path><path d="M3 13l9 5 9-5"></path></svg></span><span style="font-size: 18px; font-weight: 500">თითოეული გაკვეთილის მასალები</span></div>
+      <div style="display: flex; gap: 14px; align-items: center"><span style="width: 44px; height: 44px; border-radius: 12px; background: #E0EAE3; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5B8A81" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"></path></svg></span><span style="font-size: 18px; font-weight: 500">ხედავ, რა დაასრულე და რა გელოდება</span></div>
+    </div>
+  </div>
+  <img src="../assets/illustrations/scene-terrace-desk.webp" alt="ნინა ტერასაზე — რვეული, ლეპტოპი, ღია ბარათები და ქალაქის ხედი" style="position: absolute; left: 1000px; top: 90px; width: 360px; height: 600px; object-fit: cover; object-position: 50% 60%; border-radius: 180px 180px 20px 20px">
+  
+  <div style="position: absolute; left: 600px; top: 250px; width: 620px; height: 400px; box-sizing: border-box; padding: 10px; border-radius: 18px; background: #0A414F; box-shadow: 0 30px 60px -30px rgba(10,65,79,.6)">
+    <div style="width: 100%; height: 100%; border-radius: 10px; background: #FCF7E6; overflow: hidden; display: flex">
+      <div style="width: 130px; background: #F6EDD3; padding: 14px 12px; box-sizing: border-box; display: flex; flex-direction: column; gap: 8px; font-size: 11px">
+        <img src="../assets/logo/nina-logo.webp" alt="" style="width: 44px; margin-bottom: 8px">
+        <span style="padding: 6px 8px; border-radius: 6px; background: #196166; color: #FCF7E6; font-weight: 600">მთავარი</span>
+        <span style="padding: 6px 8px">გაკვეთილები</span><span style="padding: 6px 8px">მასალები</span><span style="padding: 6px 8px">ლექსიკა</span><span style="padding: 6px 8px">პროგრესი</span>
+      </div>
+      <div style="flex-grow: 1; padding: 18px; display: flex; flex-direction: column; gap: 12px">
+        <div style="display: flex; justify-content: space-between; align-items: center"><span class="hand" style="font-size: 28px; color: #841B22">¡Hola, Mariam!</span><img src="../assets/spots/spot-crosslegged.webp" alt="" style="height: 52px"></div>
+        <div style="border-radius: 10px; background: #FFFCF3; border: 1px solid #E4D3B4; padding: 12px; display: flex; flex-direction: column; gap: 8px">
+          <span style="font-size: 10px; font-weight: 600; color: #196166">გააგრძელე</span>
+          <span style="font-size: 14px; font-weight: 700">გაკვეთილი 6 · En el café</span>
+          <div style="height: 6px; border-radius: 3px; background: #E4D3B4"><div style="width: 62%; height: 6px; border-radius: 3px; background: #5B8A81"></div></div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+          <div style="border-radius: 10px; background: #F4DEDA; padding: 10px; font-size: 11px; display: flex; flex-direction: column; gap: 4px"><b style="color: #841B22">საშინაო</b><span>დიალოგი: შეკვეთა კაფეში</span></div>
+          <div style="border-radius: 10px; background: #DCEAE6; padding: 10px; font-size: 11px; display: flex; flex-direction: column; gap: 4px"><b style="color: #196166">ნინასგან</b><span>შენთვის: სიტყვები მოგზაურობისთვის</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div style="position: absolute; left: 1150px; top: 380px; width: 190px; height: 380px; box-sizing: border-box; padding: 8px; border-radius: 30px; background: #0A414F; box-shadow: 0 30px 60px -30px rgba(10,65,79,.6)">
+    <div style="width: 100%; height: 100%; border-radius: 23px; background: #FCF7E6; overflow: hidden; padding: 20px 12px 0; box-sizing: border-box; display: flex; flex-direction: column; gap: 10px">
+      <span class="hand" style="font-size: 22px; color: #841B22">¡Hola, Mariam!</span>
+      <div style="border-radius: 10px; background: #FFFCF3; border: 1px solid #E4D3B4; padding: 10px; font-size: 11px; display: flex; flex-direction: column; gap: 6px"><b>გაკვეთილი 6</b><div style="height: 5px; border-radius: 3px; background: #E4D3B4"><div style="width: 62%; height: 5px; border-radius: 3px; background: #5B8A81"></div></div></div>
+      <div style="border-radius: 10px; background: #F4DEDA; padding: 10px; font-size: 11px"><b style="color: #841B22">საშინაო</b> · 2</div>
+      <div style="border-radius: 10px; background: #DCEAE6; padding: 10px; font-size: 11px"><b style="color: #196166">ნინასგან</b> · 1</div>
+      <div style="margin-top: auto; height: 40px; border-top: 1px solid #E4D3B4; display: flex; justify-content: space-around; align-items: center">
+        <span style="width: 16px; height: 16px; border-radius: 4px; background: #196166"></span><span style="width: 16px; height: 16px; border-radius: 4px; background: #D0AC84"></span><span style="width: 16px; height: 16px; border-radius: 4px; background: #D0AC84"></span><span style="width: 16px; height: 16px; border-radius: 4px; background: #D0AC84"></span><span style="width: 16px; height: 16px; border-radius: 4px; background: #D0AC84"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section style="position: relative; height: 780px; background: #F6EDD3">
+  <div style="position: absolute; left: 80px; top: 90px; width: 1280px; display: flex; justify-content: space-between; align-items: flex-end">
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <div class="hand" style="font-size: 44px; color: #841B22">Poco a Poco</div>
+      <h2 style="font-size: 46px; line-height: 1.2; font-weight: 700">შენი გზა — ნულიდან თავდაჯერებულ A1-მდე</h2>
+    </div>
+    <p style="font-size: 18px; line-height: 1.6; color: #4A6268; max-width: 360px; text-align: right">ნაბიჯ-ნაბიჯ, შენს ტემპში. ყოველი გაჩერება წინაზე დგას.</p>
+  </div>
+  <svg style="position: absolute; left: 80px; top: 250px" width="1280" height="460" viewBox="0 0 1280 460" fill="none" role="img" aria-label="კურსის გზა: მისალმება, თავის გაცნობა, კაფეში, მიმართულებები, ჩემი დღე, ოჯახი, საყიდლები, A1 შემოწმება">
+    
+    <path d="M0 360 C 180 300, 320 340, 480 310 S 820 280, 980 320 S 1200 300, 1280 290 V460 H0 Z" fill="#E6D6B6"></path>
+    <path d="M0 400 C 220 360, 420 400, 640 380 S 1060 350, 1280 380 V460 H0 Z" fill="#E0EAE3"></path>
+    
+    <g opacity=".95">
+      <rect x="1060" y="200" width="46" height="60" fill="#FFFCF3" stroke="#D0AC84" stroke-width="1.5"></rect><path d="M1054 202 L1083 180 L1112 202 Z" fill="#C8734B"></path><rect x="1076" y="232" width="14" height="28" rx="7" fill="#196166"></rect>
+      <rect x="1112" y="180" width="54" height="80" fill="#FFFCF3" stroke="#D0AC84" stroke-width="1.5"></rect><path d="M1106 182 L1139 156 L1172 182 Z" fill="#C8734B"></path><rect x="1124" y="196" width="10" height="14" fill="#5B8A81"></rect><rect x="1144" y="196" width="10" height="14" fill="#5B8A81"></rect><path d="M1128 260 v-24 a11 11 0 0 1 22 0 v24" fill="#0A414F"></path>
+      <rect x="1172" y="150" width="22" height="110" fill="#F1E3C8" stroke="#D0AC84" stroke-width="1.5"></rect><path d="M1168 152 L1183 124 L1198 152 Z" fill="#C8734B"></path>
+      <ellipse cx="1216" cy="226" rx="9" ry="34" fill="#5B8A81"></ellipse><ellipse cx="1040" cy="236" rx="8" ry="26" fill="#5B8A81"></ellipse>
+      <ellipse cx="90" cy="300" rx="8" ry="28" fill="#5B8A81"></ellipse><ellipse cx="110" cy="306" rx="6" ry="20" fill="#5B8A81"></ellipse>
+      <path d="M560 300 v-26 a16 16 0 0 1 32 0 v26" stroke="#D0AC84" stroke-width="3"></path><path d="M600 300 v-26 a16 16 0 0 1 32 0 v26" stroke="#D0AC84" stroke-width="3"></path>
+    </g>
+    
+    <path d="M40 380 C 120 300, 180 250, 200 190 S 330 110, 380 180 S 470 300, 560 250 S 660 120, 720 150 S 820 290, 890 250 S 980 120, 1040 130 S 1120 110, 1180 100" stroke="#FFFCF3" stroke-width="18" stroke-linecap="round"></path>
+    <path d="M40 380 C 120 300, 180 250, 200 190 S 330 110, 380 180 S 470 300, 560 250 S 660 120, 720 150 S 820 290, 890 250 S 980 120, 1040 130 S 1120 110, 1180 100" stroke="#D0AC84" stroke-width="2.5" stroke-dasharray="2 9" stroke-linecap="round"></path>
+    
+    <g font-family="Montserrat, sans-serif" font-weight="700" font-size="15" text-anchor="middle">
+      <circle cx="70" cy="346" r="20" fill="#196166"></circle><text x="70" y="351" fill="#FCF7E6">1</text>
+      <circle cx="200" cy="190" r="20" fill="#196166"></circle><text x="200" y="195" fill="#FCF7E6">2</text>
+      <circle cx="380" cy="180" r="20" fill="#196166"></circle><text x="380" y="185" fill="#FCF7E6">3</text>
+      <circle cx="560" cy="250" r="20" fill="#FFFCF3" stroke="#196166" stroke-width="2.5"></circle><text x="560" y="255" fill="#196166">4</text>
+      <circle cx="720" cy="150" r="20" fill="#FFFCF3" stroke="#196166" stroke-width="2.5"></circle><text x="720" y="155" fill="#196166">5</text>
+      <circle cx="890" cy="250" r="20" fill="#FFFCF3" stroke="#196166" stroke-width="2.5"></circle><text x="890" y="255" fill="#196166">6</text>
+      <circle cx="1040" cy="130" r="20" fill="#FFFCF3" stroke="#196166" stroke-width="2.5"></circle><text x="1040" y="135" fill="#196166">7</text>
+      <circle cx="1180" cy="100" r="26" fill="#F5B246"></circle><path d="M1169 100 l7 7 l13 -14" stroke="#0A414F" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+    </g>
+  </svg>
+  
+  <div style="position: absolute; left: 110px; top: 612px; font-size: 15px; font-weight: 600"><span class="hand" style="display: block; font-size: 24px; color: #841B22">¡Hola!</span>მისალმება</div>
+  <div style="position: absolute; left: 212px; top: 356px; font-size: 15px; font-weight: 600"><span class="hand" style="display: block; font-size: 24px; color: #841B22">Me presento</span>თავის გაცნობა</div>
+  <div style="position: absolute; left: 400px; top: 470px; font-size: 15px; font-weight: 600"><span class="hand" style="display: block; font-size: 24px; color: #841B22">En el café</span>კაფეში</div>
+  <div style="position: absolute; left: 580px; top: 540px; font-size: 15px; font-weight: 600"><span class="hand" style="display: block; font-size: 24px; color: #841B22">¿Dónde está?</span>მიმართულებები</div>
+  <div style="position: absolute; left: 740px; top: 318px; font-size: 15px; font-weight: 600"><span class="hand" style="display: block; font-size: 24px; color: #841B22">Mi día</span>ჩემი დღე</div>
+  <div style="position: absolute; left: 910px; top: 540px; font-size: 15px; font-weight: 600"><span class="hand" style="display: block; font-size: 24px; color: #841B22">Mi familia</span>ოჯახი</div>
+  <div style="position: absolute; left: 1000px; top: 300px; font-size: 15px; font-weight: 600"><span class="hand" style="display: block; font-size: 24px; color: #841B22">De compras</span>საყიდლები</div>
+  <div style="position: absolute; left: 1292px; top: 328px"><span class="hand" style="display: block; font-size: 30px; color: #196166">¡A1!</span></div>
+  <p style="position: absolute; left: 80px; top: 726px; font-size: 13px; color: #4A6268">ბლოკების სახელები სამუშაოა — საბოლოო სია ნინასთან დაზუსტდება.</p>
+</section>
+
+
+<section style="position: relative; height: 800px; background: #FCF7E6">
+  <img src="../assets/illustrations/scene-stone-wall.webp" alt="ნინა ქვის მოაჯირზე ზის და ესპანური ქალაქის ხედს უყურებს" style="position: absolute; left: 0; top: 0; width: 700px; height: 800px; object-fit: cover; object-position: 50% 62%; border-radius: 0 360px 360px 0 / 0 50% 50% 0">
+  <svg style="position: absolute; left: 560px; top: 60px" width="220" height="680" viewBox="0 0 220 680" fill="none" aria-hidden="true"><path d="M20 20 C 190 150, 200 520, 40 660" stroke="#F5B246" stroke-width="6" stroke-linecap="round"></path></svg>
+  <div style="position: absolute; left: 800px; top: 120px; width: 560px; display: flex; flex-direction: column; gap: 18px">
+    <div class="hand" style="font-size: 44px; color: #841B22; transform: rotate(-3deg); transform-origin: left">Un regalo para ti</div>
+    <h2 style="font-size: 50px; line-height: 1.15; font-weight: 700">პირველი 2 გაკვეთილი — საჩუქრად</h2>
+    <p style="font-size: 19px; line-height: 1.6; color: #4A6268">ორი გაკვეთილი, რომ ერთმანეთი გავიცნოთ და ესპანური უკვე იგრძნო — სანამ რამეს გადაიხდი.</p>
+    <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 6px">
+      <div style="display: flex; gap: 14px; align-items: center; font-size: 17px; font-weight: 500"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5B8A81" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13c2 1.5 3.5 3.5 5 6 3-6 6.5-10.5 11-14"></path></svg>ვეცნობით ერთმანეთს</div>
+      <div style="display: flex; gap: 14px; align-items: center; font-size: 17px; font-weight: 500"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5B8A81" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13c2 1.5 3.5 3.5 5 6 3-6 6.5-10.5 11-14"></path></svg>ვარკვევთ შენს მიზნებსა და ტემპს</div>
+      <div style="display: flex; gap: 14px; align-items: center; font-size: 17px; font-weight: 500"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5B8A81" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13c2 1.5 3.5 3.5 5 6 3-6 6.5-10.5 11-14"></path></svg>პირველი ვიდეო-დიალოგები</div>
+      <div style="display: flex; gap: 14px; align-items: center; font-size: 17px; font-weight: 500"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5B8A81" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13c2 1.5 3.5 3.5 5 6 3-6 6.5-10.5 11-14"></path></svg>პირველი ბარათები</div>
+      <div style="display: flex; gap: 14px; align-items: center; font-size: 17px; font-weight: 500"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5B8A81" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13c2 1.5 3.5 3.5 5 6 3-6 6.5-10.5 11-14"></path></svg>ერთად ვაწყობთ პირველ დიალოგებს</div>
+    </div>
+    <a class="btn btn-burgundy" href="booking-desktop-form.html" style="margin-top: 14px; height: 62px; padding: 0 32px; width: fit-content; display: flex; align-items: center; gap: 12px; border-radius: 14px; background: #841B22; color: #FCF7E6; text-decoration: none; font-weight: 600; font-size: 18px">
+      დაჯავშნე საცდელი გაკვეთილი
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+    </a>
+  </div>
+</section>
+
+
+<section id="price" style="position: relative; height: 740px; background: #FCF7E6">
+  <div style="position: absolute; left: 80px; top: 120px; width: 520px; display: flex; flex-direction: column; gap: 18px">
+    <div class="hand" style="font-size: 40px; color: #196166">Precio</div>
+    <h2 style="font-size: 46px; line-height: 1.2; font-weight: 700">მარტივად: ერთი გაკვეთილი, ყველაფერი შიგნით</h2>
+    <p style="font-size: 18px; line-height: 1.65; color: #4A6268">არანაირი რთული პაკეტი. იხდი გაკვეთილს — მასალები, კაბინეტი და შენი გეგმა უკვე მასშია.</p>
+    <img src="../assets/spots/spot-coffee.webp" alt="" style="width: 190px; margin-top: 10px">
+  </div>
+  <div style="position: absolute; left: 720px; top: 110px; width: 560px; box-sizing: border-box; padding: 44px; border-radius: 24px; background: #FFFCF3; border: 1.5px solid #E4D3B4; box-shadow: 0 30px 60px -40px rgba(10,65,79,.45); display: flex; flex-direction: column; gap: 22px">
+    <div style="position: absolute; right: -18px; top: -22px; padding: 10px 18px; border-radius: 12px; background: #F5B246; color: #0A414F; font-weight: 700; font-size: 15px; transform: rotate(4deg); display: flex; gap: 8px; align-items: center">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A414F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="5" rx="1"></rect><path d="M5 13v7h14v-7M12 8v12M12 8c-1-3-5-4-5-1.5S10 8 12 8zM12 8c1-3 5-4 5-1.5S14 8 12 8z"></path></svg>
+      პირველი 2 გაკვეთილი — საჩუქრად
+    </div>
+    <div style="font-size: 20px; font-weight: 700">ინდივიდუალური გაკვეთილი</div>
+    <div style="display: flex; align-items: baseline; gap: 10px">
+      <span style="font-family: Montserrat, sans-serif; font-size: 88px; font-weight: 700; line-height: 1; color: #0A414F">30</span>
+      <span style="font-family: Montserrat, sans-serif; font-size: 28px; font-weight: 700; color: #0A414F">GEL</span>
+      <span style="font-size: 17px; color: #4A6268">/ გაკვეთილი</span>
+    </div>
+    <div style="display: flex; gap: 10px">
+      <span style="padding: 7px 14px; border-radius: 999px; background: #DCEAE6; font-size: 15px; font-weight: 600; color: #196166">75 წუთი</span>
+      <span style="padding: 7px 14px; border-radius: 999px; background: #DCEAE6; font-size: 15px; font-weight: 600; color: #196166">ონლაინ</span>
+      <span style="padding: 7px 14px; border-radius: 999px; background: #DCEAE6; font-size: 15px; font-weight: 600; color: #196166">1 : 1</span>
+    </div>
+    <div style="height: 1px; background: #E4D3B4"></div>
+    <div style="display: flex; flex-direction: column; gap: 12px; font-size: 17px">
+      <div style="display: flex; gap: 12px; align-items: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5B8A81" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"></path></svg>პერსონალური მასალები</div>
+      <div style="display: flex; gap: 12px; align-items: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5B8A81" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"></path></svg>პირადი ონლაინ კაბინეტი</div>
+      <div style="display: flex; gap: 12px; align-items: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5B8A81" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"></path></svg>ინდივიდუალური გეგმა შენი მიზნით</div>
+    </div>
+    <a class="btn btn-primary" href="booking-desktop-form.html" style="height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 14px; background: #196166; color: #FCF7E6; text-decoration: none; font-weight: 600; font-size: 18px">დაჯავშნე საცდელი გაკვეთილი</a>
+    <p style="font-size: 14px; color: #4A6268; text-align: center">ფასიანი გაკვეთილები მესამედან იწყება.</p>
+  </div>
+</section>
+
+
+<section id="faq" style="position: relative; height: 900px; background: #F6EDD3">
+  <div style="position: absolute; left: 80px; top: 110px; width: 400px; display: flex; flex-direction: column; gap: 16px">
+    <div class="hand" style="font-size: 40px; color: #841B22">¿Preguntas?</div>
+    <h2 style="font-size: 46px; line-height: 1.2; font-weight: 700">ხშირად დასმული კითხვები</h2>
+    <p style="font-size: 18px; line-height: 1.6; color: #4A6268">ვერ იპოვე პასუხი? მომწერე — სიამოვნებით გიპასუხებ.</p>
+    <img src="../assets/spots/spot-portrait.webp" alt="" style="width: 230px; margin-top: 16px">
+  </div>
+  <div style="position: absolute; left: 560px; top: 110px; width: 800px; display: flex; flex-direction: column; border-top: 1.5px solid #D0AC84">
+    
+      <div style="border-bottom: 1.5px solid #D0AC84">
+        <button class="faq-q" aria-expanded="true" style="width: 100%; min-height: 76px; padding: 18px 4px; border: 0; background: transparent; display: flex; justify-content: space-between; align-items: center; gap: 20px; text-align: left; color: #0A414F; font-family: 'FiraGO', 'Montserrat', sans-serif">
+          <span class="faq-title" style="font-size: 19px; font-weight: 600; line-height: 1.4">ესპანური საერთოდ არ ვიცი. შეიძლება?</span>
+          <span style="width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%; background: #196166; display: flex; align-items: center; justify-content: center; transition: transform .25s ease; transform: rotate(45deg)" class="faq-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FCF7E6" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></span>
+        </button>
+        
+          <p style="padding: 0 64px 24px 4px; font-size: 17px; line-height: 1.7; color: #4A6268" class="faq-a">რა თქმა უნდა. კურსი ზუსტად ნულიდან იწყება — პირველი სიტყვიდან, პირველი „¡Hola!“-დან. წინასწარი ცოდნა საჭირო არ არის.</p>
+        
+      </div>
+    
+      <div style="border-bottom: 1.5px solid #D0AC84">
+        <button class="faq-q" aria-expanded="true" style="width: 100%; min-height: 76px; padding: 18px 4px; border: 0; background: transparent; display: flex; justify-content: space-between; align-items: center; gap: 20px; text-align: left; color: #0A414F; font-family: 'FiraGO', 'Montserrat', sans-serif">
+          <span class="faq-title" style="font-size: 19px; font-weight: 600; line-height: 1.4">როგორ ტარდება გაკვეთილები?</span>
+          <span style="width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%; background: #FFFCF3; display: flex; align-items: center; justify-content: center; transition: transform .25s ease; transform: rotate(0deg)" class="faq-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></span>
+        </button>
+        
+          <p style="padding: 0 64px 24px 4px; font-size: 17px; line-height: 1.7; color: #4A6268" class="faq-a">ონლაინ, ინდივიდუალურად, 75 წუთი. ვუყურებთ ვიდეო-დიალოგებს, ვმუშაობთ ბარათებზე და ბევრს ვლაპარაკობთ. [პლატფორმა: Zoom / Google Meet]</p>
+        
+      </div>
+    
+      <div style="border-bottom: 1.5px solid #D0AC84">
+        <button class="faq-q" aria-expanded="true" style="width: 100%; min-height: 76px; padding: 18px 4px; border: 0; background: transparent; display: flex; justify-content: space-between; align-items: center; gap: 20px; text-align: left; color: #0A414F; font-family: 'FiraGO', 'Montserrat', sans-serif">
+          <span class="faq-title" style="font-size: 19px; font-weight: 600; line-height: 1.4">რამდენად ხშირად უნდა ვისწავლო?</span>
+          <span style="width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%; background: #FFFCF3; display: flex; align-items: center; justify-content: center; transition: transform .25s ease; transform: rotate(0deg)" class="faq-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></span>
+        </button>
+        
+          <p style="padding: 0 64px 24px 4px; font-size: 17px; line-height: 1.7; color: #4A6268" class="faq-a">ამას პირველ საუბარზე ერთად ვწყვეტთ — შენი დროისა და მიზნის მიხედვით. [რეკომენდებული სიხშირე]</p>
+        
+      </div>
+    
+      <div style="border-bottom: 1.5px solid #D0AC84">
+        <button class="faq-q" aria-expanded="true" style="width: 100%; min-height: 76px; padding: 18px 4px; border: 0; background: transparent; display: flex; justify-content: space-between; align-items: center; gap: 20px; text-align: left; color: #0A414F; font-family: 'FiraGO', 'Montserrat', sans-serif">
+          <span class="faq-title" style="font-size: 19px; font-weight: 600; line-height: 1.4">რა არის კაბინეტში?</span>
+          <span style="width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%; background: #FFFCF3; display: flex; align-items: center; justify-content: center; transition: transform .25s ease; transform: rotate(0deg)" class="faq-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></span>
+        </button>
+        
+          <p style="padding: 0 64px 24px 4px; font-size: 17px; line-height: 1.7; color: #4A6268" class="faq-a">შენი გაკვეთილები და თითოეულის მასალები: ბარათები, დიალოგები, აუდიო, ვიდეო, სავარჯიშოები და საშინაო დავალება — ერთ ადგილას.</p>
+        
+      </div>
+    
+      <div style="border-bottom: 1.5px solid #D0AC84">
+        <button class="faq-q" aria-expanded="true" style="width: 100%; min-height: 76px; padding: 18px 4px; border: 0; background: transparent; display: flex; justify-content: space-between; align-items: center; gap: 20px; text-align: left; color: #0A414F; font-family: 'FiraGO', 'Montserrat', sans-serif">
+          <span class="faq-title" style="font-size: 19px; font-weight: 600; line-height: 1.4">შემიძლია ვისწავლო მოგზაურობისთვის, გადასასვლელად ან სწავლისთვის?</span>
+          <span style="width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%; background: #FFFCF3; display: flex; align-items: center; justify-content: center; transition: transform .25s ease; transform: rotate(0deg)" class="faq-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></span>
+        </button>
+        
+          <p style="padding: 0 64px 24px 4px; font-size: 17px; line-height: 1.7; color: #4A6268" class="faq-a">დიახ. თემებსა და ლექსიკას შენს მიზანს ვუსადაგებ — იქნება ეს მოგზაურობა, საცხოვრებლად გადასვლა თუ სწავლა.</p>
+        
+      </div>
+    
+      <div style="border-bottom: 1.5px solid #D0AC84">
+        <button class="faq-q" aria-expanded="true" style="width: 100%; min-height: 76px; padding: 18px 4px; border: 0; background: transparent; display: flex; justify-content: space-between; align-items: center; gap: 20px; text-align: left; color: #0A414F; font-family: 'FiraGO', 'Montserrat', sans-serif">
+          <span class="faq-title" style="font-size: 19px; font-weight: 600; line-height: 1.4">როგორ მუშაობს 2 საჩუქარი გაკვეთილი?</span>
+          <span style="width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%; background: #FFFCF3; display: flex; align-items: center; justify-content: center; transition: transform .25s ease; transform: rotate(0deg)" class="faq-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></span>
+        </button>
+        
+          <p style="padding: 0 64px 24px 4px; font-size: 17px; line-height: 1.7; color: #4A6268" class="faq-a">პირველი ორი გაკვეთილი უფასოა: ვეცნობით ერთმანეთს, ვადგენთ ტემპს და უკვე ვიწყებთ ესპანურს. ფასიანი გაკვეთილები მესამედან იწყება.</p>
+        
+      </div>
+    
+      <div style="border-bottom: 1.5px solid #D0AC84">
+        <button class="faq-q" aria-expanded="true" style="width: 100%; min-height: 76px; padding: 18px 4px; border: 0; background: transparent; display: flex; justify-content: space-between; align-items: center; gap: 20px; text-align: left; color: #0A414F; font-family: 'FiraGO', 'Montserrat', sans-serif">
+          <span class="faq-title" style="font-size: 19px; font-weight: 600; line-height: 1.4">როგორ ვიხდი?</span>
+          <span style="width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%; background: #FFFCF3; display: flex; align-items: center; justify-content: center; transition: transform .25s ease; transform: rotate(0deg)" class="faq-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></span>
+        </button>
+        
+          <p style="padding: 0 64px 24px 4px; font-size: 17px; line-height: 1.7; color: #4A6268" class="faq-a">[გადახდის მეთოდი და ვადები — ნინა დააზუსტებს]</p>
+        
+      </div>
+    
+      <div style="border-bottom: 1.5px solid #D0AC84">
+        <button class="faq-q" aria-expanded="true" style="width: 100%; min-height: 76px; padding: 18px 4px; border: 0; background: transparent; display: flex; justify-content: space-between; align-items: center; gap: 20px; text-align: left; color: #0A414F; font-family: 'FiraGO', 'Montserrat', sans-serif">
+          <span class="faq-title" style="font-size: 19px; font-weight: 600; line-height: 1.4">რა მოხდება, თუ გაკვეთილს გამოვტოვებ?</span>
+          <span style="width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%; background: #FFFCF3; display: flex; align-items: center; justify-content: center; transition: transform .25s ease; transform: rotate(0deg)" class="faq-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></span>
+        </button>
+        
+          <p style="padding: 0 64px 24px 4px; font-size: 17px; line-height: 1.7; color: #4A6268" class="faq-a">[გაცდენისა და გადატანის წესი — ნინა დააზუსტებს]</p>
+        
+      </div>
+    
+  </div>
+</section>
+
+
+<section style="position: relative; height: 560px; background: #FCE8C0; overflow: hidden">
+  <svg style="position: absolute; left: 880px; top: 30px" width="520" height="520" viewBox="0 0 520 520" fill="none" aria-hidden="true"><path d="M420 70 C 330 10, 170 14, 90 110 C 10 206, 20 380, 120 460" stroke="#F5B246" stroke-width="8" stroke-linecap="round"></path><path d="M200 500 C 320 530, 450 460, 490 340 C 510 270, 500 200, 470 150" stroke="#E89A2E" stroke-width="5" stroke-linecap="round"></path></svg>
+  <img src="../assets/illustrations/nina-sitting-coffee.webp" alt="ნინა ფეხმორთხმით ზის ყავით ხელში და იღიმება" style="position: absolute; left: 930px; top: 70px; height: 470px; width: auto">
+  <div style="position: absolute; left: 80px; top: 120px; width: 760px; display: flex; flex-direction: column; gap: 20px">
+    <div class="hand" style="font-size: 76px; color: #841B22; transform: rotate(-4deg); transform-origin: left">¡Vamos!</div>
+    <h2 style="font-size: 54px; line-height: 1.15; font-weight: 700">მოდი, ესპანური ერთად ვისწავლოთ</h2>
+    <div style="display: flex; align-items: center; gap: 24px; margin-top: 10px">
+      <a class="btn btn-primary" href="booking-desktop-form.html" style="height: 64px; padding: 0 34px; display: flex; align-items: center; gap: 12px; border-radius: 14px; background: #196166; color: #FCF7E6; text-decoration: none; font-weight: 600; font-size: 19px">დაჯავშნე საცდელი გაკვეთილი</a>
+      <span style="font-size: 16px; font-weight: 600; color: #841B22">პირველი 2 გაკვეთილი — საჩუქრად</span>
+    </div>
+  </div>
+</section>
+
+
+<footer style="position: relative; height: 340px; background: #0A414F; color: #FCF7E6; box-sizing: border-box; padding: 60px 80px 0">
+  <div style="display: flex; justify-content: space-between; align-items: flex-start">
+    <div style="width: 144px; height: 144px; border-radius: 50%; background: #FCF7E6; display: flex; align-items: center; justify-content: center"><img src="../assets/logo/nina-logo.webp" alt="Nina – Tu Profe de Español" style="width: 118px; height: auto"></div>
+    <nav aria-label="ქვედა ნავიგაცია" style="display: flex; flex-direction: column; gap: 12px; font-size: 16px">
+      <span style="font-size: 13px; font-weight: 600; letter-spacing: .06em; color: #F5B246">საიტი</span>
+      <a href="#nina" style="color: #FCF7E6; text-decoration: none">ნინა</a><a href="#method" style="color: #FCF7E6; text-decoration: none">მეთოდი</a><a href="#stories" style="color: #FCF7E6; text-decoration: none">სიუჟეტები</a><a href="#price" style="color: #FCF7E6; text-decoration: none">ფასი</a>
+    </nav>
+    <div style="display: flex; flex-direction: column; gap: 12px; font-size: 16px">
+      <span style="font-size: 13px; font-weight: 600; letter-spacing: .06em; color: #F5B246">კონტაქტი</span>
+      <span>[ელ-ფოსტა]</span><span>[ტელეფონი / WhatsApp]</span><span>[Telegram]</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px; font-size: 16px">
+      <span style="font-size: 13px; font-weight: 600; letter-spacing: .06em; color: #F5B246">სოციალური</span>
+      <a href="#" style="color: #FCF7E6; text-decoration: none">Instagram</a><a href="#" style="color: #FCF7E6; text-decoration: none">Facebook</a><a href="#" style="color: #FCF7E6; text-decoration: none">TikTok</a>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 14px; align-items: flex-start">
+      <span style="font-size: 13px; font-weight: 600; letter-spacing: .06em; color: #F5B246">მოსწავლეებისთვის</span>
+      <a class="btn btn-cream" href="cabinet-c1-login.html" style="height: 46px; padding: 0 22px; display: flex; align-items: center; border-radius: 12px; background: #FCF7E6; color: #0A414F; text-decoration: none; font-weight: 600; font-size: 15px">შესვლა კაბინეტში</a>
+    </div>
+  </div>
+  <div style="position: absolute; left: 80px; right: 80px; bottom: 32px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(252,247,230,.2); padding-top: 22px">
+    <span style="font-family: Montserrat, sans-serif; font-style: italic; font-weight: 500; font-size: 17px; color: #F5B246">Nina - Tu Profe De Español</span>
+    <span style="font-size: 14px; color: #CFE0DB">© 2026 · ყველა უფლება დაცულია</span>
+  </div>
+</footer>
+
+
+
+<svg style="position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply; opacity: .22" width="1440" height="100%" aria-hidden="true"><filter id="grainMain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix values="0 0 0 0 .55  0 0 0 0 .45  0 0 0 0 .3  0 0 0 .35 0"></feColorMatrix></filter><rect width="100%" height="100%" filter="url(#grainMain)"></rect></svg></div>
+
+
+<script>
+/* Interactions from the design (vanilla, for reference only — rebuild in your framework). */
+(function(){
+  // FAQ accordion: one open at a time
+  const items = Array.from(document.querySelectorAll('.faq-q'));
+  function setOpen(i){ items.forEach((b, j) => { const open = i === j; const a = b.parentElement.querySelector('.faq-a');
+    if (a) a.hidden = !open; b.setAttribute('aria-expanded', String(open));
+    const ic = b.querySelector('.faq-icon'); if (ic){ ic.style.transform = 'rotate(' + (open ? 45 : 0) + 'deg)'; ic.style.background = open ? '#196166' : '#FFFCF3'; ic.querySelector('svg').setAttribute('stroke', open ? '#FCF7E6' : '#196166'); } }); }
+  let cur = 0; items.forEach((b, i) => b.addEventListener('click', () => { cur = cur === i ? -1 : i; setOpen(cur); })); setOpen(0);
+  // Dialogue translation toggle
+  const tg = document.querySelector('.en-toggle'); let en = false;
+  function setEN(v){ en = v; document.querySelectorAll('.en-line').forEach((e) => e.hidden = !v);
+    if (tg){ tg.setAttribute('aria-pressed', String(v)); tg.style.background = v ? '#196166' : 'transparent'; tg.style.color = v ? '#FCF7E6' : '#196166'; tg.textContent = 'EN ' + (v ? '✓' : '+'); } }
+  if (tg) tg.addEventListener('click', () => setEN(!en)); setEN(false);
+  // Spanish in Action pad
+  const fig = document.querySelector('.sia-figure'), word = document.querySelector('.sia-word'); let x = 2, y = 1;
+  function place(){ if (fig){ fig.style.left = (10 + x * 45) + 'px'; fig.style.top = (8 + y * 38) + 'px'; } }
+  document.querySelectorAll('.pad-btn').forEach((b) => b.addEventListener('click', () => { const t = b.textContent;
+    if (t.includes('izquierda')) x = Math.max(0, x - 1); if (t.includes('derecha')) x = Math.min(4, x + 1);
+    if (t.includes('arriba')) y = Math.max(0, y - 1); if (t.includes('abajo')) y = Math.min(2, y + 1);
+    if (word) word.textContent = '¡' + t.replace(/[←→↑↓]/g, '').trim() + '!'; place(); })); place();
+})();
+</script>
+</body>
+</html>

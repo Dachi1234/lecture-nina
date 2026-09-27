@@ -1,0 +1,48 @@
+---
+description: Nina – Tu Profe de Español design system. Apply to all UI work on the landing page and student cabinet.
+globs: ["**/*.tsx", "**/*.jsx", "**/*.ts", "**/*.css", "**/*.html", "**/*.mdx"]
+alwaysApply: true
+---
+
+# Nina design system — rules for code generation
+
+Design source of truth: `design/` (README.md, screens/*.html, tokens/, docs/). When building a screen, open the matching `design/screens/*.html` and copy exact values (colors, sizes, spacing, radii, copy). Rebuild layouts responsively with flex/grid — do not copy absolute positioning.
+
+## Tokens
+- Use tokens from `design/tokens/` (CSS variables or the Tailwind theme). Never invent new colors.
+- Palette: paper #FCF7E6 (page bg) · teal-deep #196166 (primary UI) · navy-teal #0A414F (text/headings/dark sections) · burgundy #841B22 (accent, CTA variant, errors) · mustard #F5B246 (brush accents, badges, focus ring) · warm-sand #D0AC84 (borders) · sage #5B8A81 (success/completed).
+- Text colors: #0A414F default, #4A6268 muted. Mustard and sand are NEVER text colors on cream.
+- NO dark mode. No `dark:` classes. No gradients as backgrounds, no neon, no purple.
+
+## Typography
+- Georgian is the main language. Font stack everywhere: `"FiraGO", "Montserrat", system-ui, sans-serif` (FiraGO is loaded only for the Georgian unicode-range).
+- Montserrat 600–700 headings / 400–500 body. Georgian body line-height 1.6.
+- Caveat (handwritten) ONLY for short Spanish accent words (¡Hola!, Poco a Poco, ¡Vamos!, Un día a la vez, Mis reglas…). Never Georgian, never body text, never inside exercises or forms.
+- Uppercase + letter-spacing only for short Latin overlines (VOCABULARIO, DIÁLOGO). Georgian is never uppercased.
+- Scale: display 64 · h1 48 · h2 36 (landing sections 46) · h3 24 · body 18 (mobile 16) · small 14.
+
+## Components
+- Buttons: primary teal / CTA burgundy / outline teal. Radius 12–14 (never pills). Hover −2px + darker. Focus: 3px mustard outline, 3px offset. CTAs don't wrap.
+- Primary CTA text is exactly „დაჯავშნე საცდელი გაკვეთილი" and opens the booking modal (desktop) / full-screen sheet (mobile).
+- Inputs 50–52px, radius 12, card bg #FFFCF3, 1.5px sand border; focus teal border + 4px teal-soft ring; error 2px burgundy + message + aria-invalid.
+- Cards radius 16, 1.5px #E4D3B4 border, card bg; hover lift −4px.
+- Chips (pill) only for facts/filters; choice chips are `<button aria-pressed>`.
+- Icons: simple line icons, 24px grid, 1.75 stroke, round caps/joins, currentColor. No emoji in UI.
+- Pronunciation letters: lowercase in pale-green (#D6E9C9) irregular organic circles — reserved for pronunciation only.
+
+## Brand & content
+- Logo: use `design/assets/logo/nina-logo.webp` exactly; never redraw/recolor; on dark backgrounds put it on a cream circle.
+- Illustrations: only from `design/assets/`. Every illustration must have a purpose. No brand logos. Spanish flag only as a small scene detail.
+- Never show textbook/series names. Never mention Nina's own Spanish level.
+- Dialogues are always Spanish + English (English is a toggle).
+- Tone: warm, first person, informal ("profe"). Avoid corporate/LMS/kids-app look (no Duolingo vibes, no kawaii, no hearts everywhere).
+
+## Cabinet
+- Calm tone only. Nav max 5: მთავარი · გაკვეთილები · მასალები · ლექსიკა · პროგრესი (desktop sidebar 248px, mobile bottom tab bar).
+- Student sees only assignments with ready_for_student = true. No sign-up.
+- Exercises: shared Exercise Frame (header/progress/check/restart/completion) + pluggable body per `template_id`. Beige #F3EAD6 surface, printed fonts, thin tile outlines, no name entry.
+- Status colors: new = teal-soft, in progress = mustard-soft (#7A4A00 text), done = sage-soft (#34605A text), homework = burgundy-soft.
+
+## Accessibility & performance
+- WCAG AA contrast, visible focus, real button/a/label elements, aria-label on icon buttons, touch targets ≥ 44px, alt text (decorative spots alt="").
+- `prefers-reduced-motion` disables animation. Lazy-load illustrations below the fold; responsive image sizes.

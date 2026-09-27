@@ -1,0 +1,111 @@
+/* =====================================================================
+   Nina – Tu Profe de Español · Design tokens (CSS custom properties)
+   Source of truth: tokens.json · Import once at the app root.
+   No dark mode — always warm, light, paper-like.
+   ===================================================================== */
+@import url("../assets/fonts/fonts.css");
+
+:root {
+  /* ---- Brand palette ("Nina Colors") ---- */
+  --paper: #FCF7E6;          /* page background (matches logo cream) */
+  --teal-deep: #196166;      /* primary UI: buttons, links, active */
+  --teal-deep-hover: #124D51;
+  --navy-teal: #0A414F;      /* headings, body text, dark sections, footer */
+  --burgundy: #841B22;       /* accent, CTA variant, errors */
+  --burgundy-hover: #6C141A;
+  --mustard: #F5B246;        /* brush underlines, badges, focus ring — never text on cream */
+  --mustard-deep: #E89A2E;   /* secondary brush stroke */
+  --warm-sand: #D0AC84;      /* borders, dividers — never text */
+  --sage: #5B8A81;           /* calm accent, success / completed */
+  --terracotta: #C8734B;     /* illustration-only: roofs on the path map */
+
+  /* ---- Surfaces & tints ---- */
+  --paper-deep: #F6EDD3;     /* calm alt sections, cabinet sidebar */
+  --sand-soft: #F1E3C8;      /* lively alt sections, icon buttons */
+  --card: #FFFCF3;           /* cards, inputs */
+  --exercise-bg: #F3EAD6;    /* beige surface inside exercises */
+  --line: #E4D3B4;           /* card borders */
+  --line-soft: #EFE3CB;      /* row dividers */
+  --tile-border: #C9B08E;    /* thin outline on exercise word tiles */
+  --teal-soft: #DCEAE6;
+  --teal-softer: #E4EFEC;    /* ghost button hover */
+  --burgundy-soft: #F4DEDA;
+  --mustard-soft: #FCE8C0;
+  --sage-soft: #E0EAE3;
+  --pronunciation-green: #D6E9C9; /* ONLY for pronunciation circles */
+  --disabled-bg: #D9D3C2;
+  --disabled-fg: #6F7D7F;
+
+  /* ---- Text ---- */
+  --text: #0A414F;           /* 10.4:1 on paper */
+  --text-muted: #4A6268;     /* 6.0:1 on paper */
+  --text-on-dark: #FCF7E6;
+  --text-on-dark-muted: #CFE0DB;
+  --text-on-dark-soft: #E6DEC8;
+  --status-progress-fg: #7A4A00; /* on mustard-soft, 6.2:1 */
+  --status-done-fg: #34605A;     /* on sage-soft, 5.8:1 */
+
+  /* ---- Typography ---- */
+  --font-sans: "FiraGO", "Montserrat", system-ui, sans-serif; /* FiraGO = Georgian range only */
+  --font-latin: "Montserrat", system-ui, sans-serif;
+  --font-hand: "Caveat", cursive; /* short Spanish accents only, never Georgian, never in exercises */
+
+  --fs-display: 64px;  --lh-display: 1.1;
+  --fs-h1: 48px;       --lh-h1: 1.15;
+  --fs-h2: 36px;       --lh-h2: 1.2;   /* landing section titles use 46px */
+  --fs-h3: 24px;       --lh-h3: 1.3;
+  --fs-body-l: 20px;
+  --fs-body: 18px;     --lh-body: 1.6; /* mobile body 16px */
+  --fs-small: 14px;    --lh-small: 1.5;
+  --fs-overline: 12px; --ls-overline: 0.08em; /* Latin only, uppercase */
+  --fw-regular: 400; --fw-medium: 500; --fw-semibold: 600; --fw-bold: 700;
+
+  /* ---- Spacing (4pt) ---- */
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px;
+  --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px; --space-16: 64px;
+  --space-24: 96px; --space-30: 120px;
+  --container: 1280px; --gutter: 24px; --margin-desktop: 80px; --margin-mobile: 20px;
+
+  /* ---- Radii ---- */
+  --radius-sm: 8px;    /* tags, tiles */
+  --radius-md: 12px;   /* inputs, buttons, icon boxes */
+  --radius-btn-l: 14px;/* large CTAs */
+  --radius-lg: 16px;   /* cards */
+  --radius-xl: 20px;   /* panels, exercise frame */
+  --radius-2xl: 24px;  /* modal, big panels */
+  --radius-pill: 999px;/* chips only */
+  --mask-blob: 46% 54% 40% 60% / 34% 36% 64% 66%;
+  --mask-arch: 999px 999px 20px 20px;
+  --mask-pron-1: 58% 42% 55% 45% / 48% 60% 40% 52%;
+  --mask-pron-2: 45% 55% 42% 58% / 58% 44% 56% 42%;
+  --mask-pron-3: 52% 48% 60% 40% / 42% 56% 44% 58%;
+
+  /* ---- Elevation ---- */
+  --shadow-lift: 0 18px 36px -22px rgba(10, 65, 79, 0.5);
+  --shadow-card-hover: 0 22px 44px -24px rgba(10, 65, 79, 0.45);
+  --shadow-device: 0 30px 60px -30px rgba(10, 65, 79, 0.6);
+  --shadow-modal: 0 40px 80px -30px rgba(0, 0, 0, 0.5);
+  --shadow-btn-hover: 0 10px 24px -10px rgba(10, 65, 79, 0.55);
+  --scrim: rgba(10, 65, 79, 0.55);
+
+  /* ---- Focus ---- */
+  --focus-ring: 3px solid var(--mustard);
+  --focus-offset: 3px;
+  --input-focus-ring: 0 0 0 4px var(--teal-soft);
+
+  /* ---- Motion ---- */
+  --ease: cubic-bezier(.2, .7, .3, 1);
+  --dur-fast: 150ms; --dur-base: 200ms; --dur-slow: 250ms;
+  --lift-btn: -2px; --lift-card: -4px;
+
+  /* ---- Layout ---- */
+  --header-h: 88px; --header-h-scrolled: 68px; --header-h-mobile: 64px;
+  --sidebar-w: 248px; --tabbar-h: 64px;
+}
+
+/* Base */
+html { background: var(--paper); }
+body { margin: 0; background: var(--paper); color: var(--text); font-family: var(--font-sans); font-size: var(--fs-body); line-height: var(--lh-body); -webkit-font-smoothing: antialiased; }
+:where(a, button, input, select, textarea, [tabindex]):focus-visible { outline: var(--focus-ring); outline-offset: var(--focus-offset); }
+.hand { font-family: var(--font-hand); font-weight: 600; line-height: 1; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }

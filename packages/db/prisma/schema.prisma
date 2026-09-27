@@ -1,0 +1,498 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+enum Role {
+  ADMIN
+  STUDENT
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String
+  nameLatin     String?
+  emailVerified Boolean   @default(false)
+  image         String?
+  role          Role      @default(STUDENT)
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+  invites       Invite[]
+  student       StudentProfile?
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?   @db.Text
+  refreshToken          String?   @db.Text
+  idToken               String?   @db.Text
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@unique([providerId, accountId])
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+}
+
+model Invite {
+  id         String    @id @default(cuid())
+  token      String    @unique
+  email      String
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt  DateTime
+  acceptedAt DateTime?
+  createdAt  DateTime  @default(now())
+}
+
+enum ContactChannel {
+  PHONE
+  WHATSAPP
+  TELEGRAM
+  EMAIL
+}
+
+enum Goal {
+  TRAVEL
+  STUDY
+  RELOCATION
+  FUN
+  OTHER
+}
+
+enum TimeOfDay {
+  MORNING
+  DAY
+  EVENING
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  TRIAL_SCHEDULED
+  TRIAL_DONE
+  CONVERTED
+  LOST
+}
+
+model StudentProfile {
+  id               String          @id @default(cuid())
+  userId           String          @unique
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  phone            String?
+  preferredChannel ContactChannel?
+  goal             Goal?
+  goalNote         String?
+  courseId         String?
+  course           Course?         @relation(fields: [courseId], references: [id])
+  nextLessonAt     DateTime?
+  giftLessonsLeft  Int             @default(2)
+  greetingForm     String          @default("feminine")
+  leadId           String?         @unique
+  lead             Lead?           @relation(fields: [leadId], references: [id])
+  onboardedAt      DateTime?
+  lessons          Lesson[]
+  assignments      Assignment[]
+  progress         MaterialProgress[]
+  attempts         ExerciseAttempt[]
+  notes            TeacherNote[]
+  checklist        ChecklistItem[]
+  personalVocab    VocabularyEntry[] @relation("PersonalVocab")
+  personalMaterials Material[]      @relation("PersonalMaterial")
+}
+
+model Lead {
+  id        String         @id @default(cuid())
+  name      String
+  phone     String
+  email     String?
+  channel   ContactChannel
+  goal      Goal?
+  days      String[]
+  timeOfDay TimeOfDay?
+  note      String?
+  consentAt DateTime
+  source    String?
+  utm       Json?
+  status    LeadStatus     @default(NEW)
+  adminNote String?
+  student   StudentProfile?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
+
+model Course {
+  id       String           @id @default(cuid())
+  slug     String           @unique
+  title    String
+  level    String?
+  order    Int              @default(0)
+  blocks   Block[]
+  students StudentProfile[]
+}
+
+model Block {
+  id                   String  @id @default(cuid())
+  courseId             String
+  course               Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  order                Int
+  titleEs              String
+  titleKa              String
+  checkpointMaterialId String?
+  topics               Topic[]
+
+  @@unique([courseId, order])
+}
+
+model Topic {
+  id          String             @id @default(cuid())
+  blockId     String
+  block       Block              @relation(fields: [blockId], references: [id], onDelete: Cascade)
+  number      Int
+  titleKa     String
+  titleEs     String?
+  internalRef String?
+  materials   MaterialTopic[]
+  lessons     LessonTopic[]
+  vocabulary  VocabularyEntry[]
+
+  @@unique([blockId, number])
+}
+
+enum MaterialType {
+  INFO_CARD
+  VOCAB
+  DIALOGUE
+  STORY
+  VIDEO
+  AUDIO
+  DOCUMENT
+  GRAMMAR
+  EXERCISE
+  GAME
+  PRONUNCIATION
+  GRADED_READER
+  CHECKPOINT
+  HTML_EMBED
+}
+
+enum MaterialStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum MaterialOrigin {
+  MANUAL
+  AI_AGENT
+  IMPORTED
+}
+
+model Material {
+  id                   String             @id @default(cuid())
+  type                 MaterialType
+  title                String
+  subtitle             String?
+  description          String?
+  content              Json
+  draft                Json?
+  contentSchemaVersion Int                @default(1)
+  status               MaterialStatus     @default(DRAFT)
+  origin               MaterialOrigin     @default(MANUAL)
+  tags                 String[]
+  estMinutes           Int?
+  personalForId        String?
+  personalFor          StudentProfile?    @relation("PersonalMaterial", fields: [personalForId], references: [id])
+  assets               MaterialAsset[]
+  topics               MaterialTopic[]
+  assignments          Assignment[]
+  progress             MaterialProgress[]
+  revisions            MaterialRevision[]
+  createdById          String?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+}
+
+model MaterialTopic {
+  materialId String
+  topicId    String
+  material   Material @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  topic      Topic    @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  @@id([materialId, topicId])
+}
+
+model MaterialRevision {
+  id          String   @id @default(cuid())
+  materialId  String
+  material    Material @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  content     Json
+  title       String
+  note        String?
+  createdById String?
+  createdAt   DateTime @default(now())
+}
+
+enum AssetKind {
+  IMAGE
+  VIDEO
+  AUDIO
+  DOCUMENT
+  OTHER
+}
+
+enum AssetStatus {
+  UPLOADING
+  PROCESSING
+  READY
+  FAILED
+}
+
+model MediaAsset {
+  id           String          @id @default(cuid())
+  kind         AssetKind
+  originalName String
+  mime         String
+  sizeBytes    BigInt
+  storageKey   String          @unique
+  checksum     String?
+  status       AssetStatus     @default(UPLOADING)
+  width        Int?
+  height       Int?
+  durationSec  Float?
+  pageCount    Int?
+  variants     Json?
+  alt          String?
+  tags         String[]
+  usedBy       MaterialAsset[]
+  createdAt    DateTime        @default(now())
+}
+
+model MaterialAsset {
+  materialId String
+  assetId    String
+  role       String
+  order      Int        @default(0)
+  material   Material   @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  asset      MediaAsset @relation(fields: [assetId], references: [id])
+
+  @@id([materialId, assetId, role])
+}
+
+enum LessonStatusOverride {
+  AUTO
+  DONE
+}
+
+model Lesson {
+  id              String               @id @default(cuid())
+  studentId       String
+  student         StudentProfile       @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  number          Int
+  title           String
+  date            DateTime
+  noteFromNina    String?
+  readyForStudent Boolean              @default(false)
+  statusOverride  LessonStatusOverride @default(AUTO)
+  isGift          Boolean              @default(false)
+  topics          LessonTopic[]
+  items           Assignment[]
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+
+  @@unique([studentId, number])
+}
+
+model LessonTopic {
+  lessonId String
+  topicId  String
+  lesson   Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  topic    Topic  @relation(fields: [topicId], references: [id])
+
+  @@id([lessonId, topicId])
+}
+
+enum AssignmentKind {
+  LESSON_MATERIAL
+  HOMEWORK
+  PERSONAL
+  REVIEW
+}
+
+model Assignment {
+  id              String         @id @default(cuid())
+  studentId       String
+  student         StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  materialId      String
+  material        Material       @relation(fields: [materialId], references: [id])
+  lessonId        String?
+  lesson          Lesson?        @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  kind            AssignmentKind @default(LESSON_MATERIAL)
+  groupLabel      String?
+  order           Int            @default(0)
+  dueAt           DateTime?
+  readyForStudent Boolean        @default(false)
+  assignedAt      DateTime       @default(now())
+
+  @@index([studentId, readyForStudent])
+}
+
+enum ProgressStatus {
+  NOT_STARTED
+  OPENED
+  COMPLETED
+}
+
+model MaterialProgress {
+  studentId   String
+  materialId  String
+  status      ProgressStatus @default(NOT_STARTED)
+  openedAt    DateTime?
+  completedAt DateTime?
+  lastStep    Int?
+  bestScore   Float?
+  student     StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  material    Material       @relation(fields: [materialId], references: [id], onDelete: Cascade)
+
+  @@id([studentId, materialId])
+}
+
+model ExerciseAttempt {
+  id                String         @id @default(cuid())
+  studentId         String
+  student           StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  materialId        String
+  contentRevisionId String?
+  answers           Json
+  score             Float?
+  correct           Int?
+  total             Int?
+  finishedAt        DateTime?
+  createdAt         DateTime       @default(now())
+}
+
+model TeacherNote {
+  id               String         @id @default(cuid())
+  studentId        String
+  student          StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  body             String
+  materialId       String?
+  visibleToStudent Boolean        @default(true)
+  createdAt        DateTime       @default(now())
+}
+
+model ChecklistItem {
+  id        String         @id @default(cuid())
+  studentId String
+  student   StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  lessonId  String?
+  text      String
+  done      Boolean        @default(false)
+  order     Int            @default(0)
+}
+
+model VocabularyEntry {
+  id            String          @id @default(cuid())
+  es            String
+  ka            String
+  en            String?
+  pronunciation String?
+  audioAssetId  String?
+  topicId       String?
+  topic         Topic?          @relation(fields: [topicId], references: [id])
+  category      String?
+  personalForId String?
+  personalFor   StudentProfile? @relation("PersonalVocab", fields: [personalForId], references: [id])
+  personalLabel String?
+}
+
+model LessonTemplate {
+  id       String   @id @default(cuid())
+  title    String
+  topicIds String[]
+  items    Json
+  note     String?
+}
+
+model SiteSetting {
+  key   String @id
+  value Json
+}
+
+model AgentThread {
+  id          String         @id @default(cuid())
+  title       String?
+  createdById String
+  messages    AgentMessage[]
+  runs        AgentRun[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model AgentMessage {
+  id        String      @id @default(cuid())
+  threadId  String
+  thread    AgentThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  role      String
+  content   Json
+  createdAt DateTime    @default(now())
+}
+
+model AgentRun {
+  id           String      @id @default(cuid())
+  threadId     String
+  thread       AgentThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  status       String
+  model        String
+  inputTokens  Int?
+  outputTokens Int?
+  costUsd      Float?
+  error        String?
+  createdAt    DateTime    @default(now())
+  finishedAt   DateTime?
+}
+
+model PromptTemplate {
+  id   String   @id @default(cuid())
+  name String
+  body String
+  tags String[]
+}

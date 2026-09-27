@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ka">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cabinet · Exercise player</title>
+<link rel="stylesheet" href="../assets/fonts/fonts.css">
+<style>
+body{margin:0;background:#FCF7E6;color:#0A414F;font-family:'FiraGO','Montserrat',system-ui,sans-serif}
+h1,h2,h3,p{margin:0}
+.hand{font-family:'Caveat',cursive;font-weight:600;line-height:1}
+.lbl{font:600 12px Montserrat,sans-serif;letter-spacing:.08em;color:#4A6268}
+.ex{border-radius:20px;background:#F3EAD6;border:1.5px solid #E4D3B4;overflow:hidden;display:flex;flex-direction:column;height:520px}
+.exh{padding:16px 18px 12px;background:#FFFCF3;border-bottom:1px solid #E4D3B4;display:flex;flex-direction:column;gap:8px}
+.bar{height:6px;border-radius:3px;background:#E4D3B4}
+.bar>div{height:6px;border-radius:3px;background:#196166}
+.exb{flex-grow:1;padding:18px;display:flex;flex-direction:column;gap:12px;font-family:Montserrat,sans-serif}
+.exf{height:68px;flex-shrink:0;padding:0 18px;display:flex;align-items:center;justify-content:space-between;background:#FFFCF3;border-top:1px solid #E4D3B4}
+.rs{width:44px;height:44px;border-radius:12px;border:1.5px solid #D0AC84;background:transparent;color:#0A414F;display:flex;align-items:center;justify-content:center}
+.chk{height:44px;padding:0 20px;border-radius:12px;border:0;background:#196166;color:#FCF7E6;font:600 15px 'FiraGO',Montserrat,sans-serif}
+.tile{padding:8px 14px;border-radius:8px;border:1px solid #C9B08E;background:#FFFCF3;font:500 16px Montserrat,sans-serif}
+.opt{min-height:52px;padding:0 16px;border-radius:12px;border:1px solid #C9B08E;background:#FFFCF3;display:flex;align-items:center;gap:12px;font:500 16px Montserrat,sans-serif}
+.ttl{font-size:16px;font-weight:700}
+.ins{font-size:14px;color:#4A6268}
+</style>
+</head>
+<body>
+
+<div style="width: 1440px; height: 2560px; overflow: hidden; background: #FCF7E6; padding: 56px 80px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
+  <div style="display: flex; flex-direction: column; gap: 8px"><span class="lbl">C6 · EXERCISE PLAYER</span><h1 style="font-size: 34px; font-weight: 700">ერთი ჩარჩო — ბევრი ინტერაქცია</h1><p style="font-size: 16px; color: #4A6268; max-width: 900px; line-height: 1.6">სავარჯიშოები მოდის ადმინიდან (ნინა ან AI აგენტი) როგორც JSON + template_id. ჩარჩო (header, პროგრესი, check/next, restart, completion) ყოველთვის ერთია; იცვლება მხოლოდ body. ბეჟი ფონი, მხოლოდ ბეჭდური შრიფტი, თხელი კონტური ფილებზე, სახელის შეყვანა არ არის.</p></div>
+
+  
+  <div style="display: grid; grid-template-columns: 760px 1fr; gap: 40px; align-items: start">
+    <div class="ex" style="height: 540px">
+      <div class="exh" style="padding: 20px 24px 16px">
+        <div style="display: flex; justify-content: space-between; align-items: center"><span class="lbl" style="color: #196166">① MULTIPLE CHOICE · 3 / 8</span><button aria-label="დახურვა" style="width: 40px; height: 40px; border-radius: 10px; border: 0; background: #F1E3C8; color: #0A414F">×</button></div>
+        <b style="font-size: 20px">¿Qué vas a tomar?</b>
+        <span class="ins" style="font-size: 15px">② აირჩიე სწორი პასუხი</span>
+        <div class="bar"><div style="width: 37%"></div></div>
+      </div>
+      <div class="exb" style="padding: 24px; gap: 14px">
+        <div style="font: 600 22px Montserrat, sans-serif; margin-bottom: 4px">Lucas: — ¿Y tú, Ana? — Ana: — Yo ___ un café.</div>
+        <div class="opt">A · quiere</div>
+        <div class="opt" style="border: 2px solid #5B8A81; background: #E0EAE3">B · quiero <span style="margin-left: auto; color: #34605A; font-weight: 700">✓ სწორია!</span></div>
+        <div class="opt">C · quieres</div>
+      </div>
+      <div class="exf" style="padding: 0 24px; height: 76px">
+        <button class="rs" aria-label="თავიდან დაწყება"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.5-5.8"></path><path d="M4 4v4h4"></path></svg></button>
+        <span style="font-size: 14px; color: #34605A; font-weight: 600">¡Muy bien! quiero = მე მინდა</span>
+        <button class="chk">შემდეგი →</button>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 16px; font-size: 15px; line-height: 1.6">
+      <b style="font-size: 18px">ჩარჩოს ანატომია</b>
+      <div><b>① Header</b> — ტიპი, ნაბიჯი N / M, სათაური, დახურვა (ბრუნდება გაკვეთილზე, პროგრესი ინახება).</div>
+      <div><b>② ინსტრუქცია</b> — ქართულად, ერთი ხაზი. <b>Progress bar</b> — teal.</div>
+      <div><b>③ Body</b> — template-ის მიხედვით (ქვემოთ 9 ვარიანტი). მასშტაბირებადი: ახალი template = ახალი body კომპონენტი.</div>
+      <div><b>④ Footer</b> — Restart (აბრუნებს სავარჯიშოს დასაწყისში) · feedback ხაზი · „შემოწმება“ → „შემდეგი →“.</div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap"><span style="padding: 6px 10px; border-radius: 8px; background: #E0EAE3; color: #34605A; font-weight: 600; font-size: 13px">სწორი: sage border + ✓</span><span style="padding: 6px 10px; border-radius: 8px; background: #F4DEDA; color: #841B22; font-weight: 600; font-size: 13px">არასწორი: burgundy border + სწორი პასუხის ჩვენება</span><span style="padding: 6px 10px; border-radius: 8px; background: #DCEAE6; color: #196166; font-weight: 600; font-size: 13px">არჩეული: teal border</span></div>
+      <div style="color: #4A6268">ერთი ნაბიჯი = ერთი ეკრანი desktop-ზე; მობილურზე უწყვეტი scroll, sticky „შემოწმება“.</div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px">
+    
+    <div class="ex">
+      <div class="exh"><span class="lbl" style="color: #196166">SWIPE TRUE / FALSE · 2 / 6</span><b class="ttl">Ana en Barcelona</b><div class="bar"><div style="width: 33%"></div></div></div>
+      <div class="exb" style="align-items: center; justify-content: center; position: relative">
+        <div style="position: absolute; width: 250px; height: 250px; border-radius: 16px; background: #FFFCF3; border: 1px solid #E4D3B4; transform: rotate(4deg) translate(10px, 8px)"></div>
+        <div style="position: relative; width: 260px; height: 260px; border-radius: 16px; background: #FFFCF3; border: 1px solid #C9B08E; box-shadow: 0 16px 30px -20px rgba(10,65,79,.5); transform: rotate(-6deg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 20px; box-sizing: border-box; text-align: center">
+          <span style="font-size: 20px; font-weight: 600">Ana es de Barcelona.</span>
+          <span style="padding: 4px 10px; border-radius: 6px; background: #F4DEDA; color: #841B22; font-weight: 700; font-size: 13px; transform: rotate(-8deg)">FALSO ←</span>
+        </div>
+        <div style="display: flex; gap: 24px; margin-top: 30px; position: relative"><span style="width: 56px; height: 56px; border-radius: 50%; background: #F4DEDA; color: #841B22; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700">✕</span><span style="width: 56px; height: 56px; border-radius: 50%; background: #E0EAE3; color: #34605A; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700">✓</span></div>
+      </div>
+      <div class="exf"><button class="rs" aria-label="თავიდან">↺</button><span class="ins">გადაფურცლე ან დააჭირე</span></div>
+    </div>
+
+    
+    <div class="ex">
+      <div class="exh"><span class="lbl" style="color: #196166">DRAG &amp; DROP · CATEGORIES</span><b class="ttl">el / la — გადაიტანე სწორ ყუთში</b><div class="bar"><div style="width: 50%"></div></div></div>
+      <div class="exb">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; min-height: 44px"><span class="tile">café</span><span class="tile" style="box-shadow: 0 10px 20px -10px rgba(10,65,79,.5); transform: rotate(-3deg); border-color: #196166">tostada</span><span class="tile">agua</span></div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; flex-grow: 1">
+          <div style="border-radius: 14px; border: 2px dashed #196166; background: #EAF2EF; padding: 12px; display: flex; flex-direction: column; gap: 8px"><b style="font-size: 18px; color: #196166">el</b><span class="tile" style="border-color: #5B8A81; background: #E0EAE3">té ✓</span><span class="tile" style="border-color: #5B8A81; background: #E0EAE3">zumo ✓</span></div>
+          <div style="border-radius: 14px; border: 2px dashed #C9B08E; padding: 12px; display: flex; flex-direction: column; gap: 8px"><b style="font-size: 18px; color: #841B22">la</b><span class="tile" style="border-color: #841B22; background: #F4DEDA">cuenta ✓</span></div>
+        </div>
+      </div>
+      <div class="exf"><button class="rs" aria-label="თავიდან">↺</button><button class="chk">შემოწმება</button></div>
+    </div>
+
+    
+    <div class="ex">
+      <div class="exh"><span class="lbl" style="color: #196166">SENTENCE BUILDER · 4 / 8</span><b class="ttl">ააწყე წინადადება</b><div class="bar"><div style="width: 50%"></div></div></div>
+      <div class="exb">
+        <span class="ins" style="font-family: 'FiraGO', sans-serif">„მე საქართველოდან ვარ, მაგრამ ბარსელონაში ვცხოვრობ.“</span>
+        <div style="min-height: 100px; border-bottom: 2px solid #196166; display: flex; gap: 8px; flex-wrap: wrap; align-content: flex-start; padding-bottom: 10px"><span class="tile" style="border-color: #196166; background: #DCEAE6">Soy</span><span class="tile" style="border-color: #196166; background: #DCEAE6">de</span><span class="tile" style="border-color: #196166; background: #DCEAE6">Georgia,</span></div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap"><span class="tile">pero</span><span class="tile">Barcelona</span><span class="tile">vivo</span><span class="tile">en</span><span class="tile" style="opacity: .35">Soy</span></div>
+      </div>
+      <div class="exf"><button class="rs" aria-label="თავიდან">↺</button><button class="chk">შემოწმება</button></div>
+    </div>
+
+    
+    <div class="ex">
+      <div class="exh"><span class="lbl" style="color: #196166">FILL IN THE BLANK</span><b class="ttl">ჩასვი სწორი ფორმა: ser</b><div class="bar"><div style="width: 62%"></div></div></div>
+      <div class="exb" style="gap: 18px; font-size: 18px; line-height: 1.6">
+        <div>Yo <span style="display: inline-block; min-width: 70px; padding: 2px 10px; border-bottom: 2px solid #5B8A81; background: #E0EAE3; font-weight: 600">soy</span> Ana.</div>
+        <div>Tú <span style="display: inline-block; min-width: 70px; padding: 2px 10px; border-bottom: 2px solid #841B22; background: #F4DEDA; font-weight: 600; text-decoration: line-through">es</span> <span style="color: #34605A; font-weight: 600">eres</span> de Tbilisi.</div>
+        <div>Lucas <span style="display: inline-block; min-width: 70px; padding: 2px 10px; border-bottom: 2px solid #196166; background: #FFFFFF; box-shadow: 0 0 0 3px #DCEAE6">e|</span> español.</div>
+        <div>Nosotros <span style="display: inline-block; min-width: 70px; padding: 2px 10px; border-bottom: 2px solid #C9B08E">&nbsp;</span> amigos.</div>
+      </div>
+      <div class="exf"><button class="rs" aria-label="თავიდან">↺</button><button class="chk">შემოწმება</button></div>
+    </div>
+
+    
+    <div class="ex">
+      <div class="exh"><span class="lbl" style="color: #196166">MATCHING PAIRS</span><b class="ttl">დააკავშირე სიტყვა და სურათი</b><div class="bar"><div style="width: 40%"></div></div></div>
+      <div class="exb" style="flex-direction: row; gap: 14px">
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 10px"><span class="opt" style="border-color: #5B8A81; background: #E0EAE3; justify-content: center">el café ✓</span><span class="opt" style="border: 2px solid #196166; justify-content: center">la mochila</span><span class="opt" style="justify-content: center">el mapa</span><span class="opt" style="justify-content: center">el cuaderno</span></div>
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 10px">
+          <span style="height: 52px; border-radius: 12px; border: 1px solid #C9B08E; background: #FFFCF3; display: flex; align-items: center; justify-content: center"><img src="../assets/spots/spot-notebook.webp" alt="რვეული" style="height: 44px"></span>
+          <span style="height: 52px; border-radius: 12px; border: 1px solid #5B8A81; background: #E0EAE3; display: flex; align-items: center; justify-content: center"><img src="../assets/spots/spot-coffee.webp" alt="ყავა" style="height: 46px"></span>
+          <span style="height: 52px; border-radius: 12px; border: 1px solid #C9B08E; background: #FFFCF3; display: flex; align-items: center; justify-content: center"><img src="../assets/spots/spot-backpack.webp" alt="ზურგჩანთა" style="height: 44px"></span>
+          <span style="height: 52px; border-radius: 12px; border: 1px solid #C9B08E; background: #FFFCF3; display: flex; align-items: center; justify-content: center"><img src="../assets/spots/spot-map.webp" alt="რუკა" style="height: 46px"></span>
+        </div>
+      </div>
+      <div class="exf"><button class="rs" aria-label="თავიდან">↺</button><span class="ins">ან: სიტყვა ↔ თარგმანი</span></div>
+    </div>
+
+    
+    <div class="ex">
+      <div class="exh"><span class="lbl" style="color: #196166">BRANCHING DIALOGUE</span><b class="ttl">შენ კაფეში ხარ. რას უპასუხებ?</b><div class="bar"><div style="width: 50%"></div></div></div>
+      <div class="exb">
+        <div style="display: flex; gap: 10px; max-width: 85%"><span style="width: 32px; height: 32px; flex-shrink: 0; border-radius: 50%; background: #DCEAE6; color: #196166; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px">L</span><div style="padding: 10px 12px; border-radius: 4px 12px 12px 12px; background: #FFFCF3; font-size: 15px; font-weight: 500">¡Hola! ¿Qué quieres tomar?</div></div>
+        <div style="align-self: flex-end; padding: 10px 12px; border-radius: 12px 4px 12px 12px; background: #196166; color: #FCF7E6; font-size: 15px; font-weight: 500">Un café con leche, por favor.</div>
+        <div style="display: flex; gap: 10px; max-width: 85%"><span style="width: 32px; height: 32px; flex-shrink: 0; border-radius: 50%; background: #DCEAE6; color: #196166; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px">L</span><div style="padding: 10px 12px; border-radius: 4px 12px 12px 12px; background: #FFFCF3; font-size: 15px; font-weight: 500">¿Algo para comer?</div></div>
+        <div style="margin-top: auto; display: flex; flex-direction: column; gap: 8px"><span class="opt" style="min-height: 44px; font-size: 15px">Sí, una tostada.</span><span class="opt" style="min-height: 44px; font-size: 15px">No, gracias. ¿Cuánto es?</span></div>
+      </div>
+      <div class="exf"><button class="rs" aria-label="თავიდან">↺</button><span class="ins">არჩევანი ცვლის ისტორიას</span></div>
+    </div>
+
+    
+    <div class="ex">
+      <div class="exh"><span class="lbl" style="color: #196166">LISTENING</span><b class="ttl">მოუსმინე და უპასუხე</b><div class="bar"><div style="width: 25%"></div></div></div>
+      <div class="exb" style="gap: 14px">
+        <div style="display: flex; gap: 14px; align-items: center; padding: 14px; border-radius: 14px; background: #0A414F; color: #FCF7E6"><span style="width: 52px; height: 52px; border-radius: 50%; background: #F5B246; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0A414F" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"></path></svg></span><div style="flex-grow: 1; display: flex; flex-direction: column; gap: 6px"><b style="font-size: 14px">¿Qué pide Laura?</b><div style="height: 4px; border-radius: 2px; background: rgba(252,247,230,.3)"><div style="width: 40%; height: 4px; border-radius: 2px; background: #F5B246"></div></div></div><span style="font-size: 12px">0.75×</span></div>
+        <span class="ins" style="font-family: 'FiraGO', sans-serif">რა შეუკვეთა ლაურამ?</span>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+          <span class="opt" style="justify-content: center">un té</span><span class="opt" style="justify-content: center">un zumo</span><span class="opt" style="justify-content: center">un café</span><span class="opt" style="justify-content: center">agua</span>
+        </div>
+      </div>
+      <div class="exf"><button class="rs" aria-label="თავიდან">↺</button><button class="chk">შემოწმება</button></div>
+    </div>
+
+    
+    <div class="ex" style="background: #FFFCF3">
+      <div class="exh"><span class="lbl" style="color: #841B22">CHECKPOINT · BLOQUE 3</span><b class="ttl">შედეგი</b></div>
+      <div class="exb" style="align-items: center; text-align: center; gap: 14px; padding-top: 24px">
+        <div style="position: relative; width: 150px; height: 150px; display: flex; align-items: center; justify-content: center">
+          <svg style="position: absolute; inset: 0" width="150" height="150" viewBox="0 0 150 150" aria-hidden="true"><circle cx="75" cy="75" r="62" fill="none" stroke="#E4D3B4" stroke-width="12"></circle><circle cx="75" cy="75" r="62" fill="none" stroke="#5B8A81" stroke-width="12" stroke-linecap="round" stroke-dasharray="331 390" transform="rotate(-90 75 75)"></circle></svg>
+          <span style="font: 700 36px Montserrat, sans-serif">17/20</span>
+        </div>
+        <span class="hand" style="font-size: 34px; color: #841B22">¡Genial!</span>
+        <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; font-family: 'FiraGO', Montserrat, sans-serif; font-size: 14px; text-align: left">
+          <div style="display: flex; justify-content: space-between; padding: 8px 12px; border-radius: 8px; background: #E0EAE3"><span>ლექსიკა</span><b>9 / 10</b></div>
+          <div style="display: flex; justify-content: space-between; padding: 8px 12px; border-radius: 8px; background: #FCE8C0"><span>querer — გაიმეორე</span><b>8 / 10</b></div>
+        </div>
+      </div>
+      <div class="exf"><button class="rs" aria-label="თავიდან">↺</button><button class="chk">შეცდომების ნახვა</button></div>
+    </div>
+
+    
+    <div class="ex" style="background: #FCE8C0; border-color: #F0D59E">
+      <div class="exb" style="align-items: center; justify-content: center; text-align: center; gap: 14px">
+        <img src="../assets/spots/spot-crosslegged.webp" alt="ნინა ყავით ზის და იღიმება" style="height: 190px">
+        <span class="hand" style="font-size: 44px; color: #841B22">¡Muy bien!</span>
+        <b style="font-family: 'FiraGO', sans-serif; font-size: 20px">სავარჯიშო დასრულებულია</b>
+        <span style="font-family: 'FiraGO', sans-serif; font-size: 15px; color: #4A6268">8 / 8 · მასალა მოინიშნა დასრულებულად</span>
+      </div>
+      <div class="exf" style="background: #FFF6E0"><button class="rs" aria-label="თავიდან დაწყება">↺</button><button class="chk">შემდეგი მასალა →</button></div>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>

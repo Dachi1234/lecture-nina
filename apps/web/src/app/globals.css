@@ -1,0 +1,40 @@
+@import "tailwindcss";
+@import "@nina/ui/styles/tokens.css";
+@import "@nina/ui/styles/theme.css";
+@source "../../../../packages/ui/src";
+
+@theme {
+  --font-sans: var(--font-firago), var(--font-montserrat), system-ui, sans-serif;
+  --font-hand: var(--font-caveat), cursive;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--text);
+  font-family: var(--font-firago), var(--font-montserrat), system-ui, sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+:where(a, button, input, textarea, summary):focus-visible {
+  outline: 3px solid var(--mustard);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="ka">
+<head>
+<meta charset="utf-8">
+<title>Nina Design System</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&amp;family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,500&amp;display=swap">
+<style>
+@font-face{font-family:'FiraGO';src:url(/_blob/03b6d26b02554995b6d3636b925c47f1) format('woff2');font-weight:400;font-display:swap;unicode-range:U+10A0-10FF,U+1C90-1CBF}
+@font-face{font-family:'FiraGO';src:url(/_blob/727c84beb3fcb64e3bb41707306e1e2a) format('woff2');font-weight:500;font-display:swap;unicode-range:U+10A0-10FF,U+1C90-1CBF}
+@font-face{font-family:'FiraGO';src:url(/_blob/3aebab4e8c84e7b7ee4184ba204621ec) format('woff2');font-weight:600;font-display:swap;unicode-range:U+10A0-10FF,U+1C90-1CBF}
+@font-face{font-family:'FiraGO';src:url(/_blob/a79aa21764b3df0f253baf5e218f5120) format('woff2');font-weight:700;font-display:swap;unicode-range:U+10A0-10FF,U+1C90-1CBF}
+body{margin:0;background:#FCF7E6;color:#0A414F;font-family:'FiraGO','Montserrat',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3,p{margin:0}
+.hand{font-family:'Caveat',cursive;font-weight:600;line-height:1}
+.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:#4A6268}
+.lbl{font:600 12px Montserrat,sans-serif;letter-spacing:.08em;color:#4A6268}
+</style>
+</helmet>
+<div style="width: 1440px; height: 5200px; position: relative; overflow: hidden; background: #FCF7E6; box-sizing: border-box; padding: 80px 80px 0; display: flex; flex-direction: column; gap: 96px">
+
+<!-- 0 · INTRO -->
+<section style="display: flex; gap: 64px; align-items: center">
+  <img src="/_blob/9f506bb9b8be2b84cb329cc1eaf189a3" alt="Nina – Tu Profe de Español logo" style="width: 260px; height: auto">
+  <div style="display: flex; flex-direction: column; gap: 18px; flex-grow: 1">
+    <div class="hand" style="font-size: 40px; color: #841B22">Guía de estilo</div>
+    <h1 style="font-family: Montserrat, sans-serif; font-size: 64px; line-height: 1.05; font-weight: 700; letter-spacing: -0.02em">Nina Design System</h1>
+    <p style="font-size: 20px; line-height: 1.6; color: #4A6268; max-width: 760px">„ეს ნინას საკუთარი ლამაზი, ჭკვიანი და მხიარული ესპანური სამყაროა.“ — თბილი, ქაღალდისებრი, ხელით ნახატი; ზრდასრულებისთვის, არა ბავშვური. მუქი რეჟიმი არ არსებობს.</p>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-top: 8px">
+      <div style="border-radius: 16px; background: #0A414F; color: #FCF7E6; padding: 24px; display: flex; flex-direction: column; gap: 8px">
+        <div style="display: flex; justify-content: space-between; align-items: baseline"><span class="hand" style="font-size: 34px; color: #F5B246">Lively · ცოცხალი</span><span style="font-size: 13px; color: #CFE0DB">Hero · Stories · CTAs</span></div>
+        <p style="font-size: 15px; line-height: 1.6; color: #E6DEC8">მაღალი კონტრასტი, navy/teal, burgundy, mustard, ფუნჯის აქცენტები, მოძრაობა.</p>
+      </div>
+      <div style="border-radius: 16px; background: #E0EAE3; padding: 24px; display: flex; flex-direction: column; gap: 8px">
+        <div style="display: flex; justify-content: space-between; align-items: baseline"><span class="hand" style="font-size: 34px; color: #196166">Calm · მშვიდი</span><span style="font-size: 13px; color: #4A6268">ახსნა · ფასი · FAQ · კაბინეტი</span></div>
+        <p style="font-size: 15px; line-height: 1.6; color: #0A414F">შეკავებული კონტრასტი, მეტი ჰაერი, sage და cream, თავშეკავებული ილუსტრაცია.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 1 · COLOR -->
+<section style="display: flex; flex-direction: column; gap: 28px">
+  <div style="display: flex; align-items: baseline; gap: 20px"><span class="lbl">01</span><h2 style="font-size: 36px; font-weight: 700">ფერები — Nina Colors</h2></div>
+  <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 16px">
+    <div style="display: flex; flex-direction: column; gap: 10px"><div style="height: 150px; border-radius: 14px; background: #FCF7E6; border: 1.5px solid #E4D3B4"></div><b style="font: 700 15px Montserrat, sans-serif">Paper</b><span class="mono">--paper #FCF7E6</span><span style="font-size: 13px; color: #4A6268">გვერდის ფონი</span></div>
+    <div style="display: flex; flex-direction: column; gap: 10px"><div style="height: 150px; border-radius: 14px; background: #196166"></div><b style="font: 700 15px Montserrat, sans-serif">Teal deep</b><span class="mono">--teal-deep #196166</span><span style="font-size: 13px; color: #4A6268">ღილაკები, ბმულები, აქტიური</span></div>
+    <div style="display: flex; flex-direction: column; gap: 10px"><div style="height: 150px; border-radius: 14px; background: #0A414F"></div><b style="font: 700 15px Montserrat, sans-serif">Navy teal</b><span class="mono">--navy-teal #0A414F</span><span style="font-size: 13px; color: #4A6268">სათაურები, ტექსტი, მუქი სექციები</span></div>
+    <div style="display: flex; flex-direction: column; gap: 10px"><div style="height: 150px; border-radius: 14px; background: #841B22"></div><b style="font: 700 15px Montserrat, sans-serif">Burgundy</b><span class="mono">--burgundy #841B22</span><span style="font-size: 13px; color: #4A6268">აქცენტი, CTA ვარიანტი</span></div>
+    <div style="display: flex; flex-direction: column; gap: 10px"><div style="height: 150px; border-radius: 14px; background: #F5B246"></div><b style="font: 700 15px Montserrat, sans-serif">Mustard</b><span class="mono">--mustard #F5B246</span><span style="font-size: 13px; color: #4A6268">ფუნჯის ხაზები, ბეჯები, focus</span></div>
+    <div style="display: flex; flex-direction: column; gap: 10px"><div style="height: 150px; border-radius: 14px; background: #D0AC84"></div><b style="font: 700 15px Montserrat, sans-serif">Warm sand</b><span class="mono">--warm-sand #D0AC84</span><span style="font-size: 13px; color: #4A6268">გამყოფები, საზღვრები</span></div>
+    <div style="display: flex; flex-direction: column; gap: 10px"><div style="height: 150px; border-radius: 14px; background: #5B8A81"></div><b style="font: 700 15px Montserrat, sans-serif">Sage</b><span class="mono">--sage #5B8A81</span><span style="font-size: 13px; color: #4A6268">მშვიდი აქცენტი, დასრულებული</span></div>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 12px">
+    <div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 64px; border-radius: 10px; background: #F6EDD3"></div><span class="mono">paper-deep #F6EDD3</span></div>
+    <div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 64px; border-radius: 10px; background: #F1E3C8"></div><span class="mono">sand-soft #F1E3C8</span></div>
+    <div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 64px; border-radius: 10px; background: #FFFCF3; border: 1px solid #E4D3B4"></div><span class="mono">card #FFFCF3</span></div>
+    <div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 64px; border-radius: 10px; background: #DCEAE6"></div><span class="mono">teal-soft #DCEAE6</span></div>
+    <div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 64px; border-radius: 10px; background: #F4DEDA"></div><span class="mono">burgundy-soft #F4DEDA</span></div>
+    <div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 64px; border-radius: 10px; background: #FCE8C0"></div><span class="mono">mustard-soft #FCE8C0</span></div>
+    <div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 64px; border-radius: 10px; background: #E0EAE3"></div><span class="mono">sage-soft #E0EAE3</span></div>
+    <div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 64px; border-radius: 58% 42% 55% 45% / 48% 60% 40% 52%; background: #D6E9C9"></div><span class="mono">pronun-green #D6E9C9</span></div>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px">
+    <div style="border-radius: 12px; background: #FFFCF3; border: 1px solid #E4D3B4; padding: 16px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 18px; font-weight: 700; color: #0A414F">Navy on paper · 10.4 : 1</span><span style="font-size: 13px; color: #4A6268">სათაურები და ძირითადი ტექსტი ✓</span></div>
+    <div style="border-radius: 12px; background: #FFFCF3; border: 1px solid #E4D3B4; padding: 16px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 18px; font-weight: 700; color: #4A6268">Muted #4A6268 · 6.0 : 1</span><span style="font-size: 13px; color: #4A6268">მეორადი ტექსტი, აღწერები ✓</span></div>
+    <div style="border-radius: 12px; background: #196166; padding: 16px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 18px; font-weight: 700; color: #FCF7E6">Paper on teal · 6.7 : 1</span><span style="font-size: 13px; color: #DCEAE6">ღილაკის ტექსტი ✓</span></div>
+    <div style="border-radius: 12px; background: #F4DEDA; padding: 16px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 18px; font-weight: 700; color: #841B22">Mustard / sand = არასოდეს ტექსტი</span><span style="font-size: 13px; color: #0A414F">მხოლოდ ზედაპირი და აქცენტი ✕</span></div>
+  </div>
+</section>
+
+<!-- 2 · TYPE -->
+<section style="display: flex; flex-direction: column; gap: 28px">
+  <div style="display: flex; align-items: baseline; gap: 20px"><span class="lbl">02</span><h2 style="font-size: 36px; font-weight: 700">ტიპოგრაფია</h2></div>
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px">
+    <div style="border-radius: 16px; background: #FFFCF3; border: 1px solid #E4D3B4; padding: 24px; display: flex; flex-direction: column; gap: 10px"><span class="lbl">LATIN / SPANISH</span><span style="font: 700 44px Montserrat, sans-serif">Montserrat</span><span style="font: 500 16px Montserrat, sans-serif; color: #4A6268">600–700 headings · 400–500 body & UI<br>¿Dónde está la biblioteca? ñ á é í ó ú ü ¡!</span></div>
+    <div style="border-radius: 16px; background: #FFFCF3; border: 1px solid #E4D3B4; padding: 24px; display: flex; flex-direction: column; gap: 10px"><span class="lbl">GEORGIAN</span><span style="font-size: 44px; font-weight: 700">FiraGO</span><span style="font-size: 16px; color: #4A6268; line-height: 1.6">600–700 სათაურები · 400–500 ტექსტი<br>აბგდევზთიკლმნოპჟრსტუფქღყშჩცძწჭხჯჰ</span></div>
+    <div style="border-radius: 16px; background: #FCE8C0; padding: 24px; display: flex; flex-direction: column; gap: 10px"><span class="lbl" style="color: #0A414F">HAND ACCENTS · SPANISH ONLY</span><span class="hand" style="font-size: 56px; color: #841B22">Caveat</span><span style="font-size: 15px; color: #0A414F; line-height: 1.6">მოკლე ესპანური სიტყვები: ¡Hola! · Poco a poco · Hoy · ¡Vamos!<br>არასოდეს ქართულისთვის, ტექსტისთვის ან სავარჯიშოებში.</span></div>
+  </div>
+  <div style="display: flex; flex-direction: column; border-top: 1px solid #E4D3B4">
+    <div style="display: grid; grid-template-columns: 200px 1fr 260px; align-items: center; padding: 18px 0; border-bottom: 1px solid #E4D3B4"><span class="lbl">DISPLAY</span><span style="font-size: 64px; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em">ესპანური სამყარო</span><span class="mono">64 / 1.1 · 700 · −2%</span></div>
+    <div style="display: grid; grid-template-columns: 200px 1fr 260px; align-items: center; padding: 18px 0; border-bottom: 1px solid #E4D3B4"><span class="lbl">H1</span><span style="font-size: 48px; font-weight: 700; line-height: 1.15">პირველი 2 გაკვეთილი</span><span class="mono">48 / 1.15 · 700</span></div>
+    <div style="display: grid; grid-template-columns: 200px 1fr 260px; align-items: center; padding: 18px 0; border-bottom: 1px solid #E4D3B4"><span class="lbl">H2</span><span style="font-size: 36px; font-weight: 700; line-height: 1.2">როგორ მიმდინარეობს გაკვეთილი</span><span class="mono">36 / 1.2 · 700 (landing 46)</span></div>
+    <div style="display: grid; grid-template-columns: 200px 1fr 260px; align-items: center; padding: 18px 0; border-bottom: 1px solid #E4D3B4"><span class="lbl">H3</span><span style="font-size: 24px; font-weight: 600; line-height: 1.3">სიუჟეტები და არა წესები</span><span class="mono">24 / 1.3 · 600</span></div>
+    <div style="display: grid; grid-template-columns: 200px 1fr 260px; align-items: center; padding: 18px 0; border-bottom: 1px solid #E4D3B4"><span class="lbl">BODY</span><span style="font-size: 18px; line-height: 1.6; max-width: 680px">ენას სიტუაციებსა და პერსონაჟებში ხვდები — Hola, ¿qué tal? — წესი მერე თავად ჩნდება.</span><span class="mono">18 / 1.6 · 400 (mobile 16)</span></div>
+    <div style="display: grid; grid-template-columns: 200px 1fr 260px; align-items: center; padding: 18px 0; border-bottom: 1px solid #E4D3B4"><span class="lbl">SMALL</span><span style="font-size: 14px; line-height: 1.5; color: #4A6268">ფასიანი გაკვეთილები მესამედან იწყება.</span><span class="mono">14 / 1.5 · 400–500</span></div>
+    <div style="display: grid; grid-template-columns: 200px 1fr 260px; align-items: center; padding: 18px 0; border-bottom: 1px solid #E4D3B4"><span class="lbl">OVERLINE (LATIN)</span><span style="font: 600 12px Montserrat, sans-serif; letter-spacing: .1em; color: #196166">VOCABULARIO · DIÁLOGO</span><span class="mono">12 · 600 · +10% · caps (Latin only)</span></div>
+    <div style="display: grid; grid-template-columns: 200px 1fr 260px; align-items: center; padding: 18px 0; border-bottom: 1px solid #E4D3B4"><span class="lbl">HAND</span><span class="hand" style="font-size: 44px; color: #841B22">¡Hola! · Un día a la vez</span><span class="mono">Caveat 600 · 28–76</span></div>
+  </div>
+  <p style="font-size: 14px; color: #4A6268">Font stack: <span class="mono">font-family: 'FiraGO', 'Montserrat', system-ui, sans-serif</span> — FiraGO ჩატვირთულია მხოლოდ ქართული unicode-range-ით (U+10A0–10FF, U+1C90–1CBF), ასე ქართული FiraGO-თი, ლათინური კი Montserrat-ით იწერება ერთსა და იმავე ხაზზე.</p>
+</section>
+
+<!-- 3 · BUTTONS -->
+<section style="display: flex; flex-direction: column; gap: 28px">
+  <div style="display: flex; align-items: baseline; gap: 20px"><span class="lbl">03</span><h2 style="font-size: 36px; font-weight: 700">ღილაკები</h2></div>
+  <div style="display: grid; grid-template-columns: 200px repeat(4, minmax(0, 1fr)); gap: 20px 24px; align-items: center">
+    <span></span><span class="lbl">DEFAULT</span><span class="lbl">HOVER (−2px, darker)</span><span class="lbl">FOCUS (mustard ring)</span><span class="lbl">DISABLED</span>
+    <span style="font-weight: 600">Primary · teal</span>
+    <button style="height: 56px; border: 0; border-radius: 14px; background: #196166; color: #FCF7E6; font: 600 16px 'FiraGO', Montserrat, sans-serif">დაჯავშნე გაკვეთილი</button>
+    <button style="height: 56px; border: 0; border-radius: 14px; background: #124D51; color: #FCF7E6; font: 600 16px 'FiraGO', Montserrat, sans-serif; transform: translateY(-2px); box-shadow: 0 10px 24px -10px rgba(10,65,79,.55)">დაჯავშნე გაკვეთილი</button>
+    <button style="height: 56px; border: 0; border-radius: 14px; background: #196166; color: #FCF7E6; font: 600 16px 'FiraGO', Montserrat, sans-serif; outline: 3px solid #F5B246; outline-offset: 3px">დაჯავშნე გაკვეთილი</button>
+    <button disabled style="height: 56px; border: 0; border-radius: 14px; background: #D9D3C2; color: #6F7D7F; font: 600 16px 'FiraGO', Montserrat, sans-serif">დაჯავშნე გაკვეთილი</button>
+    <span style="font-weight: 600">CTA variant · burgundy</span>
+    <button style="height: 56px; border: 0; border-radius: 14px; background: #841B22; color: #FCF7E6; font: 600 16px 'FiraGO', Montserrat, sans-serif">დაჯავშნე გაკვეთილი</button>
+    <button style="height: 56px; border: 0; border-radius: 14px; background: #6C141A; color: #FCF7E6; font: 600 16px 'FiraGO', Montserrat, sans-serif; transform: translateY(-2px)">დაჯავშნე გაკვეთილი</button>
+    <button style="height: 56px; border: 0; border-radius: 14px; background: #841B22; color: #FCF7E6; font: 600 16px 'FiraGO', Montserrat, sans-serif; outline: 3px solid #F5B246; outline-offset: 3px">დაჯავშნე გაკვეთილი</button>
+    <button disabled style="height: 56px; border: 0; border-radius: 14px; background: #D9D3C2; color: #6F7D7F; font: 600 16px 'FiraGO', Montserrat, sans-serif">დაჯავშნე გაკვეთილი</button>
+    <span style="font-weight: 600">Secondary · outline</span>
+    <button style="height: 56px; border: 1.5px solid #196166; border-radius: 14px; background: transparent; color: #196166; font: 600 16px 'FiraGO', Montserrat, sans-serif">შესვლა</button>
+    <button style="height: 56px; border: 1.5px solid #196166; border-radius: 14px; background: #E4EFEC; color: #196166; font: 600 16px 'FiraGO', Montserrat, sans-serif">შესვლა</button>
+    <button style="height: 56px; border: 1.5px solid #196166; border-radius: 14px; background: transparent; color: #196166; font: 600 16px 'FiraGO', Montserrat, sans-serif; outline: 3px solid #F5B246; outline-offset: 3px">შესვლა</button>
+    <button disabled style="height: 56px; border: 1.5px solid #D9D3C2; border-radius: 14px; background: transparent; color: #8C9899; font: 600 16px 'FiraGO', Montserrat, sans-serif">შესვლა</button>
+    <span style="font-weight: 600">Text link</span>
+    <a href="#" style="font-weight: 600; font-size: 16px; color: #196166; text-decoration: underline; text-decoration-color: #F5B246; text-decoration-thickness: 2px; text-underline-offset: 6px">როგორ მიმდინარეობს ↓</a>
+    <a href="#" style="font-weight: 600; font-size: 16px; color: #0A414F; text-decoration: underline; text-decoration-color: #841B22; text-decoration-thickness: 2px; text-underline-offset: 6px">როგორ მიმდინარეობს ↓</a>
+    <span class="mono">sizes: L 60–64 · M 48–56 · S 40</span>
+    <span class="mono">radius 12–14 · never pill for primary</span>
+  </div>
+</section>
+
+<!-- 4 · FORMS -->
+<section style="display: flex; flex-direction: column; gap: 28px">
+  <div style="display: flex; align-items: baseline; gap: 20px"><span class="lbl">04</span><h2 style="font-size: 36px; font-weight: 700">ფორმის ელემენტები</h2></div>
+  <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px">
+    <div style="display: flex; flex-direction: column; gap: 8px"><label for="ds1" style="font-size: 15px; font-weight: 600">სახელი</label><input id="ds1" placeholder="მაგ. მარიამი" style="height: 52px; box-sizing: border-box; padding: 0 16px; border-radius: 12px; border: 1.5px solid #D0AC84; background: #FFFCF3; font: 400 16px 'FiraGO', Montserrat, sans-serif; color: #0A414F"><span class="mono">default</span></div>
+    <div style="display: flex; flex-direction: column; gap: 8px"><label for="ds2" style="font-size: 15px; font-weight: 600">ტელეფონი</label><input id="ds2" value="+995 5" style="height: 52px; box-sizing: border-box; padding: 0 16px; border-radius: 12px; border: 2px solid #196166; background: #FFFFFF; box-shadow: 0 0 0 4px #DCEAE6; font: 400 16px 'FiraGO', Montserrat, sans-serif; color: #0A414F"><span class="mono">focus · teal + soft ring</span></div>
+    <div style="display: flex; flex-direction: column; gap: 8px"><label for="ds3" style="font-size: 15px; font-weight: 600">ელ-ფოსტა</label><input id="ds3" value="mariam@" aria-invalid="true" style="height: 52px; box-sizing: border-box; padding: 0 16px; border-radius: 12px; border: 2px solid #841B22; background: #FFFCF3; font: 400 16px 'FiraGO', Montserrat, sans-serif; color: #0A414F"><span style="font-size: 14px; color: #841B22; font-weight: 500">ელ-ფოსტა არასრულია</span></div>
+    <div style="display: flex; flex-direction: column; gap: 8px"><label for="ds4" style="font-size: 15px; font-weight: 600; color: #8C9899">სახელი</label><input id="ds4" disabled value="—" style="height: 52px; box-sizing: border-box; padding: 0 16px; border-radius: 12px; border: 1.5px solid #E4D3B4; background: #F3EEDF; font: 400 16px 'FiraGO', Montserrat, sans-serif; color: #8C9899"><span class="mono">disabled</span></div>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+    <div style="display: flex; flex-direction: column; gap: 10px"><span style="font-size: 15px; font-weight: 600">სასურველი არხი · choice chips</span>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap">
+        <span style="height: 44px; padding: 0 16px; display: flex; align-items: center; gap: 6px; border-radius: 12px; background: #196166; color: #FCF7E6; font-weight: 600; font-size: 15px">✓ WhatsApp</span>
+        <span style="height: 44px; padding: 0 16px; display: flex; align-items: center; border-radius: 12px; border: 1.5px solid #D0AC84; background: #FFFCF3; font-size: 15px">ტელეფონი</span>
+        <span style="height: 44px; padding: 0 16px; display: flex; align-items: center; border-radius: 12px; border: 1.5px solid #D0AC84; background: #FFFCF3; font-size: 15px">Telegram</span>
+        <span style="height: 44px; padding: 0 16px; display: flex; align-items: center; border-radius: 12px; border: 1.5px solid #D0AC84; background: #FFFCF3; font-size: 15px">ელ-ფოსტა</span>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px"><span style="font-size: 15px; font-weight: 600">Checkbox · consent</span>
+      <label style="display: flex; gap: 12px; align-items: flex-start; font-size: 15px; line-height: 1.5"><span style="width: 24px; height: 24px; flex-shrink: 0; border-radius: 6px; background: #196166; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FCF7E6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"></path></svg></span>ვეთანხმები ჩემი მონაცემების დამუშავებას</label>
+      <label style="display: flex; gap: 12px; align-items: flex-start; font-size: 15px; line-height: 1.5"><span style="width: 24px; height: 24px; flex-shrink: 0; border-radius: 6px; border: 2px solid #D0AC84; background: #FFFCF3; box-sizing: border-box"></span>unchecked</label>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px"><label for="ds5" style="font-size: 15px; font-weight: 600">შენიშვნა · textarea</label><textarea id="ds5" placeholder="რისთვის გინდა ესპანური?" style="height: 96px; box-sizing: border-box; padding: 14px 16px; border-radius: 12px; border: 1.5px solid #D0AC84; background: #FFFCF3; font: 400 16px 'FiraGO', Montserrat, sans-serif; resize: none"></textarea></div>
+  </div>
+</section>
+
+<!-- 5 · CHIPS, BADGES, CARDS -->
+<section style="display: flex; flex-direction: column; gap: 28px">
+  <div style="display: flex; align-items: baseline; gap: 20px"><span class="lbl">05</span><h2 style="font-size: 36px; font-weight: 700">ჩიპები, ბეჯები, ბარათები</h2></div>
+  <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center">
+    <span style="padding: 8px 16px; border-radius: 999px; background: #FFFCF3; border: 1.5px solid #E4D3B4; font-size: 15px; font-weight: 500">ნულიდან</span>
+    <span style="padding: 7px 14px; border-radius: 999px; background: #DCEAE6; color: #196166; font-size: 14px; font-weight: 600">75 წუთი</span>
+    <span style="padding: 6px 12px; border-radius: 8px; background: #DCEAE6; color: #196166; font-size: 13px; font-weight: 600">ახალი</span>
+    <span style="padding: 6px 12px; border-radius: 8px; background: #FCE8C0; color: #7A4A00; font-size: 13px; font-weight: 600">მიმდინარე</span>
+    <span style="padding: 6px 12px; border-radius: 8px; background: #E0EAE3; color: #34605A; font-size: 13px; font-weight: 600">✓ დასრულებული</span>
+    <span style="padding: 6px 12px; border-radius: 8px; background: #F4DEDA; color: #841B22; font-size: 13px; font-weight: 600">საშინაო · 3 ოქტ.</span>
+    <span style="padding: 6px 12px; border-radius: 8px; background: #0A414F; color: #FCF7E6; font-size: 13px; font-weight: 600">პირადი · ნინასგან</span>
+    <span style="padding: 10px 18px; border-radius: 12px; background: #F5B246; color: #0A414F; font-weight: 700; font-size: 15px; transform: rotate(3deg)">2 გაკვეთილი — საჩუქრად</span>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+    <div style="display: flex; flex-direction: column; gap: 10px"><span class="lbl">FEATURE CARD · LANDING</span>
+      <article style="height: 220px; border-radius: 16px; background: #FFFCF3; border: 1.5px solid #E4D3B4; display: flex; overflow: hidden">
+        <div style="width: 120px; background: #FCE8C0; display: flex; align-items: flex-end; justify-content: center"><img src="/_blob/79a137fd642ae4412dd74e5b07b9201e" alt="" style="height: 200px"></div>
+        <div style="padding: 22px; display: flex; flex-direction: column; gap: 8px"><span class="hand" style="font-size: 28px; color: #841B22">02</span><b style="font-size: 19px">სიუჟეტები და არა წესები</b><span style="font-size: 15px; line-height: 1.55; color: #4A6268">ენას სიტუაციებში ხვდები.</span></div>
+      </article>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px"><span class="lbl">LESSON CARD · CABINET</span>
+      <article style="border-radius: 16px; background: #FFFCF3; border: 1.5px solid #E4D3B4; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+        <div style="display: flex; justify-content: space-between; align-items: center"><span style="font: 600 13px Montserrat, sans-serif; color: #196166">LECCIÓN 6 · 24 სექ.</span><span style="padding: 5px 10px; border-radius: 8px; background: #FCE8C0; color: #7A4A00; font-size: 12px; font-weight: 600">მიმდინარე</span></div>
+        <b style="font-size: 20px">En el café — შეკვეთა</b>
+        <div style="display: flex; gap: 6px"><span style="padding: 4px 10px; border-radius: 6px; background: #F6EDD3; font-size: 13px">ser / estar</span><span style="padding: 4px 10px; border-radius: 6px; background: #F6EDD3; font-size: 13px">საკვები</span></div>
+        <div style="display: flex; align-items: center; gap: 10px"><div style="flex-grow: 1; height: 6px; border-radius: 3px; background: #E4D3B4"><div style="width: 58%; height: 6px; border-radius: 3px; background: #5B8A81"></div></div><span style="font-size: 13px; color: #4A6268">7 / 12</span></div>
+      </article>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px"><span class="lbl">MATERIAL ROW · CABINET</span>
+      <div style="border-radius: 14px; background: #FFFCF3; border: 1.5px solid #E4D3B4; display: flex; flex-direction: column">
+        <div style="display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-bottom: 1px solid #EFE3CB"><span style="width: 40px; height: 40px; border-radius: 10px; background: #DCEAE6; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"></rect><path d="M16 10l5-3v10l-5-3"></path></svg></span><div style="flex-grow: 1"><b style="font-size: 15px">Diálogo en el café</b><div style="font-size: 13px; color: #4A6268">ვიდეო · 2:10</div></div><span style="width: 26px; height: 26px; border-radius: 50%; background: #5B8A81; display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FCF7E6" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"></path></svg></span></div>
+        <div style="display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-bottom: 1px solid #EFE3CB"><span style="width: 40px; height: 40px; border-radius: 10px; background: #FCE8C0; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#841B22" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z"></path><path d="M14 6l3 3"></path></svg></span><div style="flex-grow: 1"><b style="font-size: 15px">ააწყე წინადადება</b><div style="font-size: 13px; color: #4A6268">სავარჯიშო · 8 ნაბიჯი</div></div><span style="width: 26px; height: 26px; border-radius: 50%; border: 2.5px solid #5B8A81; box-sizing: border-box; background: linear-gradient(90deg, #5B8A81 50%, transparent 50%)"></span></div>
+        <div style="display: flex; align-items: center; gap: 14px; padding: 14px 16px"><span style="width: 40px; height: 40px; border-radius: 10px; background: #F1E3C8; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A414F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"></path><path d="M14 3v5h5M9 13h6M9 17h4"></path></svg></span><div style="flex-grow: 1"><b style="font-size: 15px">Hoja de trabajo</b><div style="font-size: 13px; color: #4A6268">PDF · 2 გვ.</div></div><span style="width: 26px; height: 26px; border-radius: 50%; border: 2.5px solid #D0AC84; box-sizing: border-box"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 · ICONS -->
+<section style="display: flex; flex-direction: column; gap: 28px">
+  <div style="display: flex; align-items: baseline; gap: 20px"><span class="lbl">06</span><h2 style="font-size: 36px; font-weight: 700">იკონები</h2><span style="font-size: 15px; color: #4A6268">24px grid · 1.75 stroke · round caps & joins · teal/navy · მასალის ტიპს ყოველთვის თავისი იკონი აქვს</span></div>
+  <div style="display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 12px">
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 0; border-radius: 12px; background: #FFFCF3"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="2"></rect><path d="M10 8h4M10 12h4"></path></svg><span style="font-size: 12px">ბარათი</span></div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 0; border-radius: 12px; background: #FFFCF3"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"></path><path d="M4 21V5M9 8h6"></path></svg><span style="font-size: 12px">ლექსიკა</span></div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 0; border-radius: 12px; background: #FFFCF3"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h11a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H9l-4 3v-3H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"></path><path d="M19 9h1a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-1v3l-4-3h-3"></path></svg><span style="font-size: 12px">დიალოგი</span></div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 0; border-radius: 12px; background: #FFFCF3"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"></rect><path d="M16 10l5-3v10l-5-3"></path></svg><span style="font-size: 12px">ვიდეო</span></div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 0; border-radius: 12px; background: #FFFCF3"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15v-3a8 8 0 0 1 16 0v3"></path><rect x="3" y="14" width="4" height="6" rx="1.5"></rect><rect x="17" y="14" width="4" height="6" rx="1.5"></rect></svg><span style="font-size: 12px">აუდიო</span></div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 0; border-radius: 12px; background: #FFFCF3"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"></path><path d="M14 3v5h5M9 13h6M9 17h4"></path></svg><span style="font-size: 12px">დოკუმენტი</span></div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 0; border-radius: 12px; background: #FFFCF3"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z"></path><path d="M14 6l3 3"></path></svg><span style="font-size: 12px">სავარჯიშო</span></div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 0; border-radius: 12px; background: #FFFCF3"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h2l2-5 3 10 3-12 3 9 2-2h3"></path></svg><span style="font-size: 12px">გამოთქმა</span></div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 0; border-radius: 12px; background: #FFFCF3"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h14v9a7 7 0 0 1-14 0z"></path><path d="M9 9h6M9 13h4"></path></svg><span style="font-size: 12px">გრამატიკა</span></div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 0; border-radius: 12px; background: #FFFCF3"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"></rect><path d="M9 12l2 2 4-4"></path></svg><span style="font-size: 12px">საშინაო</span></div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 0; border-radius: 12px; background: #FFFCF3"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"></rect><circle cx="9" cy="9" r="1.2"></circle><circle cx="15" cy="15" r="1.2"></circle><circle cx="15" cy="9" r="1.2"></circle><circle cx="9" cy="15" r="1.2"></circle></svg><span style="font-size: 12px">თამაში</span></div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 0; border-radius: 12px; background: #FFFCF3"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 21V4M5 4h11l-2 4 2 4H5"></path></svg><span style="font-size: 12px">checkpoint</span></div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 0; border-radius: 12px; background: #FFFCF3"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-7 8 7v9a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"></path></svg><span style="font-size: 12px">მთავარი</span></div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 0; border-radius: 12px; background: #FFFCF3"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg><span style="font-size: 12px">გაკვეთილები</span></div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 0; border-radius: 12px; background: #FFFCF3"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"></path><path d="M3 13l9 5 9-5"></path></svg><span style="font-size: 12px">მასალები</span></div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 0; border-radius: 12px; background: #FFFCF3"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19c3-1 4-4 6-8s4-6 10-7"></path><circle cx="4" cy="19" r="1.5"></circle><circle cx="11" cy="10" r="1.5"></circle><circle cx="20" cy="4" r="1.5"></circle></svg><span style="font-size: 12px">პროგრესი</span></div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 0; border-radius: 12px; background: #FFFCF3"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.5-5.8"></path><path d="M4 4v4h4"></path></svg><span style="font-size: 12px">თავიდან</span></div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 0; border-radius: 12px; background: #FFFCF3"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"></path></svg><span style="font-size: 12px">ჩამოტვირთვა</span></div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 0; border-radius: 12px; background: #FFFCF3"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="5" rx="1"></rect><path d="M5 13v7h14v-7M12 8v12M12 8c-1-3-5-4-5-1.5S10 8 12 8zM12 8c1-3 5-4 5-1.5S14 8 12 8z"></path></svg><span style="font-size: 12px">საჩუქარი</span></div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 0; border-radius: 12px; background: #FFFCF3"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="M20 20l-4.2-4.2"></path></svg><span style="font-size: 12px">ძიება</span></div>
+  </div>
+</section>
+
+<!-- 7 · GRAPHIC LANGUAGE -->
+<section style="display: flex; flex-direction: column; gap: 28px">
+  <div style="display: flex; align-items: baseline; gap: 20px"><span class="lbl">07</span><h2 style="font-size: 36px; font-weight: 700">გრაფიკული ენა</h2></div>
+  <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px">
+    <div style="height: 220px; border-radius: 16px; background: #FFFCF3; border: 1px solid #E4D3B4; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between">
+      <span class="lbl">BRUSH UNDERLINE</span>
+      <span style="position: relative; font: 700 34px Montserrat, sans-serif; width: fit-content">Español<svg style="position: absolute; left: -4px; bottom: -12px" width="160" height="18" viewBox="0 0 300 22" preserveAspectRatio="none" aria-hidden="true"><path d="M4 13 C 70 6, 160 3, 296 8 C 298 12, 292 15, 286 14 C 190 12, 96 14, 9 19 C 3 19, 1 15, 4 13 Z" fill="#F5B246"></path></svg></span>
+      <span style="font-size: 13px; color: #4A6268">ერთი სიტყვა სათაურში — არა მთელი ხაზი.</span>
+    </div>
+    <div style="height: 220px; border-radius: 16px; background: #FFFCF3; border: 1px solid #E4D3B4; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between">
+      <span class="lbl">OPEN BRUSH CIRCLE</span>
+      <svg width="120" height="110" viewBox="0 0 120 120" fill="none" aria-hidden="true"><path d="M96 22 A 50 50 0 1 0 108 70" stroke="#F5B246" stroke-width="5" stroke-linecap="round"></path><path d="M90 16 A 48 48 0 0 0 30 18" stroke="#E89A2E" stroke-width="2" stroke-linecap="round"></path></svg>
+      <span style="font-size: 13px; color: #4A6268">ლოგოს ჩარჩოს ექო — ყოველთვის ღია, ყოველთვის რაღაცის გარშემო.</span>
+    </div>
+    <div style="height: 220px; border-radius: 16px; background: #FFFCF3; border: 1px solid #E4D3B4; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between">
+      <span class="lbl">DOODLES</span>
+      <div style="display: flex; gap: 22px; align-items: center">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#196166" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M12 2v6M12 16v6M2 12h6M16 12h6"></path></svg>
+        <svg width="60" height="46" viewBox="0 0 80 70" fill="none" aria-hidden="true"><path d="M66 6 C 58 36, 36 52, 10 58" stroke="#841B22" stroke-width="3" stroke-linecap="round"></path><path d="M20 48 L 9 58 L 23 63" stroke="#841B22" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#5B8A81" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13c2 1.5 3.5 3.5 5 6 3-6 6.5-10.5 11-14"></path></svg>
+        <svg width="44" height="20" viewBox="0 0 44 20" fill="none" aria-hidden="true"><path d="M2 10c6-8 10 8 16 0s10 8 16 0 6-4 8-2" stroke="#F5B246" stroke-width="2.5" stroke-linecap="round"></path></svg>
+      </div>
+      <span style="font-size: 13px; color: #4A6268">ვარსკვლავი, ისარი, ხელით check, ტალღა. მაქს. 2–3 სექციაზე.</span>
+    </div>
+    <div style="height: 220px; border-radius: 16px; background: #FFFCF3; border: 1px solid #E4D3B4; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between">
+      <span class="lbl">PRONUNCIATION</span>
+      <div style="display: flex; gap: 10px">
+        <span style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; background: #D6E9C9; border-radius: 58% 42% 55% 45% / 48% 60% 40% 52%; font: 600 26px Montserrat, sans-serif">ñ</span>
+        <span style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; background: #D6E9C9; border-radius: 45% 55% 42% 58% / 58% 44% 56% 42%; font: 600 26px Montserrat, sans-serif">ll</span>
+        <span style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; background: #D6E9C9; border-radius: 52% 48% 60% 40% / 42% 56% 44% 58%; font: 600 26px Montserrat, sans-serif">rr</span>
+      </div>
+      <span style="font-size: 13px; color: #4A6268">პატარა ასოები ღია-მწვანე ორგანულ წრეებში. მხოლოდ გამოთქმისთვის.</span>
+    </div>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; align-items: end">
+    <div style="display: flex; flex-direction: column; gap: 10px"><img src="/_blob/7de97e497a484d3edf44ba1dcdfef78f" alt="" style="width: 100%; height: 240px; object-fit: cover; border-radius: 46% 54% 40% 60% / 34% 36% 64% 66%"><span class="mono">mask · organic blob</span></div>
+    <div style="display: flex; flex-direction: column; gap: 10px"><img src="/_blob/6678dfde7f6ab904677aab0a3215c3e4" alt="" style="width: 100%; height: 240px; object-fit: cover; object-position: 50% 58%; border-radius: 160px 160px 16px 16px"><span class="mono">mask · arch (Mediterranean)</span></div>
+    <div style="display: flex; flex-direction: column; gap: 10px"><div style="height: 240px; border-radius: 16px; background: #0A414F; position: relative; overflow: hidden"><svg style="position: absolute; left: 0; top: 0" width="100%" height="40" viewBox="0 0 1440 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 0 H1440 V14 C 1200 34, 980 6, 720 20 C 460 34, 240 8, 0 24 Z" fill="#FCF7E6"></path></svg></div><span class="mono">section edge · soft wave (dark sections)</span></div>
+    <div style="display: flex; flex-direction: column; gap: 10px"><div style="height: 240px; border-radius: 16px; background: #F1E3C8; display: flex; align-items: center; justify-content: center"><div style="position: relative; width: 150px; height: 150px; padding: 22px 14px; box-sizing: border-box; background: #FFFCF3; border-radius: 4px; transform: rotate(-3deg); box-shadow: 0 10px 20px -14px rgba(10,65,79,.5)"><span style="position: absolute; left: 40px; top: -10px; width: 70px; height: 20px; background: rgba(245,178,70,.65)"></span><span class="hand" style="font-size: 26px; color: #196166">Hoy:</span></div></div><span class="mono">pinned note · tape</span></div>
+  </div>
+</section>
+
+<!-- 8 · ILLUSTRATION & LOGO -->
+<section style="display: flex; flex-direction: column; gap: 28px">
+  <div style="display: flex; align-items: baseline; gap: 20px"><span class="lbl">08</span><h2 style="font-size: 36px; font-weight: 700">ილუსტრაცია და ლოგო</h2></div>
+  <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px">
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px">
+      <div style="border-radius: 16px; background: #E0EAE3; padding: 22px; display: flex; flex-direction: column; gap: 12px"><b style="font-size: 18px; color: #34605A">✓ ასე</b>
+        <p style="font-size: 15px; line-height: 1.65">ყოველ ილუსტრაციას აქვს როლი: კონტექსტი, ისტორია, მოგონება.<br>Cut-out ნინა cream ფონზე; სცენები ორგანულ/თაღოვან ნიღაბში.<br>9:16 სცენები — მობილურის სექციებისთვის.<br>Spot-ები character sheet-იდან — ბარათებში და empty state-ებში.</p>
+        <div style="display: flex; gap: 10px; align-items: flex-end"><img src="/_blob/f5c4c64e4c1f0208d4b078d021d0539a" alt="" style="height: 120px"><img src="/_blob/2b9e9f86702be06eb6cde527d31c4ab7" alt="" style="height: 120px"><img src="/_blob/251537b2037f8eb6c0f4f658d2afb102" alt="" style="height: 100px"></div>
+      </div>
+      <div style="border-radius: 16px; background: #F4DEDA; padding: 22px; display: flex; flex-direction: column; gap: 12px"><b style="font-size: 18px; color: #841B22">✕ ასე არა</b>
+        <p style="font-size: 15px; line-height: 1.65">ბრენდის ლოგოები (sneaker „N“, ლეპტოპი) — გაასუფთავე.<br>სახელმძღვანელოს სახელი წიგნის ზურგზე — მოჭერი / გაასწორე.<br>დროშა, როგორც დომინანტი მოტივი; ფლამენკო-კლიშე.<br>გიგანტური, გადაჭარბებული პერსონაჟი; kawaii, გულები ყველგან.<br>ლეპტოპის სურათი ყველგან.</p>
+      </div>
+    </div>
+    <div style="border-radius: 16px; background: #FFFCF3; border: 1px solid #E4D3B4; padding: 22px; display: flex; gap: 24px; align-items: center">
+      <div style="display: flex; flex-direction: column; gap: 14px; align-items: center">
+        <img src="/_blob/9f506bb9b8be2b84cb329cc1eaf189a3" alt="ლოგო" style="width: 150px">
+        <div style="width: 80px; height: 80px; border-radius: 50%; background: #0A414F; display: flex; align-items: center; justify-content: center"><div style="width: 64px; height: 64px; border-radius: 50%; background: #FCF7E6; display: flex; align-items: center; justify-content: center"><img src="/_blob/9f506bb9b8be2b84cb329cc1eaf189a3" alt="" style="width: 54px"></div></div>
+      </div>
+      <p style="font-size: 15px; line-height: 1.7">ლოგო გამოიყენება ზუსტად ისე, როგორც მოწოდებულია — არ იხატება თავიდან, არ იცვლება ფერი.<br>მუქ ფონზე — cream ბეჯზე.<br>მინ. ზომა: 56px (header 64–68px).<br>Favicon: მხოლოდ პორტრეტის დეტალი (თმა + სათვალე), არასოდეს მარტო ჩარჩო.<br>ლოგოს წრიული ჩარჩო ცალკე არასოდეს.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 9 · SPACING, RADII, ELEVATION, HEADER STATES -->
+<section style="display: flex; flex-direction: column; gap: 28px">
+  <div style="display: flex; align-items: baseline; gap: 20px"><span class="lbl">09</span><h2 style="font-size: 36px; font-weight: 700">სივრცე, კუთხეები, ჩრდილი, header</h2></div>
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+    <div style="border-radius: 16px; background: #FFFCF3; border: 1px solid #E4D3B4; padding: 22px; display: flex; flex-direction: column; gap: 14px"><span class="lbl">SPACING · 4pt</span>
+      <div style="display: flex; align-items: flex-end; gap: 10px">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><div style="width: 8px; height: 8px; background: #F5B246"></div><span class="mono">8</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><div style="width: 16px; height: 16px; background: #F5B246"></div><span class="mono">16</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><div style="width: 24px; height: 24px; background: #F5B246"></div><span class="mono">24</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><div style="width: 32px; height: 32px; background: #F5B246"></div><span class="mono">32</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><div style="width: 48px; height: 48px; background: #F5B246"></div><span class="mono">48</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><div style="width: 64px; height: 64px; background: #F5B246"></div><span class="mono">64</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><div style="width: 96px; height: 96px; background: #F5B246"></div><span class="mono">96</span></div>
+      </div>
+      <span style="font-size: 13px; color: #4A6268">Desktop grid 12 col · 80 margin · 24 gutter · 1280 max. Mobile 4 col · 20 margin. Section padding 96–120 / mobile 64.</span>
+    </div>
+    <div style="border-radius: 16px; background: #FFFCF3; border: 1px solid #E4D3B4; padding: 22px; display: flex; flex-direction: column; gap: 14px"><span class="lbl">RADII</span>
+      <div style="display: flex; gap: 14px; align-items: center">
+        <div style="width: 64px; height: 64px; border-radius: 8px; background: #DCEAE6"></div><div style="width: 64px; height: 64px; border-radius: 12px; background: #DCEAE6"></div><div style="width: 64px; height: 64px; border-radius: 16px; background: #DCEAE6"></div><div style="width: 64px; height: 64px; border-radius: 24px; background: #DCEAE6"></div><div style="width: 64px; height: 64px; border-radius: 999px; background: #DCEAE6"></div>
+      </div>
+      <span class="mono">8 tiles/tags · 12 inputs/buttons · 16 cards · 24 panels · pill = chips only</span>
+      <span class="lbl" style="margin-top: 6px">ELEVATION</span>
+      <div style="display: flex; gap: 18px"><div style="width: 90px; height: 56px; border-radius: 12px; background: #FFFCF3; border: 1.5px solid #E4D3B4"></div><div style="width: 90px; height: 56px; border-radius: 12px; background: #FFFCF3; box-shadow: 0 18px 36px -22px rgba(10,65,79,.5)"></div><div style="width: 90px; height: 56px; border-radius: 12px; background: #FFFCF3; box-shadow: 0 30px 60px -30px rgba(10,65,79,.6)"></div></div>
+      <span class="mono">0 · line  |  1 · hover/lift  |  2 · modal, device</span>
+    </div>
+    <div style="border-radius: 16px; background: #FFFCF3; border: 1px solid #E4D3B4; padding: 22px; display: flex; flex-direction: column; gap: 14px"><span class="lbl">MOTION</span>
+      <p style="font-size: 15px; line-height: 1.7">Hover lift: −2px (buttons), −4px (cards) · 180–250ms ease.<br>Hero: „¡Hola!“ იწერება clip-path reveal-ით 1.2s.<br>Nina: ნაზი parallax / float 7s.<br>Accordion: 250ms, + → × rotate.<br><b>prefers-reduced-motion</b>: ყველა ანიმაცია გამორთულია.</p>
+    </div>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 14px">
+    <span class="lbl">HEADER · DEFAULT (88) → SCROLLED (68, cream + sand divider)</span>
+    <div style="height: 88px; border-radius: 12px; background: #FCF7E6; border: 1px dashed #D0AC84; padding: 0 28px; display: flex; align-items: center; justify-content: space-between">
+      <img src="/_blob/9f506bb9b8be2b84cb329cc1eaf189a3" alt="" style="height: 68px"><div style="display: flex; gap: 30px; font-size: 15px; font-weight: 500"><span>ნინა</span><span>მეთოდი</span><span>სიუჟეტები</span><span>მასალები</span><span>ფასი</span><span>კითხვები</span></div><div style="display: flex; gap: 10px"><span style="height: 44px; padding: 0 16px; display: flex; align-items: center; color: #196166; font-weight: 600; font-size: 15px">შესვლა</span><span style="height: 44px; padding: 0 18px; display: flex; align-items: center; border-radius: 12px; background: #196166; color: #FCF7E6; font-weight: 600; font-size: 15px">დაჯავშნე საცდელი გაკვეთილი</span></div>
+    </div>
+    <div style="height: 68px; border-radius: 12px; background: #FCF7E6; border-bottom: 1.5px solid #D0AC84; box-shadow: 0 8px 20px -16px rgba(10,65,79,.4); padding: 0 28px; display: flex; align-items: center; justify-content: space-between">
+      <img src="/_blob/9f506bb9b8be2b84cb329cc1eaf189a3" alt="" style="height: 52px"><div style="display: flex; gap: 30px; font-size: 15px; font-weight: 500"><span>ნინა</span><span style="color: #841B22; text-decoration: underline; text-decoration-color: #F5B246; text-decoration-thickness: 2px; text-underline-offset: 6px">მეთოდი</span><span>სიუჟეტები</span><span>მასალები</span><span>ფასი</span><span>კითხვები</span></div><div style="display: flex; gap: 10px"><span style="height: 40px; padding: 0 14px; display: flex; align-items: center; color: #196166; font-weight: 600; font-size: 14px">შესვლა</span><span style="height: 40px; padding: 0 16px; display: flex; align-items: center; border-radius: 12px; background: #196166; color: #FCF7E6; font-weight: 600; font-size: 14px">დაჯავშნე საცდელი გაკვეთილი</span></div>
+    </div>
+  </div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":5200}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

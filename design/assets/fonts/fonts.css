@@ -1,0 +1,17 @@
+/* Nina — self-hosted fonts. Stack: font-family: "FiraGO", "Montserrat", system-ui, sans-serif;
+ * FiraGO is limited to the Georgian unicode-range, so Georgian renders in FiraGO and Latin/Spanish in Montserrat on the same line. */
+@font-face{font-family:'FiraGO';src:url('./firago-georgian-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;unicode-range:U+10A0-10FF,U+1C90-1CBF,U+2D00-2D2F}
+@font-face{font-family:'FiraGO';src:url('./firago-georgian-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;unicode-range:U+10A0-10FF,U+1C90-1CBF,U+2D00-2D2F}
+@font-face{font-family:'FiraGO';src:url('./firago-georgian-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;unicode-range:U+10A0-10FF,U+1C90-1CBF,U+2D00-2D2F}
+@font-face{font-family:'FiraGO';src:url('./firago-georgian-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;unicode-range:U+10A0-10FF,U+1C90-1CBF,U+2D00-2D2F}
+@font-face{font-family:'Montserrat';src:url('./montserrat-latin-400-normal.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Montserrat';src:url('./montserrat-latin-400-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Montserrat';src:url('./montserrat-latin-500-normal.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Montserrat';src:url('./montserrat-latin-500-italic.woff2') format('woff2');font-weight:500;font-style:italic;font-display:swap}
+@font-face{font-family:'Montserrat';src:url('./montserrat-latin-600-normal.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Montserrat';src:url('./montserrat-latin-600-italic.woff2') format('woff2');font-weight:600;font-style:italic;font-display:swap}
+@font-face{font-family:'Montserrat';src:url('./montserrat-latin-700-normal.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Montserrat';src:url('./montserrat-latin-700-italic.woff2') format('woff2');font-weight:700;font-style:italic;font-display:swap}
+@font-face{font-family:'Caveat';src:url('./caveat-latin-500-normal.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Caveat';src:url('./caveat-latin-600-normal.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Caveat';src:url('./caveat-latin-700-normal.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}

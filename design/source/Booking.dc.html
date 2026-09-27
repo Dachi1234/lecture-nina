@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ka">
+<head>
+<meta charset="utf-8">
+<title>Booking modal</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap">
+<style>
+@font-face{font-family:'FiraGO';src:url(/_blob/03b6d26b02554995b6d3636b925c47f1) format('woff2');font-weight:400;font-display:swap;unicode-range:U+10A0-10FF,U+1C90-1CBF}
+@font-face{font-family:'FiraGO';src:url(/_blob/727c84beb3fcb64e3bb41707306e1e2a) format('woff2');font-weight:500;font-display:swap;unicode-range:U+10A0-10FF,U+1C90-1CBF}
+@font-face{font-family:'FiraGO';src:url(/_blob/3aebab4e8c84e7b7ee4184ba204621ec) format('woff2');font-weight:600;font-display:swap;unicode-range:U+10A0-10FF,U+1C90-1CBF}
+@font-face{font-family:'FiraGO';src:url(/_blob/a79aa21764b3df0f253baf5e218f5120) format('woff2');font-weight:700;font-display:swap;unicode-range:U+10A0-10FF,U+1C90-1CBF}
+body{margin:0;background:#FCF7E6;color:#0A414F;font-family:'FiraGO','Montserrat',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3,p{margin:0}
+.hand{font-family:'Caveat',cursive;font-weight:600;line-height:1}
+input,textarea,button{font-family:'FiraGO','Montserrat',sans-serif}
+input:focus,textarea:focus{outline:none;border-color:#196166 !important;box-shadow:0 0 0 4px #DCEAE6;background:#FFFFFF !important}
+button:focus-visible{outline:3px solid #F5B246;outline-offset:3px}
+.chip{cursor:pointer;transition:background-color .15s ease}.chip:hover{border-color:#196166 !important}
+.submit:hover{background:#124D51 !important}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{animation:spin .8s linear infinite}
+@keyframes pop{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+.pop{animation:pop .35s ease both}
+@media (prefers-reduced-motion:reduce){*{animation:none !important}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1000px; position: relative; overflow: hidden; background: #FCF7E6">
+  <!-- page behind -->
+  <div style="position: absolute; inset: 0; filter: blur(3px)">
+    <div style="position: absolute; left: 80px; top: 180px; font: 700 120px Montserrat, sans-serif; color: #0A414F">Nina</div>
+    <div style="position: absolute; left: 80px; top: 320px; font: 700 54px Montserrat, sans-serif; color: #0A414F">Tu Profe de Español</div>
+    <img src="/_blob/692e24cf9c1deaef742c515214d88a1b" alt="" style="position: absolute; left: 860px; top: 130px; height: 760px">
+  </div>
+  <div style="position: absolute; inset: 0; background: rgba(10,65,79,.55)"></div>
+
+  <div class="pop" role="dialog" aria-modal="true" aria-labelledby="bk-title" style="position: absolute; left: 220px; top: 60px; width: 1000px; height: 880px; border-radius: 24px; background: #FCF7E6; box-shadow: 0 40px 80px -30px rgba(0,0,0,.5); display: flex; overflow: hidden">
+    <!-- left illustration panel -->
+    <div style="width: 300px; flex-shrink: 0; background: #FCE8C0; position: relative; display: flex; flex-direction: column; padding: 36px 28px; box-sizing: border-box; gap: 14px">
+      <div class="hand" style="font-size: 44px; color: #841B22; transform: rotate(-4deg); transform-origin: left">¡Hola!</div>
+      <p style="font-size: 17px; line-height: 1.6; font-weight: 500">პირველი 2 გაკვეთილი — საჩუქრად.</p>
+      <p style="font-size: 15px; line-height: 1.6; color: #4A6268">შეავსე ფორმა და ნინა თავად დაგიკავშირდება, რომ შეთანხმდეთ დროზე.</p>
+      <svg style="position: absolute; left: 30px; bottom: 30px" width="250" height="250" viewBox="0 0 120 120" fill="none" aria-hidden="true"><path d="M96 22 A 50 50 0 1 0 108 70" stroke="#F5B246" stroke-width="3" stroke-linecap="round"></path></svg>
+      <img src="/_blob/f5c4c64e4c1f0208d4b078d021d0539a" alt="" style="position: absolute; left: 70px; bottom: 16px; height: 440px">
+    </div>
+
+    <!-- right: form / success -->
+    <div style="flex-grow: 1; position: relative; padding: 32px 40px; box-sizing: border-box">
+      <button aria-label="დახურვა" style="position: absolute; right: 20px; top: 20px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: #F1E3C8; color: #0A414F; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+
+      <sc-if value="{{isForm}}" hint-placeholder-val="{{ true }}">
+        <form style="display: flex; flex-direction: column; gap: 16px; opacity: {{formOpacity}}">
+          <div style="display: flex; flex-direction: column; gap: 6px; padding-right: 56px">
+            <h2 id="bk-title" style="font-size: 30px; line-height: 1.2; font-weight: 700">დაჯავშნე საცდელი გაკვეთილი</h2>
+            <sc-if value="{{hasErrors}}" hint-placeholder-val="{{ false }}"><p role="alert" style="font-size: 15px; color: #841B22; font-weight: 600">გთხოვ, შეავსე მონიშნული ველები.</p></sc-if>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+            <div style="display: flex; flex-direction: column; gap: 6px"><label for="bk-name" style="font-size: 14px; font-weight: 600">სახელი *</label><input id="bk-name" value="{{name}}" onChange="{{setName}}" placeholder="მაგ. მარიამი" aria-invalid="{{nameErr}}" style="height: 50px; box-sizing: border-box; padding: 0 14px; border-radius: 12px; border: {{nameBorder}}; background: #FFFCF3; font-size: 16px; color: #0A414F"><sc-if value="{{nameErr}}" hint-placeholder-val="{{ false }}"><span style="font-size: 13px; color: #841B22; font-weight: 500">შეიყვანე სახელი</span></sc-if></div>
+            <div style="display: flex; flex-direction: column; gap: 6px"><label for="bk-phone" style="font-size: 14px; font-weight: 600">ტელეფონი *</label><input id="bk-phone" type="tel" value="{{phone}}" onChange="{{setPhone}}" placeholder="+995 5__ __ __ __" aria-invalid="{{phoneErr}}" style="height: 50px; box-sizing: border-box; padding: 0 14px; border-radius: 12px; border: {{phoneBorder}}; background: #FFFCF3; font-size: 16px; color: #0A414F"><sc-if value="{{phoneErr}}" hint-placeholder-val="{{ false }}"><span style="font-size: 13px; color: #841B22; font-weight: 500">ნომერი არასრულია</span></sc-if></div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+            <div style="display: flex; flex-direction: column; gap: 6px"><label for="bk-email" style="font-size: 14px; font-weight: 600">ელ-ფოსტა <span style="font-weight: 400; color: #4A6268">(არასავალდებულო)</span></label><input id="bk-email" type="email" placeholder="name@mail.com" style="height: 50px; box-sizing: border-box; padding: 0 14px; border-radius: 12px; border: 1.5px solid #D0AC84; background: #FFFCF3; font-size: 16px"></div>
+            <div style="display: flex; flex-direction: column; gap: 6px"><span style="font-size: 14px; font-weight: 600">დღის მონაკვეთი</span>
+              <div style="display: flex; gap: 8px"><sc-for list="{{times}}" as="t" hint-placeholder-count="3"><button type="button" class="chip" onClick="{{t.pick}}" aria-pressed="{{t.on}}" style="flex-grow: 1; height: 50px; border-radius: 12px; border: 1.5px solid {{t.border}}; background: {{t.bg}}; color: {{t.fg}}; font-size: 15px; font-weight: 500">{{t.label}}</button></sc-for></div>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; font-weight: 600">როგორ დაგიკავშირდე?</span>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap"><sc-for list="{{channels}}" as="c" hint-placeholder-count="4"><button type="button" class="chip" onClick="{{c.pick}}" aria-pressed="{{c.on}}" style="height: 44px; padding: 0 16px; border-radius: 12px; border: 1.5px solid {{c.border}}; background: {{c.bg}}; color: {{c.fg}}; font-size: 15px; font-weight: 500">{{c.label}}</button></sc-for></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; font-weight: 600">რისთვის გინდა ესპანური?</span>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap"><sc-for list="{{goals}}" as="g" hint-placeholder-count="5"><button type="button" class="chip" onClick="{{g.pick}}" aria-pressed="{{g.on}}" style="height: 44px; padding: 0 16px; border-radius: 12px; border: 1.5px solid {{g.border}}; background: {{g.bg}}; color: {{g.fg}}; font-size: 15px; font-weight: 500">{{g.label}}</button></sc-for></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; font-weight: 600">სასურველი დღეები</span>
+            <div style="display: flex; gap: 8px"><sc-for list="{{days}}" as="d" hint-placeholder-count="7"><button type="button" class="chip" onClick="{{d.pick}}" aria-pressed="{{d.on}}" style="width: 64px; height: 44px; border-radius: 12px; border: 1.5px solid {{d.border}}; background: {{d.bg}}; color: {{d.fg}}; font-size: 14px; font-weight: 500">{{d.label}}</button></sc-for></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px"><label for="bk-note" style="font-size: 14px; font-weight: 600">შენიშვნა <span style="font-weight: 400; color: #4A6268">(არასავალდებულო)</span></label><textarea id="bk-note" placeholder="მაგ. სექტემბერში ვალენსიაში გადავდივარ" style="height: 64px; box-sizing: border-box; padding: 12px 14px; border-radius: 12px; border: 1.5px solid #D0AC84; background: #FFFCF3; font-size: 15px; resize: none"></textarea></div>
+          <button type="button" onClick="{{toggleConsent}}" role="checkbox" aria-checked="{{consent}}" style="display: flex; gap: 12px; align-items: center; border: 0; background: transparent; padding: 0; text-align: left; font-size: 14px; color: {{consentFg}}; cursor: pointer">
+            <span style="width: 24px; height: 24px; flex-shrink: 0; box-sizing: border-box; border-radius: 6px; border: 2px solid {{consentBorder}}; background: {{consentBg}}; display: flex; align-items: center; justify-content: center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FCF7E6" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"></path></svg></span>
+            ვეთანხმები, რომ ნინამ ჩემი მონაცემები გამოიყენოს დასაკავშირებლად *
+          </button>
+          <button type="button" class="submit" onClick="{{submit}}" style="height: 58px; border: 0; border-radius: 14px; background: #196166; color: #FCF7E6; font-size: 17px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 12px; cursor: pointer">
+            <sc-if value="{{isLoading}}" hint-placeholder-val="{{ false }}"><svg class="spin" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FCF7E6" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9"></path></svg></sc-if>
+            {{submitLabel}}
+          </button>
+        </form>
+      </sc-if>
+
+      <sc-if value="{{isSuccess}}" hint-placeholder-val="{{ false }}">
+        <div class="pop" role="status" style="height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 18px">
+          <div style="position: relative; width: 260px; height: 300px; display: flex; align-items: flex-end; justify-content: center">
+            <svg style="position: absolute; inset: 0" width="260" height="300" viewBox="0 0 120 120" preserveAspectRatio="none" fill="none" aria-hidden="true"><path d="M96 22 A 50 50 0 1 0 108 70" stroke="#F5B246" stroke-width="2.5" stroke-linecap="round"></path></svg>
+            <img src="/_blob/251537b2037f8eb6c0f4f658d2afb102" alt="ნინა ყავით ხელში იღიმება" style="height: 270px; position: relative">
+          </div>
+          <div class="hand" style="font-size: 48px; color: #841B22">¡Gracias!</div>
+          <h2 style="font-size: 32px; line-height: 1.25; font-weight: 700">მადლობა! ნინა მალე დაგიკავშირდება</h2>
+          <p style="font-size: 17px; line-height: 1.6; color: #4A6268; max-width: 460px">{{successLine}}</p>
+          <button type="button" onClick="{{reset}}" style="margin-top: 8px; height: 52px; padding: 0 28px; border-radius: 14px; border: 1.5px solid #196166; background: transparent; color: #196166; font-size: 16px; font-weight: 600; cursor: pointer">დახურვა</button>
+          <div class="hand" style="font-size: 30px; color: #196166">¡Hasta pronto!</div>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"state":{"editor":"enum","options":["form","errors","loading","success"],"default":"form"},"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    const st = props.state || 'form';
+    this.state = {
+      step: st === 'success' ? 'success' : (st === 'loading' ? 'loading' : 'form'),
+      tried: st === 'errors',
+      name: st === 'errors' ? '' : 'მარიამი',
+      phone: st === 'errors' ? '+995 5' : '+995 555 12 34 56',
+      channel: 'WhatsApp', goal: 'მოგზაურობა', time: 'საღამო', days: ['სამ', 'ხუთ'],
+      consent: st !== 'errors'
+    };
+  }
+  componentDidUpdate(prev) {
+    if (prev.state !== this.props.state) {
+      const st = this.props.state || 'form';
+      this.setState({
+        step: st === 'success' ? 'success' : (st === 'loading' ? 'loading' : 'form'),
+        tried: st === 'errors',
+        name: st === 'errors' ? '' : 'მარიამი',
+        phone: st === 'errors' ? '+995 5' : '+995 555 12 34 56',
+        consent: st !== 'errors'
+      });
+    }
+  }
+  chipStyle(on) {
+    return on ? { bg: '#196166', fg: '#FCF7E6', border: '#196166' } : { bg: '#FFFCF3', fg: '#0A414F', border: '#D0AC84' };
+  }
+  renderVals() {
+    const s = this.state;
+    const nameErr = s.tried && !s.name.trim();
+    const phoneErr = s.tried && s.phone.replace(/\D/g, '').length < 12;
+    const consentErr = s.tried && !s.consent;
+    const mk = (arr, key, multi) => arr.map((label) => {
+      const on = multi ? s[key].indexOf(label) >= 0 : s[key] === label;
+      return Object.assign({ label: label, on: on, pick: () => {
+        if (multi) {
+          const cur = s[key];
+          this.setState({ [key]: on ? cur.filter((x) => x !== label) : cur.concat([label]) });
+        } else { this.setState({ [key]: label }); }
+      } }, this.chipStyle(on));
+    });
+    const errB = '2px solid #841B22', okB = '1.5px solid #D0AC84';
+    return {
+      isForm: s.step !== 'success',
+      isSuccess: s.step === 'success',
+      isLoading: s.step === 'loading',
+      formOpacity: s.step === 'loading' ? 0.7 : 1,
+      submitLabel: s.step === 'loading' ? 'იგზავნება…' : 'გაგზავნა',
+      hasErrors: nameErr || phoneErr || consentErr,
+      name: s.name, phone: s.phone,
+      nameErr: nameErr, phoneErr: phoneErr,
+      nameBorder: nameErr ? errB : okB, phoneBorder: phoneErr ? errB : okB,
+      setName: (e) => this.setState({ name: e.target.value }),
+      setPhone: (e) => this.setState({ phone: e.target.value }),
+      channels: mk(['ტელეფონი', 'WhatsApp', 'Telegram', 'ელ-ფოსტა'], 'channel', false),
+      goals: mk(['მოგზაურობა', 'სწავლა', 'გადასვლა', 'გართობისთვის', 'სხვა'], 'goal', false),
+      times: mk(['დილა', 'დღე', 'საღამო'], 'time', false),
+      days: mk(['ორშ', 'სამ', 'ოთხ', 'ხუთ', 'პარ', 'შაბ', 'კვ'], 'days', true),
+      consent: s.consent,
+      consentBg: s.consent ? '#196166' : '#FFFCF3',
+      consentBorder: s.consent ? '#196166' : (consentErr ? '#841B22' : '#D0AC84'),
+      consentFg: consentErr ? '#841B22' : '#0A414F',
+      toggleConsent: () => this.setState({ consent: !s.consent }),
+      submit: () => {
+        if (s.step === 'loading') return;
+        const bad = !s.name.trim() || s.phone.replace(/\D/g, '').length < 12 || !s.consent;
+        if (bad) { this.setState({ tried: true }); return; }
+        this.setState({ step: 'loading', tried: false });
+        setTimeout(() => this.setState({ step: 'success' }), 1200);
+      },
+      successLine: 'არხი: ' + s.channel + ' · ' + s.time + '. ერთად შევთანხმდებით პირველი გაკვეთილის დროზე.',
+      reset: () => this.setState({ step: 'form', tried: false })
+    };
+  }
+}
+</script>
+</body>
+</html>

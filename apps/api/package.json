@@ -1,0 +1,37 @@
+{
+  "name": "@nina/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "seed:content": "tsx scripts/seed-content/run.ts"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.3.0",
+    "@fastify/multipart": "^10.1.2",
+    "@fastify/rate-limit": "^11.2.0",
+    "@nina/contracts": "workspace:*",
+    "@nina/db": "workspace:^",
+    "@nina/exercise-engine": "workspace:*",
+    "better-auth": "1.7.6",
+    "blurhash": "^2.0.5",
+    "fastify": "5.12.5",
+    "pdf-lib": "^1.17.1",
+    "pg-boss": "^12.35.0",
+    "sharp": "^0.35.4",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@nina/config": "workspace:*",
+    "@types/node": "22.20.4",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "vitest": "3.2.4"
+  }
+}

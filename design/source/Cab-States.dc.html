@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ka">
+<head>
+<meta charset="utf-8">
+<title>Cabinet · States</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap">
+<style>
+@font-face{font-family:'FiraGO';src:url(/_blob/03b6d26b02554995b6d3636b925c47f1) format('woff2');font-weight:400;font-display:swap;unicode-range:U+10A0-10FF,U+1C90-1CBF}
+@font-face{font-family:'FiraGO';src:url(/_blob/3aebab4e8c84e7b7ee4184ba204621ec) format('woff2');font-weight:600;font-display:swap;unicode-range:U+10A0-10FF,U+1C90-1CBF}
+@font-face{font-family:'FiraGO';src:url(/_blob/a79aa21764b3df0f253baf5e218f5120) format('woff2');font-weight:700;font-display:swap;unicode-range:U+10A0-10FF,U+1C90-1CBF}
+body{margin:0;background:#FCF7E6;color:#0A414F;font-family:'FiraGO','Montserrat',system-ui,sans-serif}
+h1,h2,p{margin:0}
+.hand{font-family:'Caveat',cursive;font-weight:600;line-height:1}
+.lbl{font:600 12px Montserrat,sans-serif;letter-spacing:.08em;color:#4A6268}
+.panel{border-radius:20px;background:#FFFCF3;border:1.5px solid #E4D3B4;height:640px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;padding:32px;box-sizing:border-box}
+@keyframes shimmer{0%{opacity:.55}50%{opacity:1}100%{opacity:.55}}
+.sk{background:#EFE3CB;border-radius:10px;animation:shimmer 1.4s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.sk{animation:none}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; overflow: hidden; background: #FCF7E6; padding: 56px 80px; box-sizing: border-box; display: flex; flex-direction: column; gap: 28px">
+  <div style="display: flex; flex-direction: column; gap: 8px"><span class="lbl">C10 · STATES</span><h1 style="font-size: 30px; font-weight: 700">ცარიელი · იტვირთება · შეცდომა</h1></div>
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px">
+    <section class="panel">
+      <span class="lbl" style="align-self: flex-start">EMPTY · პირველ შესვლაზე</span>
+      <img src="/_blob/7cf34272be5364af71a8da7c4cafbfff" alt="ნინა ყავით ზის" style="height: 220px">
+      <span class="hand" style="font-size: 38px; color: #841B22">¡Bienvenida!</span>
+      <h2 style="font-size: 21px; font-weight: 700; line-height: 1.35">შენი პირველი გაკვეთილი ნინასთან მალე დაიწყება</h2>
+      <p style="font-size: 15px; line-height: 1.6; color: #4A6268">გაკვეთილის შემდეგ მასალები აქ გამოჩნდება.</p>
+      <span style="font-size: 14px; font-weight: 600; color: #196166">3 ოქტ. · 19:00</span>
+    </section>
+    <section class="panel" style="justify-content: flex-start; align-items: stretch; text-align: left">
+      <span class="lbl">LOADING · skeleton</span>
+      <div class="sk" style="height: 40px; width: 60%"></div>
+      <div class="sk" style="height: 16px; width: 40%"></div>
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px">
+        <div style="display: flex; gap: 14px; align-items: center"><div class="sk" style="width: 48px; height: 48px; border-radius: 12px"></div><div style="flex-grow: 1; display: flex; flex-direction: column; gap: 8px"><div class="sk" style="height: 14px; width: 70%"></div><div class="sk" style="height: 12px; width: 40%"></div></div></div>
+        <div style="display: flex; gap: 14px; align-items: center"><div class="sk" style="width: 48px; height: 48px; border-radius: 12px"></div><div style="flex-grow: 1; display: flex; flex-direction: column; gap: 8px"><div class="sk" style="height: 14px; width: 80%"></div><div class="sk" style="height: 12px; width: 35%"></div></div></div>
+        <div style="display: flex; gap: 14px; align-items: center"><div class="sk" style="width: 48px; height: 48px; border-radius: 12px"></div><div style="flex-grow: 1; display: flex; flex-direction: column; gap: 8px"><div class="sk" style="height: 14px; width: 60%"></div><div class="sk" style="height: 12px; width: 45%"></div></div></div>
+        <div style="display: flex; gap: 14px; align-items: center"><div class="sk" style="width: 48px; height: 48px; border-radius: 12px"></div><div style="flex-grow: 1; display: flex; flex-direction: column; gap: 8px"><div class="sk" style="height: 14px; width: 75%"></div><div class="sk" style="height: 12px; width: 30%"></div></div></div>
+      </div>
+      <p style="margin-top: auto; font-size: 13px; color: #4A6268">Skeleton იმეორებს რეალურ განლაგებას. Spinner-ი მხოლოდ ღილაკებში.</p>
+    </section>
+    <section class="panel">
+      <span class="lbl" style="align-self: flex-start">ERROR · კავშირი / ფაილი</span>
+      <img src="/_blob/79a137fd642ae4412dd74e5b07b9201e" alt="ნინა რუკით ხელში" style="height: 220px">
+      <span class="hand" style="font-size: 38px; color: #196166">¡Uy!</span>
+      <h2 style="font-size: 21px; font-weight: 700; line-height: 1.35">მასალა ვერ ჩაიტვირთა</h2>
+      <p style="font-size: 15px; line-height: 1.6; color: #4A6268">შეამოწმე ინტერნეტი და სცადე თავიდან. პროგრესი შენახულია.</p>
+      <div style="display: flex; gap: 10px"><button style="height: 48px; padding: 0 22px; border-radius: 12px; border: 0; background: #196166; color: #FCF7E6; font: 600 15px 'FiraGO', Montserrat, sans-serif">თავიდან ცდა</button><button style="height: 48px; padding: 0 22px; border-radius: 12px; border: 1.5px solid #196166; background: transparent; color: #196166; font: 600 15px 'FiraGO', Montserrat, sans-serif">გაკვეთილზე დაბრუნება</button></div>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic { renderVals() { return {}; } }
+</script>
+</body>
+</html>

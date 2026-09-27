@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ka">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cabinet · My lessons</title>
+<link rel="stylesheet" href="../assets/fonts/fonts.css">
+<style>
+body{margin:0;background:#FCF7E6;color:#0A414F;font-family:'FiraGO','Montserrat',system-ui,sans-serif}
+h1,h2,p{margin:0}
+.hand{font-family:'Caveat',cursive;font-weight:600;line-height:1}
+.nav{height:48px;padding:0 14px;display:flex;align-items:center;gap:12px;border-radius:12px;color:#0A414F;text-decoration:none;font-size:15px;font-weight:500}
+.nav:hover{background:#EFE3CB}
+.nav.on{background:#196166;color:#FCF7E6;font-weight:600}
+.row{display:grid;grid-template-columns:72px 110px 1fr 280px 150px 110px 32px;align-items:center;gap:16px;padding:0 20px;height:84px;border-bottom:1px solid #EFE3CB;text-decoration:none;color:#0A414F}
+.row:hover{background:#FFFCF3}
+.tag{padding:4px 10px;border-radius:6px;background:#F6EDD3;font-size:13px}
+a:focus-visible{outline:3px solid #F5B246;outline-offset:3px}
+</style>
+</head>
+<body>
+
+<div style="width: 1440px; height: 1000px; overflow: hidden; background: #FCF7E6; display: flex">
+  <aside style="width: 248px; flex-shrink: 0; background: #F6EDD3; border-right: 1px solid #E4D3B4; padding: 24px 16px; box-sizing: border-box; display: flex; flex-direction: column; gap: 4px">
+    <img src="../assets/logo/nina-logo.webp" alt="Nina – Tu Profe de Español" style="width: 84px; margin: 0 0 24px 10px">
+    <a class="nav" href="cabinet-c2-home.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-7 8 7v9a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"></path></svg>მთავარი</a>
+    <a class="nav on" href="cabinet-c3-lessons.html" aria-current="page"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg>გაკვეთილები</a>
+    <a class="nav" href="cabinet-c7-library.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"></path><path d="M3 13l9 5 9-5"></path></svg>მასალები</a>
+    <a class="nav" href="cabinet-c8-vocabulary.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"></path><path d="M4 21V5M9 8h6"></path></svg>ლექსიკა</a>
+    <a class="nav" href="cabinet-c9-progress.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19c3-1 4-4 6-8s4-6 10-7"></path><circle cx="4" cy="19" r="1.5"></circle><circle cx="11" cy="10" r="1.5"></circle><circle cx="20" cy="4" r="1.5"></circle></svg>პროგრესი</a>
+    <div style="margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 12px 10px; border-top: 1px solid #E4D3B4"><span style="width: 40px; height: 40px; border-radius: 50%; background: #F4DEDA; color: #841B22; display: flex; align-items: center; justify-content: center; font-weight: 700">მ</span><div><div style="font-size: 14px; font-weight: 600">მარიამი</div><a href="cabinet-c1-login.html" style="font-size: 13px; color: #4A6268">გასვლა</a></div></div>
+  </aside>
+  <main style="flex-grow: 1; padding: 44px 56px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end">
+      <div style="display: flex; flex-direction: column; gap: 6px"><span class="hand" style="font-size: 32px; color: #841B22">Mis lecciones</span><h1 style="font-size: 34px; font-weight: 700">ჩემი გაკვეთილები</h1></div>
+      <div style="display: flex; gap: 8px"><span style="height: 40px; padding: 0 16px; display: flex; align-items: center; border-radius: 10px; background: #196166; color: #FCF7E6; font-size: 14px; font-weight: 600">ყველა · 7</span><span style="height: 40px; padding: 0 16px; display: flex; align-items: center; border-radius: 10px; border: 1.5px solid #D0AC84; font-size: 14px">მიმდინარე</span><span style="height: 40px; padding: 0 16px; display: flex; align-items: center; border-radius: 10px; border: 1.5px solid #D0AC84; font-size: 14px">დასრულებული</span></div>
+    </div>
+    <div style="border-radius: 16px; background: #FFFCF3; border: 1.5px solid #E4D3B4; overflow: hidden">
+      <div class="row" style="height: 48px; background: #F6EDD3; font-size: 13px; font-weight: 600; color: #4A6268"><span>№</span><span>თარიღი</span><span>სათაური</span><span>თემები</span><span>სტატუსი</span><span>მასალები</span><span></span></div>
+      <a class="row" href="cabinet-c4-lesson.html" style="background: #FFF8E6"><span style="width: 44px; height: 44px; border-radius: 12px; background: #F5B246; display: flex; align-items: center; justify-content: center; font: 700 18px Montserrat, sans-serif">7</span><span style="font-size: 14px">3 ოქტ.</span><b style="font-size: 16px">¿Dónde está el metro?</b><span style="display: flex; gap: 6px"><span class="tag">მიმართულებები</span><span class="tag">estar</span></span><span style="padding: 5px 10px; border-radius: 8px; background: #DCEAE6; color: #196166; font-size: 13px; font-weight: 600; width: fit-content">ახალი</span><span style="font-size: 14px; color: #4A6268">0 / 9</span><span>›</span></a>
+      <a class="row" href="cabinet-c4-lesson.html"><span style="width: 44px; height: 44px; border-radius: 12px; background: #DCEAE6; display: flex; align-items: center; justify-content: center; font: 700 18px Montserrat, sans-serif; color: #196166">6</span><span style="font-size: 14px">26 სექ.</span><b style="font-size: 16px">En el café — შეკვეთა</b><span style="display: flex; gap: 6px"><span class="tag">საკვები</span><span class="tag">querer</span></span><span style="padding: 5px 10px; border-radius: 8px; background: #FCE8C0; color: #7A4A00; font-size: 13px; font-weight: 600; width: fit-content">მიმდინარე</span><span style="font-size: 14px; color: #4A6268">7 / 12</span><span>›</span></a>
+      <a class="row" href="cabinet-c4-lesson.html"><span style="width: 44px; height: 44px; border-radius: 12px; background: #E0EAE3; display: flex; align-items: center; justify-content: center; font: 700 18px Montserrat, sans-serif; color: #34605A">5</span><span style="font-size: 14px">22 სექ.</span><b style="font-size: 16px">Los números y la hora</b><span style="display: flex; gap: 6px"><span class="tag">რიცხვები</span><span class="tag">დრო</span></span><span style="padding: 5px 10px; border-radius: 8px; background: #E0EAE3; color: #34605A; font-size: 13px; font-weight: 600; width: fit-content">✓ დასრულებული</span><span style="font-size: 14px; color: #4A6268">10 / 10</span><span>›</span></a>
+      <a class="row" href="cabinet-c4-lesson.html"><span style="width: 44px; height: 44px; border-radius: 12px; background: #E0EAE3; display: flex; align-items: center; justify-content: center; font: 700 18px Montserrat, sans-serif; color: #34605A">4</span><span style="font-size: 14px">19 სექ.</span><b style="font-size: 16px">Ana en Barcelona</b><span style="display: flex; gap: 6px"><span class="tag">ser</span><span class="tag">ქვეყნები</span></span><span style="padding: 5px 10px; border-radius: 8px; background: #E0EAE3; color: #34605A; font-size: 13px; font-weight: 600; width: fit-content">✓ დასრულებული</span><span style="font-size: 14px; color: #4A6268">8 / 8</span><span>›</span></a>
+      <a class="row" href="cabinet-c4-lesson.html"><span style="width: 44px; height: 44px; border-radius: 12px; background: #E0EAE3; display: flex; align-items: center; justify-content: center; font: 700 18px Montserrat, sans-serif; color: #34605A">3</span><span style="font-size: 14px">15 სექ.</span><b style="font-size: 16px">Me presento</b><span style="display: flex; gap: 6px"><span class="tag">თავის გაცნობა</span></span><span style="padding: 5px 10px; border-radius: 8px; background: #E0EAE3; color: #34605A; font-size: 13px; font-weight: 600; width: fit-content">✓ დასრულებული</span><span style="font-size: 14px; color: #4A6268">9 / 9</span><span>›</span></a>
+      <a class="row" href="cabinet-c4-lesson.html"><span style="width: 44px; height: 44px; border-radius: 12px; background: #E0EAE3; display: flex; align-items: center; justify-content: center; font: 700 18px Montserrat, sans-serif; color: #34605A">2</span><span style="font-size: 14px">12 სექ.</span><b style="font-size: 16px">El alfabeto y los sonidos</b><span style="display: flex; gap: 6px"><span class="tag">გამოთქმა</span></span><span style="padding: 5px 10px; border-radius: 8px; background: #E0EAE3; color: #34605A; font-size: 13px; font-weight: 600; width: fit-content">✓ დასრულებული</span><span style="font-size: 14px; color: #4A6268">6 / 6</span><span>›</span></a>
+      <a class="row" href="cabinet-c4-lesson.html" style="border-bottom: 0"><span style="width: 44px; height: 44px; border-radius: 12px; background: #E0EAE3; display: flex; align-items: center; justify-content: center; font: 700 18px Montserrat, sans-serif; color: #34605A">1</span><span style="font-size: 14px">8 სექ.</span><b style="font-size: 16px">¡Hola! — პირველი შეხვედრა</b><span style="display: flex; gap: 6px"><span class="tag">მისალმება</span></span><span style="padding: 5px 10px; border-radius: 8px; background: #E0EAE3; color: #34605A; font-size: 13px; font-weight: 600; width: fit-content">✓ დასრულებული</span><span style="font-size: 14px; color: #4A6268">5 / 5</span><span>›</span></a>
+    </div>
+    <p style="font-size: 13px; color: #4A6268">Dev: ჩანს მხოლოდ „ready for student“ გაკვეთილები. რიგი — ახალიდან ძველისკენ; მიმდინარე/ახალი გაკვეთილი მონიშნულია თბილი ფონით. მასალების მრიცხველი = completed / assigned.</p>
+  </main>
+</div>
+
+
+</body>
+</html>

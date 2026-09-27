@@ -1,0 +1,25 @@
+{
+  "name": "@nina/exercise-engine",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch --preserveWatchOutput",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@nina/config": "workspace:*",
+    "@types/node": "22.20.4",
+    "typescript": "5.9.3",
+    "vitest": "3.2.4"
+  }
+}
