@@ -4,7 +4,6 @@ node_modules
 **/dist
 **/.turbo
 .git
-apps/web
 apps/api/.data
 apps/api/scripts/seed-content/.cache
 design
