@@ -1,8 +1,10 @@
 [build]
 builder = "DOCKERFILE"
 dockerfilePath = "apps/api/Dockerfile"
+watchPatterns = ["apps/api/**", "packages/**", "pnpm-lock.yaml", "package.json", "pnpm-workspace.yaml"]
 
 [deploy]
 healthcheckPath = "/v1/health"
 healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"
+requiredMountPath = "/data"

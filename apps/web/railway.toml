@@ -1,0 +1,10 @@
+[build]
+builder = "RAILPACK"
+buildCommand = "pnpm --filter @nina/web build"
+watchPatterns = ["apps/web/**", "packages/ui/**", "packages/contracts/**", "packages/exercise-engine/**", "pnpm-lock.yaml", "package.json", "pnpm-workspace.yaml"]
+
+[deploy]
+startCommand = "pnpm --filter @nina/web start"
+healthcheckPath = "/"
+healthcheckTimeout = 300
+restartPolicyType = "ON_FAILURE"
