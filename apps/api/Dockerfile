@@ -40,4 +40,4 @@ ENV PORT=4000
 ENV STORAGE_ROOT=/data
 EXPOSE 4000
 
-CMD ["sh", "-c", "pnpm --filter @nina/db exec prisma migrate deploy && node apps/api/dist/server.js"]
+CMD ["sh", "-c", "node packages/db/scripts/migrate.mjs && node apps/api/dist/server.js"]
