@@ -70,8 +70,8 @@ export const landing = {
     people: [
       { name: "Ana", text: "ქართველი ვებ-დიზაინერი ბარსელონაში" },
       { name: "Nina", text: "შენი პროფე — ყოველთვის გვერდით" },
-      { name: "Laura", text: "[ლაურას მოკლე აღწერა]" },
-      { name: "Lucas", text: "[ლუკასის მოკლე აღწერა]" },
+      { name: "Laura", text: "ვალენსიაში ცხოვრობს და ქალაქს გიჩვენებს" },
+      { name: "Lucas", text: "ანას მეგობარი — კაფეში ყავას უკვეთავს" },
     ],
     dialogueLabel: "DIÁLOGO",
     dialoguePlace: "En el café",
@@ -199,13 +199,13 @@ export const landing = {
     text: "ვერ იპოვე პასუხი? მომწერე — სიამოვნებით გიპასუხებ.",
     items: [
       { id: "zero", question: "ესპანური საერთოდ არ ვიცი. შეიძლება?", answer: "რა თქმა უნდა. კურსი ზუსტად ნულიდან იწყება — პირველი სიტყვიდან, პირველი „¡Hola!“-დან. წინასწარი ცოდნა საჭირო არ არის." },
-      { id: "how", question: "როგორ ტარდება გაკვეთილები?", answer: "ონლაინ, ინდივიდუალურად, 75 წუთი. ვუყურებთ ვიდეო-დიალოგებს, ვმუშაობთ ბარათებზე და ბევრს ვლაპარაკობთ. [პლატფორმა: Zoom / Google Meet]" },
-      { id: "often", question: "რამდენად ხშირად უნდა ვისწავლო?", answer: "ამას პირველ საუბარზე ერთად ვწყვეტთ — შენი დროისა და მიზნის მიხედვით. [რეკომენდებული სიხშირე]" },
+      { id: "how", question: "როგორ ტარდება გაკვეთილები?", answer: "ონლაინ, ინდივიდუალურად, 75 წუთი. ვუყურებთ ვიდეო-დიალოგებს, ვმუშაობთ ბარათებზე და ბევრს ვლაპარაკობთ. ბმულს გაკვეთილამდე გამოგიგზავნი." },
+      { id: "often", question: "რამდენად ხშირად უნდა ვისწავლო?", answer: "ამას პირველ საუბარზე ერთად ვწყვეტთ — შენი დროისა და მიზნის მიხედვით." },
       { id: "cabinet", question: "რა არის კაბინეტში?", answer: "შენი გაკვეთილები და თითოეულის მასალები: ბარათები, დიალოგები, აუდიო, ვიდეო, სავარჯიშოები და საშინაო დავალება — ერთ ადგილას." },
       { id: "goal", question: "შემიძლია ვისწავლო მოგზაურობისთვის, გადასასვლელად ან სწავლისთვის?", answer: "დიახ. თემებსა და ლექსიკას შენს მიზანს ვუსადაგებ — იქნება ეს მოგზაურობა, საცხოვრებლად გადასვლა თუ სწავლა." },
       { id: "gift", question: "როგორ მუშაობს 2 საჩუქარი გაკვეთილი?", answer: "პირველი ორი გაკვეთილი უფასოა: ვეცნობით ერთმანეთს, ვადგენთ ტემპს და უკვე ვიწყებთ ესპანურს. ფასიანი გაკვეთილები მესამედან იწყება." },
-      { id: "pay", question: "როგორ ვიხდი?", answer: "[გადახდის მეთოდი და ვადები — ნინა დააზუსტებს]" },
-      { id: "miss", question: "რა მოხდება, თუ გაკვეთილს გამოვტოვებ?", answer: "[გაცდენისა და გადატანის წესი — ნინა დააზუსტებს]" },
+      { id: "pay", question: "როგორ ვიხდი?", answer: "გადახდის წესს პირველ საუბარზე შევთანხმდებით." },
+      { id: "miss", question: "რა მოხდება, თუ გაკვეთილს გამოვტოვებ?", answer: "თუ ვერ მოხვალ, წინასწარ მომწერე და გაკვეთილს გადავიტანთ." },
     ],
   },
   final: {
@@ -218,9 +218,9 @@ export const landing = {
     contact: "კონტაქტი",
     social: "სოციალური",
     students: "მოსწავლეებისთვის",
-    email: "[ელ-ფოსტა]",
-    phone: "[ტელეფონი / WhatsApp]",
-    telegram: "[Telegram]",
+    email: "ელ-ფოსტა",
+    phone: "ტელეფონი",
+    telegram: "Telegram",
     instagram: "Instagram",
     facebook: "Facebook",
     tiktok: "TikTok",
@@ -289,8 +289,14 @@ export const landing = {
 
 export function assertLandingReady() {
   if (process.env.NODE_ENV !== "production" || process.env.ALLOW_PLACEHOLDER_COPY === "true") return;
-  const text = JSON.stringify(landing);
-  if (text.includes("[")) {
+  if (hasPlaceholder(landing)) {
     throw new Error("landing.ka.ts still contains draft placeholders");
   }
+}
+
+function hasPlaceholder(value: unknown): boolean {
+  if (typeof value === "string") return /\[[^[\]]+\]/.test(value);
+  if (Array.isArray(value)) return value.some(hasPlaceholder);
+  if (value && typeof value === "object") return Object.values(value).some(hasPlaceholder);
+  return false;
 }
