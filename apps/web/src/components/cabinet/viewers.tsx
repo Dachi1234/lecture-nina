@@ -6,7 +6,7 @@ import { exerciseContentSchema, materialReadiness, type ExerciseContent } from "
 import { Icon } from "@nina/ui";
 import { MarkDone } from "./mark-done";
 import { ExercisePlayer } from "./exercise-player";
-import { groupTone, materialIcon, materialLabel } from "@/lib/materials";
+import { groupTone, materialIcon, materialLabel, withLesson } from "@/lib/materials";
 import { toneClass } from "@/lib/tones";
 
 type Neighbor = { id: string; title: string } | null;
@@ -22,6 +22,9 @@ export type MaterialPayload = {
   lastStep: number | null;
   canMarkDone: boolean;
   lessonId: string | null;
+  lessonNumber?: number;
+  lessonTitle?: string;
+  noteKa?: string | null;
   preview?: boolean;
   assets: Record<string, string>;
   prev: Neighbor;
@@ -52,7 +55,7 @@ function PassiveViewer({ material }: { material: MaterialPayload }) {
       {material.preview ? null : (
         <div className="flex flex-wrap items-center justify-between gap-3">
           <Link href={back} className="text-sm font-semibold text-teal-deep">
-            ← გაკვეთილზე დაბრუნება
+            ← {material.lessonNumber ? `გაკვეთილი ${material.lessonNumber}` : "გაკვეთილზე დაბრუნება"}
           </Link>
           <div className="flex gap-4 text-sm font-semibold">
             {material.prev ? <Link href={`/app/m/${material.prev.id}${query}`} className="text-teal-deep">← {material.prev.title}</Link> : null}
@@ -70,11 +73,17 @@ function PassiveViewer({ material }: { material: MaterialPayload }) {
           {material.subtitle ? <p className="mt-1 text-lg text-ink-muted">{material.subtitle}</p> : null}
         </div>
       </header>
+      {material.noteKa && !material.preview ? (
+        <p className="rounded-2xl bg-teal-soft px-5 py-3.5 text-base leading-relaxed">
+          <span className="font-bold">ნინა: </span>
+          {material.noteKa}
+        </p>
+      ) : null}
       {empty ? <NotReady preview={Boolean(material.preview)} /> : <ViewerBody material={material} />}
       {material.description && !empty ? (
         <p className="rounded-2xl border-l-4 border-mustard bg-card px-5 py-4 text-lg leading-relaxed">{material.description}</p>
       ) : null}
-      {!material.preview && !empty && material.canMarkDone && material.status !== "COMPLETED" ? <MarkDone materialId={material.id} /> : null}
+      {!material.preview && !empty && material.canMarkDone && material.status !== "COMPLETED" ? <MarkDone materialId={material.id} lessonId={material.lessonId} /> : null}
     </article>
   );
 }
@@ -114,7 +123,7 @@ function ViewerBody({ material }: { material: MaterialPayload }) {
     case "STORY":
       return <StoryView content={content} assets={assets} />;
     case "HTML_EMBED":
-      return <EmbedView materialId={material.id} content={content} assets={assets} />;
+      return <EmbedView materialId={material.id} lessonId={material.lessonId} content={content} assets={assets} />;
     default:
       return null;
   }
@@ -673,7 +682,7 @@ function StoryView({ content, assets }: { content: Rec; assets: Assets }) {
   );
 }
 
-function EmbedView({ materialId, content, assets }: { materialId: string; content: Rec; assets: Assets }) {
+function EmbedView({ materialId, lessonId, content, assets }: { materialId: string; lessonId: string | null; content: Rec; assets: Assets }) {
   const bundle = src(assets, content.bundle);
   const frame = useRef<HTMLIFrameElement>(null);
   const [height, setHeight] = useState(typeof content.height === "number" ? content.height : 640);
@@ -684,7 +693,7 @@ function EmbedView({ materialId, content, assets }: { materialId: string; conten
       const data = message.data as { type?: string; height?: number; score?: number };
       if (data?.type === "nina:resize" && typeof data.height === "number") setHeight(data.height);
       if (data?.type === "nina:complete") {
-        void fetch(`/v1/me/embeds/${materialId}/complete`, {
+        void fetch(withLesson(`/v1/me/embeds/${materialId}/complete`, lessonId), {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
@@ -694,7 +703,7 @@ function EmbedView({ materialId, content, assets }: { materialId: string; conten
     };
     window.addEventListener("message", onMessage);
     return () => window.removeEventListener("message", onMessage);
-  }, [materialId, bundle]);
+  }, [materialId, lessonId, bundle]);
   if (!bundle) return null;
   return (
     <iframe

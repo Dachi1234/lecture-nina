@@ -1,42 +1,44 @@
 import Link from "next/link";
-import { NewMaterialWizard } from "@/components/admin/studio/wizard";
+import { NewMaterialWizard, type AttachTarget } from "@/components/admin/studio/wizard";
 import { ApiError, apiGet } from "@/lib/api";
-import { loadTopics } from "@/lib/topics";
+import { shortDate } from "@/lib/dates";
 
-type Lesson = { id: string; studentId: string; studentName: string; number: number; title: string; items: { groupLabel: string | null }[] };
+type Plan = { id: string; titleKa: string; unit: { titleKa: string } | null };
+type Lesson = { id: string; displayTitle: string; date: string; audience: { name: string } | null };
 
-export default async function NewMaterialPage({ searchParams }: { searchParams: Promise<{ lessonId?: string }> }) {
-  const { lessonId } = await searchParams;
-  const topics = await loadTopics();
-  let lesson: Lesson | null = null;
-  if (lessonId) {
-    try {
-      lesson = await apiGet<Lesson>(`/v1/admin/lessons/${lessonId}`);
-    } catch (error) {
-      if (!(error instanceof ApiError && error.status === 404)) throw error;
+async function optional<T>(path: string) {
+  try {
+    return await apiGet<T>(path);
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 404) return null;
+    throw error;
+  }
+}
+
+export default async function NewMaterialPage({ searchParams }: { searchParams: Promise<{ planId?: string; lessonId?: string; section?: string }> }) {
+  const { planId, lessonId, section = "CLASS" } = await searchParams;
+  let target: AttachTarget | null = null;
+  if (planId) {
+    const plan = await optional<Plan>(`/v1/admin/plans/${planId}`);
+    if (plan) target = { kind: "plan", id: plan.id, label: `გეგმა · ${plan.titleKa}`, section, returnTo: `/admin/plans/${plan.id}` };
+  } else if (lessonId) {
+    const lesson = await optional<Lesson>(`/v1/admin/lessons/${lessonId}`);
+    if (lesson) {
+      target = {
+        kind: "lesson",
+        id: lesson.id,
+        label: `${lesson.audience?.name ?? ""} · ${shortDate(lesson.date)} · ${lesson.displayTitle}`,
+        section,
+        returnTo: `/admin/lessons/${lesson.id}`,
+      };
     }
   }
-  const returnTo = lesson ? `/admin/students/${lesson.studentId}/lessons/${lesson.id}` : null;
   return (
     <div className="flex flex-col gap-4">
-      <Link href={returnTo ?? "/admin/library"} className="text-sm font-semibold text-teal-deep">
-        ← {lesson ? `გაკვეთილი ${lesson.number}` : "ბიბლიოთეკა"}
+      <Link href={target?.returnTo ?? "/admin/library"} className="text-sm font-semibold text-teal-deep">
+        ← {target ? (target.kind === "plan" ? "გეგმა" : "გაკვეთილი") : "ბიბლიოთეკა"}
       </Link>
-      <NewMaterialWizard
-        topics={topics}
-        lesson={
-          lesson && returnTo
-            ? {
-                id: lesson.id,
-                number: lesson.number,
-                title: lesson.title,
-                studentName: lesson.studentName,
-                groups: [...new Set(lesson.items.map((item) => item.groupLabel).filter((label): label is string => Boolean(label)))],
-                returnTo,
-              }
-            : null
-        }
-      />
+      <NewMaterialWizard target={target} />
     </div>
   );
 }

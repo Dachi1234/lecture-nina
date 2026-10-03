@@ -1,15 +1,22 @@
 "use client";
 
-import { useMemo, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { EXERCISE_TEMPLATE_CATALOG, MATERIAL_CATALOG, MATERIAL_GROUPS, exerciseTemplateMeta, type MaterialTypeMeta } from "@nina/contracts";
 import { Button, ChoiceChip, Icon, IconTile } from "@nina/ui";
 import { groupTone, materialIcon } from "@/lib/materials";
-import { MiniInput, Segmented, TextField } from "./kit";
+import { Segmented, TextField } from "./kit";
 
-type Topic = { id: string; number: number; titleKa: string };
-type LessonTarget = { id: string; number: number; title: string; studentName: string; groups: string[]; returnTo: string };
+export type AttachTarget = { kind: "plan" | "lesson"; id: string; label: string; section: string; returnTo: string };
 type Choice = { type: string; templateId?: string };
+
+const LEVELS = ["A1", "A2", "B1", "B2"];
+const SECTIONS = [
+  { id: "WARMUP", label: "გახურება" },
+  { id: "CLASS", label: "გაკვეთილზე" },
+  { id: "HOMEWORK", label: "საშინაო" },
+  { id: "REVIEW", label: "გამეორება" },
+];
 
 const buildLabel: Record<MaterialTypeMeta["build"], string> = {
   builder: "აწყობა აქვე",
@@ -19,26 +26,19 @@ const buildLabel: Record<MaterialTypeMeta["build"], string> = {
 
 const MINUTES = [3, 5, 10, 15, 20];
 
-export function NewMaterialWizard({ topics, lesson }: { topics: Topic[]; lesson: LessonTarget | null }) {
+export function NewMaterialWizard({ target }: { target: AttachTarget | null }) {
   const router = useRouter();
   const [choice, setChoice] = useState<Choice | null>(null);
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
   const [estMinutes, setEstMinutes] = useState<number | null>(null);
-  const [topicIds, setTopicIds] = useState<string[]>([]);
-  const [topicQuery, setTopicQuery] = useState("");
-  const [kind, setKind] = useState<"LESSON_MATERIAL" | "HOMEWORK" | "REVIEW">("LESSON_MATERIAL");
-  const [groupLabel, setGroupLabel] = useState(lesson?.groups.at(-1) ?? "");
+  const [level, setLevel] = useState<string | null>("A1");
+  const [section, setSection] = useState(target?.section ?? "CLASS");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
   const meta = choice ? MATERIAL_CATALOG[choice.type as keyof typeof MATERIAL_CATALOG] : null;
   const template = choice?.templateId ? exerciseTemplateMeta(choice.templateId) : null;
-  const visibleTopics = useMemo(() => {
-    const query = topicQuery.trim().toLowerCase();
-    if (!query) return topics;
-    return topics.filter((topic) => topic.titleKa.toLowerCase().includes(query) || String(topic.number) === query);
-  }, [topics, topicQuery]);
 
   async function create(event: FormEvent) {
     event.preventDefault();
@@ -55,8 +55,8 @@ export function NewMaterialWizard({ topics, lesson }: { topics: Topic[]; lesson:
         title,
         subtitle,
         estMinutes,
-        topicIds,
-        ...(lesson ? { attach: { lessonId: lesson.id, kind, groupLabel } } : {}),
+        level,
+        ...(target ? { attach: { [target.kind === "plan" ? "planId" : "lessonId"]: target.id, section } } : {}),
       }),
     }).catch(() => null);
     const body = (await response?.json().catch(() => null)) as { id?: string; error?: { messageKa?: string } } | null;
@@ -65,7 +65,7 @@ export function NewMaterialWizard({ topics, lesson }: { topics: Topic[]; lesson:
       setError(body?.error?.messageKa ?? "ვერ შეიქმნა.");
       return;
     }
-    const back = lesson ? `&returnTo=${encodeURIComponent(lesson.returnTo)}` : "";
+    const back = target ? `&returnTo=${encodeURIComponent(target.returnTo)}` : "";
     router.push(`/admin/library/${body.id}?tab=content${back}`);
   }
 
@@ -84,9 +84,9 @@ export function NewMaterialWizard({ topics, lesson }: { topics: Topic[]; lesson:
         })}
       </ol>
 
-      {lesson ? (
+      {target ? (
         <p className="rounded-xl bg-teal-soft px-4 py-3 text-[15px] text-teal-deep">
-          ახალი მასალა ჩაემატება: <b>{lesson.studentName} · გაკვეთილი {lesson.number} · {lesson.title}</b>. ბიბლიოთეკაშიც შეინახება, რომ სხვა მოსწავლეებსაც მისცე.
+          ახალი მასალა ჩაემატება: <b>{target.label}</b>. ბიბლიოთეკაშიც შეინახება, რომ სხვა გეგმებშიც გამოიყენო.
         </p>
       ) : null}
 
@@ -151,36 +151,17 @@ export function NewMaterialWizard({ topics, lesson }: { topics: Topic[]; lesson:
               </div>
             </div>
             <div className="flex flex-col gap-2">
-              <p className="text-sm font-semibold">თემა · {topicIds.length ? topicIds.length : "არჩეული არ არის"}</p>
-              <MiniInput label="თემის ძებნა" placeholder="მოძებნე თემა: კაფე, 14…" value={topicQuery} onChange={setTopicQuery} className="max-w-sm" />
-              <div className="flex max-h-48 flex-wrap gap-2 overflow-y-auto">
-                {visibleTopics.map((topic) => {
-                  const pressed = topicIds.includes(topic.id);
-                  return (
-                    <ChoiceChip key={topic.id} pressed={pressed} className="h-10 text-sm" onClick={() => setTopicIds(pressed ? topicIds.filter((id) => id !== topic.id) : [...topicIds, topic.id])}>
-                      {topic.number} · {topic.titleKa}
-                    </ChoiceChip>
-                  );
-                })}
+              <p className="text-sm font-semibold">დონე</p>
+              <div className="flex flex-wrap gap-2">
+                {LEVELS.map((value) => (
+                  <ChoiceChip key={value} pressed={level === value} onClick={() => setLevel(level === value ? null : value)}>{value}</ChoiceChip>
+                ))}
               </div>
             </div>
-            {lesson ? (
+            {target ? (
               <div className="flex flex-col gap-3 rounded-xl bg-paper-deep p-4">
-                <p className="text-sm font-semibold">გაკვეთილში</p>
-                <Segmented
-                  label="როგორ"
-                  value={kind}
-                  options={[{ id: "LESSON_MATERIAL", label: "გაკვეთილის მასალა" }, { id: "HOMEWORK", label: "საშინაო" }, { id: "REVIEW", label: "გამეორება" }]}
-                  onChange={setKind}
-                />
-                <label className="flex flex-col gap-1 text-sm font-semibold">
-                  ჯგუფი
-                  <input list="lesson-groups" value={groupLabel} onChange={(event) => setGroupLabel(event.target.value)} placeholder="მაგ. 2 · სიტყვები და წესი" className="h-11 rounded-lg border-[1.5px] border-sand bg-card px-3 font-normal" />
-                  <datalist id="lesson-groups">
-                    {lesson.groups.map((group) => <option key={group} value={group} />)}
-                  </datalist>
-                </label>
-                <p className="text-sm text-ink-muted">მოსწავლე ამას ვერ დაინახავს, სანამ გაკვეთილში „უჩანს“ არ მონიშნავ.</p>
+                <Segmented label="სექცია" value={section} options={SECTIONS} onChange={setSection} />
+                <p className="text-sm text-ink-muted">მოსწავლე ამას დაინახავს მხოლოდ მაშინ, როცა მასალა გამოქვეყნდება და გაკვეთილი გაეგზავნება.</p>
               </div>
             ) : null}
             {error ? <p className="text-sm font-medium text-burgundy">{error}</p> : null}

@@ -1,6 +1,7 @@
 import { MaterialStage, type MaterialPayload } from "@/components/cabinet/viewers";
 import { RememberOpen } from "@/components/cabinet/remember-open";
 import { apiGet, redirectAdminHome } from "@/lib/api";
+import { withLesson } from "@/lib/materials";
 
 export default async function MaterialPage({
   params,
@@ -12,10 +13,10 @@ export default async function MaterialPage({
   const { materialId } = await params;
   const { lessonId } = await searchParams;
   await redirectAdminHome();
-  const material = await apiGet<MaterialPayload>(`/v1/me/materials/${materialId}${lessonId ? `?lessonId=${encodeURIComponent(lessonId)}` : ""}`);
+  const material = await apiGet<MaterialPayload>(withLesson(`/v1/me/materials/${materialId}`, lessonId));
   return (
     <>
-      <RememberOpen materialId={material.id} />
+      <RememberOpen materialId={material.id} lessonId={material.lessonId} />
       <MaterialStage material={material} />
     </>
   );

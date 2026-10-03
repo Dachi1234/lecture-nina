@@ -1,7 +1,12 @@
 import { notFound } from "next/navigation";
 import { MaterialStudio, type StudioMaterial } from "@/components/admin/studio/studio";
 import { ApiError, apiGet } from "@/lib/api";
-import { loadTopics } from "@/lib/topics";
+
+function backLabel(path: string) {
+  if (path.startsWith("/admin/plans/")) return "გეგმაზე დაბრუნება";
+  if (path.startsWith("/admin/lessons/")) return "გაკვეთილზე დაბრუნება";
+  return "უკან";
+}
 
 export default async function AdminMaterialPage({
   params,
@@ -19,8 +24,7 @@ export default async function AdminMaterialPage({
     if (error instanceof ApiError && error.status === 404) notFound();
     throw error;
   }
-  const topics = await loadTopics();
   const initialTab = tab === "basics" || tab === "publish" ? tab : "content";
-  const back = returnTo?.startsWith("/admin/") ? { href: returnTo, label: returnTo.includes("/lessons/") ? "გაკვეთილზე დაბრუნება" : "უკან" } : null;
-  return <MaterialStudio key={material.id} material={material} topics={topics} initialTab={initialTab} returnTo={back} />;
+  const back = returnTo?.startsWith("/admin/") ? { href: returnTo, label: backLabel(returnTo) } : null;
+  return <MaterialStudio key={material.id} material={material} initialTab={initialTab} returnTo={back} />;
 }

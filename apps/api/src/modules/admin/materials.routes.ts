@@ -12,10 +12,12 @@ import { Prisma } from "@nina/db";
 import { prisma } from "../../db.js";
 import { requireRole } from "../auth/guard.js";
 import { signMediaUrl } from "../media/sign.js";
+import { SECTIONS, type Section } from "../../domain/progress.js";
+import { audienceOf, lessonTitle } from "../lessons/load.js";
 
 const materialTypes = new Set<string>(MATERIAL_TYPES);
 const exerciseTypes = new Set<string>(EXERCISE_MATERIAL_TYPES);
-const assignmentKinds = new Set(["LESSON_MATERIAL", "HOMEWORK", "PERSONAL", "REVIEW"]);
+const sections = new Set<string>(SECTIONS);
 
 const materialListSelect = {
   id: true,
@@ -25,21 +27,14 @@ const materialListSelect = {
   status: true,
   origin: true,
   tags: true,
+  level: true,
   estMinutes: true,
   content: true,
   draft: true,
   updatedAt: true,
-  personalFor: { select: { user: { select: { name: true } } } },
-  topics: { select: { topic: { select: { number: true, titleKa: true } } } },
-  assignments: {
-    select: {
-      id: true,
-      kind: true,
-      readyForStudent: true,
-      student: { select: { user: { select: { name: true } } } },
-      lesson: { select: { number: true, title: true } },
-    },
-  },
+  legacySourceId: true,
+  planItems: { select: { plan: { select: { id: true, titleKa: true } } } },
+  lessonItems: { where: { materialId: { not: null } }, select: { lesson: { select: { id: true } } } },
 } as const;
 
 type Rec = Record<string, unknown>;
@@ -93,9 +88,9 @@ export async function adminMaterialRoutes(app: FastifyInstance) {
       title?: string;
       subtitle?: string;
       templateId?: string;
-      topicIds?: unknown;
       estMinutes?: unknown;
-      attach?: { lessonId?: string; kind?: string; groupLabel?: string | null };
+      level?: unknown;
+      attach?: { planId?: string; lessonId?: string; section?: string };
     };
     const template = body.templateId ? exerciseTemplateMeta(body.templateId) : null;
     const type = template ? template.materialType : body.type;
@@ -108,12 +103,11 @@ export async function adminMaterialRoutes(app: FastifyInstance) {
     const title = body.title.trim();
     const content = starterContent(type, template?.id);
     if (exerciseTypes.has(type)) content.title = title;
-    const topicIds = stringList(body.topicIds);
-    const lesson = body.attach?.lessonId
-      ? await prisma.lesson.findUnique({ where: { id: body.attach.lessonId }, select: { id: true, studentId: true } })
-      : null;
-    if (body.attach?.lessonId && !lesson) {
-      return reply.code(404).send({ error: { code: "NOT_FOUND", messageKa: "გაკვეთილი ვერ მოიძებნა." } });
+    const section = (body.attach?.section && sections.has(body.attach.section) ? body.attach.section : "CLASS") as Section;
+    const plan = body.attach?.planId ? await prisma.lessonPlan.findUnique({ where: { id: body.attach.planId }, select: { id: true } }) : null;
+    const lesson = body.attach?.lessonId ? await prisma.lesson.findUnique({ where: { id: body.attach.lessonId }, select: { id: true } }) : null;
+    if ((body.attach?.planId && !plan) || (body.attach?.lessonId && !lesson)) {
+      return reply.code(404).send({ error: { code: "NOT_FOUND", messageKa: "გეგმა ან გაკვეთილი ვერ მოიძებნა." } });
     }
     const row = await prisma.material.create({
       data: {
@@ -121,27 +115,20 @@ export async function adminMaterialRoutes(app: FastifyInstance) {
         title,
         subtitle: body.subtitle?.trim() || null,
         estMinutes: typeof body.estMinutes === "number" && body.estMinutes > 0 ? Math.round(body.estMinutes) : null,
+        level: typeof body.level === "string" && body.level.trim() ? body.level.trim() : null,
         content: content as object,
         status: "DRAFT",
         origin: "MANUAL",
         createdById: user.id,
-        ...(topicIds.length ? { topics: { create: topicIds.map((topicId) => ({ topicId })) } } : {}),
       },
     });
+    if (plan) {
+      const last = await prisma.planItem.findFirst({ where: { planId: plan.id, section }, orderBy: { order: "desc" }, select: { order: true } });
+      await prisma.planItem.create({ data: { planId: plan.id, materialId: row.id, section, order: (last?.order ?? -1) + 1 } });
+    }
     if (lesson) {
-      const last = await prisma.assignment.findFirst({ where: { lessonId: lesson.id }, orderBy: { order: "desc" }, select: { order: true } });
-      const kind = body.attach?.kind && assignmentKinds.has(body.attach.kind) ? body.attach.kind : "LESSON_MATERIAL";
-      await prisma.assignment.create({
-        data: {
-          studentId: lesson.studentId,
-          materialId: row.id,
-          lessonId: lesson.id,
-          kind: kind as "LESSON_MATERIAL",
-          groupLabel: body.attach?.groupLabel?.trim() || null,
-          order: (last?.order ?? -1) + 1,
-          readyForStudent: false,
-        },
-      });
+      const last = await prisma.lessonItem.findFirst({ where: { lessonId: lesson.id, section, planItemId: null }, orderBy: { order: "desc" }, select: { order: true } });
+      await prisma.lessonItem.create({ data: { lessonId: lesson.id, materialId: row.id, section, order: (last?.order ?? -1) + 1 } });
     }
     return { id: row.id };
   });
@@ -192,14 +179,27 @@ export async function adminMaterialRoutes(app: FastifyInstance) {
     const row = await prisma.material.findUnique({
       where: { id },
       include: {
-        personalFor: { select: { id: true, user: { select: { name: true } } } },
-        topics: { include: { topic: { select: { id: true, number: true, titleKa: true, titleEs: true, internalRef: true } } } },
-        assignments: {
-          include: {
-            student: { select: { id: true, user: { select: { name: true } } } },
-            lesson: { select: { id: true, number: true, title: true } },
+        planItems: {
+          select: {
+            section: true,
+            plan: { select: { id: true, titleKa: true, unit: { select: { titleKa: true, course: { select: { title: true } } } }, _count: { select: { lessons: true } } } },
           },
-          orderBy: { order: "asc" },
+        },
+        lessonItems: {
+          where: { materialId: { not: null } },
+          select: {
+            section: true,
+            lesson: {
+              select: {
+                id: true,
+                title: true,
+                date: true,
+                plan: { select: { titleKa: true } },
+                student: { select: { id: true, user: { select: { name: true } } } },
+                group: { select: { id: true, name: true } },
+              },
+            },
+          },
         },
         progress: { select: { status: true } },
         revisions: { select: { id: true, title: true, createdAt: true, note: true }, orderBy: { createdAt: "desc" }, take: 8 },
@@ -218,21 +218,31 @@ export async function adminMaterialRoutes(app: FastifyInstance) {
       status: row.status,
       origin: row.origin,
       tags: row.tags,
+      level: row.level,
       estMinutes: row.estMinutes,
+      legacySourceId: row.legacySourceId,
       updatedAt: row.updatedAt.toISOString(),
-      personalFor: row.personalFor ? { id: row.personalFor.id, name: row.personalFor.user.name } : null,
       assets: signAssets(row.content, row.draft),
       readiness: materialReadiness(row.type, working),
-      topics: row.topics.map((link) => link.topic).sort((a, b) => a.number - b.number),
-      usage: row.assignments.map((item) => ({
-        id: item.id,
-        kind: item.kind,
-        groupLabel: item.groupLabel,
-        readyForStudent: item.readyForStudent,
-        studentId: item.student.id,
-        studentName: item.student.user.name,
-        lesson: item.lesson ? { id: item.lesson.id, number: item.lesson.number, title: item.lesson.title } : null,
+      plans: row.planItems.map((item) => ({
+        id: item.plan.id,
+        titleKa: item.plan.titleKa,
+        section: item.section,
+        unitTitle: item.plan.unit?.titleKa ?? null,
+        courseTitle: item.plan.unit?.course.title ?? null,
+        lessons: item.plan._count.lessons,
       })),
+      lessons: row.lessonItems.flatMap((item) =>
+        item.lesson
+          ? [{
+              id: item.lesson.id,
+              title: lessonTitle(item.lesson),
+              date: item.lesson.date.toISOString(),
+              section: item.section,
+              audience: audienceOf({ student: item.lesson.student, group: item.lesson.group ? { ...item.lesson.group, members: [] } : null }),
+            }]
+          : [],
+      ),
       stats: {
         opened: row.progress.filter((item) => item.status !== "NOT_STARTED").length,
         completed: row.progress.filter((item) => item.status === "COMPLETED").length,
@@ -257,7 +267,7 @@ export async function adminMaterialRoutes(app: FastifyInstance) {
       content?: unknown;
       estMinutes?: unknown;
       tags?: unknown;
-      topicIds?: unknown;
+      level?: unknown;
     };
     const existing = await prisma.material.findUnique({ where: { id }, select: { id: true, type: true, status: true, content: true, draft: true } });
     if (!existing) return notFound(reply);
@@ -275,7 +285,6 @@ export async function adminMaterialRoutes(app: FastifyInstance) {
       : live
         ? { draft: sameAsPublished ? prismaNull() : (content as object) }
         : { content: content as object, draft: prismaNull() };
-    const topicIds = body.topicIds === undefined ? undefined : stringList(body.topicIds);
     const saved = await prisma.material.update({
       where: { id },
       data: {
@@ -284,7 +293,7 @@ export async function adminMaterialRoutes(app: FastifyInstance) {
         ...(body.description === null || typeof body.description === "string" ? { description: typeof body.description === "string" ? body.description.trim() || null : null } : {}),
         ...(body.estMinutes === null ? { estMinutes: null } : typeof body.estMinutes === "number" && body.estMinutes > 0 ? { estMinutes: Math.round(body.estMinutes) } : {}),
         ...(body.tags !== undefined ? { tags: stringList(body.tags).map((tag) => tag.trim()).filter(Boolean).slice(0, 20) } : {}),
-        ...(topicIds ? { topics: { deleteMany: {}, create: topicIds.map((topicId) => ({ topicId })) } } : {}),
+        ...(body.level === null || typeof body.level === "string" ? { level: typeof body.level === "string" ? body.level.trim() || null : null } : {}),
         ...contentData,
       },
       select: { id: true, type: true, title: true, updatedAt: true, content: true, draft: true },
@@ -348,7 +357,7 @@ export async function adminMaterialRoutes(app: FastifyInstance) {
     const user = await requireRole(request, reply, "ADMIN");
     if (!user) return;
     const { id } = request.params as { id: string };
-    const source = await prisma.material.findUnique({ where: { id }, include: { topics: true } });
+    const source = await prisma.material.findUnique({ where: { id } });
     if (!source) return notFound(reply);
     const working = (source.draft ?? source.content) as object;
     const copy = await prisma.material.create({
@@ -361,9 +370,9 @@ export async function adminMaterialRoutes(app: FastifyInstance) {
         status: "DRAFT",
         origin: "MANUAL",
         tags: source.tags,
+        level: source.level,
         estMinutes: source.estMinutes,
         createdById: user.id,
-        topics: { create: source.topics.map((link) => ({ topicId: link.topicId })) },
       },
     });
     await syncAssetLinks(copy.id, working);
@@ -388,12 +397,12 @@ export async function adminMaterialRoutes(app: FastifyInstance) {
     const { id } = request.params as { id: string };
     const material = await prisma.material.findUnique({
       where: { id },
-      select: { id: true, _count: { select: { assignments: true, progress: true } } },
+      select: { id: true, _count: { select: { planItems: true, lessonItems: true, progress: true } } },
     });
     if (!material) return notFound(reply);
     const attempts = await prisma.exerciseAttempt.count({ where: { materialId: id } });
-    if (material._count.assignments > 0 || material._count.progress > 0 || attempts > 0) {
-      return reply.code(409).send({ error: { code: "IN_USE", messageKa: "მასალა გაკვეთილში გამოიყენება. ჯერ ამოიღე გაკვეთილიდან ან გადაიტანე არქივში." } });
+    if (material._count.planItems > 0 || material._count.lessonItems > 0 || material._count.progress > 0 || attempts > 0) {
+      return reply.code(409).send({ error: { code: "IN_USE", messageKa: "მასალა გეგმაში ან გაკვეთილში გამოიყენება. ჯერ ამოიღე იქიდან ან გადაიტანე არქივში." } });
     }
     await prisma.material.delete({ where: { id } });
     return { ok: true };
@@ -416,15 +425,10 @@ function summarize(row: {
   content: unknown;
   draft: unknown;
   updatedAt: Date;
-  personalFor: { user: { name: string } } | null;
-  topics: { topic: { number: number; titleKa: string } }[];
-  assignments: {
-    id: string;
-    kind: string;
-    readyForStudent: boolean;
-    student: { user: { name: string } };
-    lesson: { number: number; title: string } | null;
-  }[];
+  level: string | null;
+  legacySourceId: string | null;
+  planItems: { plan: { id: string; titleKa: string } }[];
+  lessonItems: { lesson: { id: string } }[];
 }) {
   const readiness = materialReadiness(row.type, row.draft ?? row.content);
   const content = isRecord(row.draft ?? row.content) ? ((row.draft ?? row.content) as Rec) : {};
@@ -439,7 +443,8 @@ function summarize(row: {
     estMinutes: row.estMinutes,
     templateId: typeof content.templateId === "string" ? content.templateId : null,
     hasDraft: row.draft !== null,
-    personalFor: row.personalFor?.user.name ?? null,
+    level: row.level,
+    fromLegacy: row.legacySourceId !== null,
     readiness: {
       ready: readiness.ready,
       empty: readiness.empty,
@@ -448,13 +453,7 @@ function summarize(row: {
       summaryKa: readiness.summaryKa,
     },
     updatedAt: row.updatedAt.toISOString(),
-    topics: row.topics.map((link) => link.topic).sort((a, b) => a.number - b.number),
-    usage: row.assignments.map((item) => ({
-      studentName: item.student.user.name,
-      lessonNumber: item.lesson?.number ?? null,
-      lessonTitle: item.lesson?.title ?? null,
-      readyForStudent: item.readyForStudent,
-      kind: item.kind,
-    })),
+    plans: row.planItems.map((item) => item.plan),
+    extraLessons: row.lessonItems.length,
   };
 }

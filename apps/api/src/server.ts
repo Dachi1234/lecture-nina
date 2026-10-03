@@ -17,7 +17,8 @@ import { adminDashboardRoutes } from "./modules/admin/dashboard.routes.js";
 import { adminStudentRoutes } from "./modules/admin/students.routes.js";
 import { adminLessonRoutes } from "./modules/admin/lessons.routes.js";
 import { adminCurriculumRoutes } from "./modules/admin/curriculum.routes.js";
-import { adminVocabularyRoutes } from "./modules/admin/vocabulary.routes.js";
+import { adminGroupRoutes } from "./modules/admin/groups.routes.js";
+import { adminLegacyRoutes } from "./modules/admin/legacy.routes.js";
 import { adminSettingsRoutes } from "./modules/admin/settings.routes.js";
 
 const app = Fastify({ logger: true });
@@ -40,7 +41,8 @@ await app.register(adminDashboardRoutes);
 await app.register(adminStudentRoutes);
 await app.register(adminLessonRoutes);
 await app.register(adminCurriculumRoutes);
-await app.register(adminVocabularyRoutes);
+await app.register(adminGroupRoutes);
+await app.register(adminLegacyRoutes);
 await app.register(adminSettingsRoutes);
 
 app.get("/v1/health", async () => ({ status: "ok" }));

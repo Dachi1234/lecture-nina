@@ -2,6 +2,18 @@ import Link from "next/link";
 import { StatusChip } from "@nina/ui";
 import { apiGet, redirectAdminHome } from "@/lib/api";
 import { lessonOverline, lessonWhen, shortDate } from "@/lib/dates";
+import { materialLabel, withLesson } from "@/lib/materials";
+
+type LessonCard = {
+  id: string;
+  number: number;
+  title: string;
+  date: string;
+  status: "NEW" | "IN_PROGRESS" | "DONE";
+  counter: { completed: number; total: number };
+  unit: { titleKa: string } | null;
+  group: { name: string } | null;
+};
 
 type Home = {
   name: string;
@@ -9,18 +21,19 @@ type Home = {
   greetingForm: string;
   nextLessonAt: string | null;
   empty: boolean;
-  continueLearning: {
-    lessonId: string;
-    number: number;
-    title: string;
-    date: string;
-    counter: { completed: number; total: number };
-    nextMaterial: { id: string; title: string } | null;
+  continueLearning: (LessonCard & { nextMaterial: { id: string; title: string; type: string } | null }) | null;
+  recent: LessonCard[];
+  homework: { lessonId: string; lessonNumber: number; materialId: string; title: string; type: string; dueAt: string | null; status: "NOT_STARTED" | "OPENED" | "COMPLETED" }[];
+  note: { body: string; createdAt: string } | null;
+  syllabus: {
+    course: { title: string };
+    done: number;
+    total: number;
+    units: { id: string; titleKa: string; titleEs: string | null; state: "done" | "current" | "upcoming"; done: number; total: number }[];
   } | null;
-  homework: { materialId: string; title: string; dueAt: string | null; status: "NOT_STARTED" | "OPENED" | "COMPLETED" }[];
-  note: { body: string; createdAt: string; material: { id: string; title: string } | null } | null;
-  path: { id: string; titleKa: string; titleEs: string; done: number; total: number; state: "done" | "current" | "upcoming" }[];
 };
+
+const chip = { NEW: "new", IN_PROGRESS: "progress", DONE: "done" } as const;
 
 export default async function HomePage() {
   await redirectAdminHome();
@@ -39,9 +52,9 @@ export default async function HomePage() {
     );
   }
 
-  const left = home.homework.filter((item) => item.status !== "COMPLETED").length;
   const current = home.continueLearning;
   const ratio = current && current.counter.total > 0 ? Math.round((current.counter.completed / current.counter.total) * 100) : 0;
+  const syllabus = home.syllabus;
 
   return (
     <div className="flex flex-col gap-7">
@@ -54,11 +67,11 @@ export default async function HomePage() {
         <img src="/illustrations/spots/spot-crosslegged.webp" alt="" className="hidden h-[150px] md:block" />
       </header>
 
-      <div className="grid gap-6 lg:grid-cols-[1.45fr_1fr]">
+      <div className="grid gap-6 lg:grid-cols-[1.45fr_1fr] [&>*]:min-w-0">
         <section className="flex flex-col gap-4 rounded-2xl border-[1.5px] border-line bg-card p-7">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold">გააგრძელე სწავლა</h2>
-            {current ? <StatusChip status={current.counter.completed === 0 ? "new" : "progress"} /> : null}
+            {current ? <StatusChip status={chip[current.status]} /> : null}
           </div>
           {current ? (
             <>
@@ -67,6 +80,9 @@ export default async function HomePage() {
                 <div className="min-w-0 flex-1">
                   <p className="text-[13px] font-semibold tracking-wide text-teal-deep">{lessonOverline(current.number, current.date)}</p>
                   <p className="text-2xl font-bold">{current.title}</p>
+                  {current.unit || current.group ? (
+                    <p className="text-sm text-ink-muted">{[current.unit?.titleKa, current.group?.name].filter(Boolean).join(" · ")}</p>
+                  ) : null}
                   <div className="mt-2 flex items-center gap-3">
                     <div className="h-2 flex-1 overflow-hidden rounded bg-line">
                       <div className="h-full rounded bg-sage" style={{ width: `${ratio}%` }} />
@@ -83,40 +99,46 @@ export default async function HomePage() {
                   <p className="font-bold">{current.nextMaterial?.title ?? current.title}</p>
                 </div>
                 <Link
-                  href={current.nextMaterial ? `/app/m/${current.nextMaterial.id}?lessonId=${current.lessonId}` : `/app/lessons/${current.lessonId}`}
-                  className="inline-flex h-12 items-center rounded-xl bg-teal-deep px-6 text-[15px] font-semibold text-on-dark"
+                  href={current.nextMaterial ? withLesson(`/app/m/${current.nextMaterial.id}`, current.id) : `/app/lessons/${current.id}`}
+                  className="inline-flex h-12 items-center rounded-xl bg-teal-deep px-6 text-[15px] font-semibold text-on-dark transition hover:-translate-y-0.5 hover:bg-teal-hover"
                 >
                   გაგრძელება
                 </Link>
               </div>
             </>
           ) : (
-            <p className="text-lg text-ink-muted">ყველა გაკვეთილი დასრულებულია.</p>
+            <p className="text-lg text-ink-muted">ყველა გაკვეთილი დასრულებულია. ¡Muy bien!</p>
           )}
         </section>
 
         <section className="flex flex-col gap-3.5 rounded-2xl border-[1.5px] border-line bg-card p-7">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold">საშინაო დავალება</h2>
-            <span className="text-sm text-ink-muted">{left} დარჩა</span>
+            <span className="text-sm text-ink-muted">{home.homework.length} დარჩა</span>
           </div>
-          {home.homework.length === 0 ? <p className="text-ink-muted">საშინაო ჯერ არ გაქვს.</p> : null}
-          {home.homework.map((item) => (
+          {home.homework.length === 0 ? <p className="text-ink-muted">ყველაფერი შესრულებულია.</p> : null}
+          {home.homework.slice(0, 5).map((item) => (
             <Link
-              key={item.materialId}
-              href={`/app/m/${item.materialId}`}
-              className={`rounded-xl p-3.5 ${item.status === "COMPLETED" ? "bg-sage-soft" : item.status === "NOT_STARTED" ? "bg-burgundy-soft" : "border border-line bg-card"}`}
+              key={`${item.lessonId}:${item.materialId}`}
+              href={withLesson(`/app/m/${item.materialId}`, item.lessonId)}
+              className={`rounded-xl p-3.5 ${item.status === "NOT_STARTED" ? "bg-burgundy-soft" : "border border-line bg-card"}`}
             >
-              <p className={`font-bold ${item.status === "COMPLETED" ? "text-sage-ink line-through" : ""}`}>{item.title}</p>
-              <p className={`text-[13px] font-semibold ${item.status === "COMPLETED" ? "text-sage-ink" : item.status === "NOT_STARTED" ? "text-burgundy" : "text-ink-muted"}`}>
-                {item.status === "COMPLETED" ? "შესრულებული" : item.dueAt ? `ვადა: ${shortDate(item.dueAt)}` : "ვადის გარეშე"}
+              <p className="font-bold">{item.title}</p>
+              <p className={`text-[13px] font-semibold ${item.status === "NOT_STARTED" ? "text-burgundy" : "text-ink-muted"}`}>
+                გაკვეთილი {item.lessonNumber} · {materialLabel(item.type, null)}
+                {item.dueAt ? ` · ვადა: ${shortDate(item.dueAt)}` : ""}
               </p>
             </Link>
           ))}
+          {home.homework.length > 5 ? (
+            <Link href="/app/materials?section=HOMEWORK" className="text-sm font-semibold text-teal-deep">
+              ყველა საშინაო →
+            </Link>
+          ) : null}
         </section>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_1.45fr]">
+      <div className="grid gap-6 lg:grid-cols-[1fr_1.45fr] [&>*]:min-w-0">
         {home.note ? (
           <section className="flex flex-col gap-3.5 rounded-2xl border-[1.5px] border-teal-soft bg-teal-soft p-7">
             <div className="flex items-center gap-3">
@@ -127,30 +149,41 @@ export default async function HomePage() {
               </div>
             </div>
             <p className="text-base leading-relaxed">„{home.note.body}“</p>
-            {home.note.material ? (
-              <Link href={`/app/m/${home.note.material.id}`} className="flex items-center gap-3 rounded-xl bg-card px-3.5 py-3">
-                <StatusChip status="personal" />
-                <span className="font-bold">{home.note.material.title}</span>
-              </Link>
-            ) : null}
           </section>
-        ) : null}
-        {home.path.length > 0 ? (
-          <section className="flex flex-col gap-3.5 rounded-2xl border-[1.5px] border-line bg-card p-7">
+        ) : (
+          <section className="flex flex-col gap-3 rounded-2xl border-[1.5px] border-line bg-card p-7">
+            <h2 className="text-xl font-bold">ბოლო გაკვეთილები</h2>
+            {home.recent.map((lesson) => (
+              <Link key={lesson.id} href={`/app/lessons/${lesson.id}`} className="flex items-center justify-between gap-3 rounded-xl px-1 py-1.5 hover:bg-paper-deep">
+                <span className="font-semibold">
+                  {lesson.number}. {lesson.title}
+                </span>
+                <span className="text-sm text-ink-muted">{shortDate(lesson.date)}</span>
+              </Link>
+            ))}
+          </section>
+        )}
+        {syllabus ? (
+          <section className="flex flex-col gap-4 rounded-2xl border-[1.5px] border-line bg-card p-7">
             <div className="flex items-baseline justify-between gap-3">
               <h2 className="text-xl font-bold">
-                <span className="font-hand text-3xl text-burgundy">Poco a Poco</span> · შენი გზა
+                <span className="font-hand text-3xl text-burgundy">Poco a Poco</span> · {syllabus.course.title}
               </h2>
               <Link href="/app/progress" className="text-sm font-semibold text-teal-deep">
                 სრულად →
               </Link>
             </div>
-            <ol className="flex gap-3 overflow-x-auto pb-1 text-sm text-ink-muted">
-              {home.path.map((block) => (
-                <li key={block.id} className={`shrink-0 ${block.state === "current" ? "font-bold text-ink" : ""}`}>
-                  {block.titleEs || block.titleKa}
-                  {block.state === "done" ? " ✓" : ""}
-                  {block.state === "current" ? " · ახლა" : ""}
+            <div className="h-2 overflow-hidden rounded-full bg-line">
+              <div className="h-full rounded-full bg-sage" style={{ width: `${syllabus.total ? Math.round((syllabus.done / syllabus.total) * 100) : 0}%` }} />
+            </div>
+            <ol className="flex gap-2 overflow-x-auto pb-1">
+              {syllabus.units.map((unit) => (
+                <li
+                  key={unit.id}
+                  className={`shrink-0 rounded-xl px-3 py-2 text-sm ${unit.state === "done" ? "bg-sage-soft text-sage-ink" : unit.state === "current" ? "bg-teal-deep font-semibold text-on-dark" : "bg-paper-deep text-ink-muted"}`}
+                >
+                  {unit.titleKa}
+                  {unit.state === "done" ? " ✓" : ""}
                 </li>
               ))}
             </ol>

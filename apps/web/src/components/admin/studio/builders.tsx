@@ -78,6 +78,8 @@ export function parseWordList(text: string): Rec[] {
     });
 }
 
+type GlossaryWord = { id: string; es: string; ka: string; en: string | null };
+
 function VocabBuilder({ content, onChange }: BuilderProps) {
   const title = rec(content.title);
   const entries = recs(content.entries);
@@ -86,8 +88,8 @@ function VocabBuilder({ content, onChange }: BuilderProps) {
   const [paste, setPaste] = useState("");
   const [panel, setPanel] = useState<"" | "paste" | "glossary">("");
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<{ id: string; es: string; ka: string; en: string | null }[]>([]);
-  const [glossaryNote, setGlossaryNote] = useState("");
+  const [results, setResults] = useState<GlossaryWord[]>([]);
+  const [glossary, setGlossary] = useState<GlossaryWord[] | null>(null);
 
   function setEntries(next: Rec[]) {
     onChange({ ...content, entries: next });
@@ -95,37 +97,19 @@ function VocabBuilder({ content, onChange }: BuilderProps) {
 
   async function search(value: string) {
     setQuery(value);
-    if (value.trim().length < 2) {
+    const needle = value.trim().toLowerCase();
+    if (needle.length < 2) {
       setResults([]);
       return;
     }
-    const response = await fetch(`/v1/admin/vocabulary?q=${encodeURIComponent(value.trim())}`, { credentials: "include" });
-    if (!response.ok) return;
-    const body = (await response.json()) as { items: { id: string; es: string; ka: string; en: string | null }[] };
-    setResults(body.items.slice(0, 8));
-  }
-
-  async function saveToGlossary() {
-    setGlossaryNote("");
-    const response = await fetch("/v1/admin/vocabulary", { credentials: "include" });
-    if (!response.ok) return;
-    const body = (await response.json()) as { items: { es: string }[] };
-    const known = new Set(body.items.map((item) => item.es.trim().toLowerCase()));
-    const rows = entries
-      .filter((entry) => str(entry.es).trim() && str(entry.ka).trim())
-      .map((entry) => ({ es: [str(entry.article), str(entry.es).trim()].filter(Boolean).join(" "), ka: str(entry.ka).trim(), en: str(entry.en).trim() || undefined }))
-      .filter((row) => !known.has(row.es.toLowerCase()));
-    if (rows.length === 0) {
-      setGlossaryNote("ყველა სიტყვა უკვე არის ლექსიკონში.");
-      return;
+    let words = glossary;
+    if (!words) {
+      const response = await fetch("/v1/admin/legacy/words", { credentials: "include" });
+      if (!response.ok) return;
+      words = ((await response.json()) as { items: GlossaryWord[] }).items;
+      setGlossary(words);
     }
-    const saved = await fetch("/v1/admin/vocabulary/import", {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ rows }),
-    });
-    setGlossaryNote(saved.ok ? `ლექსიკონს დაემატა ${rows.length} სიტყვა.` : "ვერ შეინახა.");
+    setResults(words.filter((word) => word.es.toLowerCase().includes(needle) || word.ka.toLowerCase().includes(needle) || (word.en ?? "").toLowerCase().includes(needle)).slice(0, 8));
   }
 
   return (
@@ -154,7 +138,7 @@ function VocabBuilder({ content, onChange }: BuilderProps) {
         action={
           <div className="flex gap-2">
             <button type="button" aria-pressed={panel === "paste"} onClick={() => setPanel(panel === "paste" ? "" : "paste")} className="h-10 rounded-lg border-[1.5px] border-sand px-3 text-sm font-semibold aria-pressed:border-teal-deep aria-pressed:text-teal-deep">სიის ჩასმა</button>
-            <button type="button" aria-pressed={panel === "glossary"} onClick={() => setPanel(panel === "glossary" ? "" : "glossary")} className="h-10 rounded-lg border-[1.5px] border-sand px-3 text-sm font-semibold aria-pressed:border-teal-deep aria-pressed:text-teal-deep">ლექსიკონიდან</button>
+            <button type="button" aria-pressed={panel === "glossary"} onClick={() => setPanel(panel === "glossary" ? "" : "glossary")} className="h-10 rounded-lg border-[1.5px] border-sand px-3 text-sm font-semibold aria-pressed:border-teal-deep aria-pressed:text-teal-deep">ძველი ლექსიკონიდან</button>
           </div>
         }
       >
@@ -250,12 +234,6 @@ function VocabBuilder({ content, onChange }: BuilderProps) {
           })}
         </ol>
         <AddButton onClick={() => { setEntries([...entries, { es: "", ka: "" }]); setOpen(null); }}>სიტყვის დამატება</AddButton>
-        <div className="flex flex-wrap items-center gap-3 border-t border-line-soft pt-3">
-          <button type="button" onClick={() => void saveToGlossary()} className="h-10 text-sm font-semibold text-teal-deep underline decoration-mustard decoration-2 underline-offset-4">
-            ახალი სიტყვების შენახვა საერთო ლექსიკონში
-          </button>
-          {glossaryNote ? <span className="text-sm text-sage-ink">{glossaryNote}</span> : null}
-        </div>
       </Section>
     </div>
   );

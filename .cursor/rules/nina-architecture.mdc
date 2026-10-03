@@ -13,10 +13,12 @@ Source of truth: `docs/BUILD_GUIDE.md`. Read the relevant section before changin
 - Every material content shape and exercise template is defined ONCE as a zod schema in `packages/contracts` and reused by web renderers, admin editors, API validation and AI tools.
 
 ## Data rules
-- Materials live once in the library and are reused via `Assignment`; never duplicate a material to give it to another student.
-- Students only ever see lessons/items with `readyForStudent = true` and only their own data. Enforce this in the API, not only in the UI.
-- Never expose the textbook name or `Topic.internalRef` to student-facing endpoints or UI.
-- Lesson status, counters, covered topics and vocabulary filters are derived as in BUILD_GUIDE 7.1. Keep that logic in the API with unit tests.
+- Model: Library `Material` → Curriculum `Course → Unit → LessonPlan → PlanItem` → Teaching `Lesson` (one student XOR one group, optional plan, live-linked; per-lesson changes in `LessonItem`). See BUILD_GUIDE 7.
+- Materials live once in the library and are reused via plans and lesson extras; never duplicate a material to give it to another student.
+- Students only ever see published lessons (`publishedAt`) for themselves or their groups, items that are not hidden/held, and PUBLISHED materials — only their own data. Enforce this in the API, not only in the UI.
+- Never expose textbook names, private/teacher notes or legacy references to student-facing endpoints or UI.
+- Lesson status, counters, effective items and syllabus progress are derived as in BUILD_GUIDE 7.1 (`apps/api/src/domain/progress.ts`). Keep that logic in the API with unit tests.
+- Legacy library (`LegacyMaterial`, `LegacyWord`) is read-only; "copy into new library" creates a DRAFT material.
 - Publishing a material writes a `MaterialRevision`.
 
 ## Files
@@ -32,7 +34,7 @@ Source of truth: `docs/BUILD_GUIDE.md`. Read the relevant section before changin
 
 ## AI
 - LLM access only through the `LLMProvider` abstraction; model id from env/settings, never hardcoded.
-- AI tools create DRAFTS only (`origin = AI_AGENT`). AI can never publish, set `readyForStudent`, delete, or contact anyone.
+- AI tools create DRAFTS only (`origin = AI_AGENT`). AI can never publish materials or lessons, delete, or contact anyone.
 - Tool inputs/outputs are zod-validated; validation errors are returned to the model so it can fix them.
 
 ## Social Studio

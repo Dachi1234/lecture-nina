@@ -22,7 +22,7 @@
 4. System architecture
 5. Tech stack
 6. Monorepo layout
-7. Data model (Prisma schema)
+7. Data model
 8. Content contracts: material types and exercises
 9. API design
 10. Auth, roles, security
@@ -30,7 +30,7 @@
 12. Landing page: build spec
 13. Booking flow and leads
 14. Student cabinet: build spec
-15. Admin panel: build spec (not designed, build from this)
+15. Admin panel: build spec
 16. AI Assistant (admin agent chat)
 17. Social Studio (reserved module)
 18. Background jobs
@@ -324,397 +324,54 @@ nina/
 
 ---
 
-## 7. DATA MODEL (PRISMA SCHEMA)
+## 7. DATA MODEL
 
-This is the canonical model. Cursor may add indexes, `createdAt/updatedAt` and minor fields, but not change the concepts.
+`packages/db/prisma/schema.prisma` is canonical. This section explains the concepts; read the schema for exact fields. Cursor may add indexes and minor fields, but not change the concepts.
 
-```prisma
-// ───────── Identity ─────────
-enum Role { ADMIN STUDENT }
+### 7.0 The model in one picture
 
-model User {
-  id            String   @id @default(cuid())
-  email         String   @unique
-  name          String                      // Georgian display name, e.g. "მარიამი"
-  nameLatin     String?                     // e.g. "Mariam" (used in "¡Hola, Mariam!")
-  role          Role     @default(STUDENT)
-  isActive      Boolean  @default(true)
-  // Better Auth manages sessions/accounts/verification tables alongside this model
-  student       StudentProfile?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-}
-
-model StudentProfile {
-  id              String   @id @default(cuid())
-  userId          String   @unique
-  user            User     @relation(fields: [userId], references: [id])
-  phone           String?
-  preferredChannel ContactChannel?
-  goal            Goal?
-  goalNote        String?
-  courseId        String?                   // current course (A1)
-  course          Course?  @relation(fields: [courseId], references: [id])
-  nextLessonAt    DateTime?                 // shown on cabinet home
-  giftLessonsLeft Int      @default(2)
-  leadId          String?  @unique          // converted from which lead
-  lead            Lead?    @relation(fields: [leadId], references: [id])
-  lessons         Lesson[]
-  assignments     Assignment[]
-  progress        MaterialProgress[]
-  attempts        ExerciseAttempt[]
-  notes           TeacherNote[]
-  checklist       ChecklistItem[]
-  personalVocab   VocabularyEntry[]  @relation("PersonalVocab")
-  personalMaterials Material[]       @relation("PersonalMaterial")
-  onboardedAt     DateTime?                 // first login
-}
-
-// ───────── Leads (booking form) ─────────
-enum ContactChannel { PHONE WHATSAPP TELEGRAM EMAIL }
-enum Goal { TRAVEL STUDY RELOCATION FUN OTHER }
-enum TimeOfDay { MORNING DAY EVENING }
-enum LeadStatus { NEW CONTACTED TRIAL_SCHEDULED TRIAL_DONE CONVERTED LOST }
-
-model Lead {
-  id          String         @id @default(cuid())
-  name        String
-  phone       String
-  email       String?
-  channel     ContactChannel
-  goal        Goal?
-  days        String[]                      // ["MON","WED",...]
-  timeOfDay   TimeOfDay?
-  note        String?
-  consentAt   DateTime
-  source      String?                       // "hero" | "header" | "gift" | "pricing" | "final" | utm...
-  utm         Json?
-  status      LeadStatus     @default(NEW)
-  adminNote   String?
-  student     StudentProfile?
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
-}
-
-// ───────── Curriculum ─────────
-model Course {
-  id        String   @id @default(cuid())
-  slug      String   @unique               // "a1", "survival", "spanish-in-action"
-  title     String                          // student-facing (never the textbook name)
-  level     String?                         // "A1"
-  order     Int      @default(0)
-  blocks    Block[]
-  students  StudentProfile[]
-}
-
-model Block {
-  id        String   @id @default(cuid())
-  courseId  String
-  course    Course   @relation(fields: [courseId], references: [id])
-  order     Int
-  titleEs   String                          // "En el café"
-  titleKa   String                          // "კაფეში"
-  topics    Topic[]
-  checkpointMaterialId String?              // the checkpoint exercise for this block
-  @@unique([courseId, order])
-}
-
-model Topic {
-  id        String   @id @default(cuid())
-  blockId   String
-  block     Block    @relation(fields: [blockId], references: [id])
-  number    Int                             // global 1..45 within the course (for "up to topic N")
-  titleKa   String                          // "საკვები და სასმელი"
-  titleEs   String?                         // "querer / quiero"
-  internalRef String?                       // admin-only mapping to textbook units. NEVER exposed to students.
-  materials MaterialTopic[]
-  lessons   LessonTopic[]
-  vocabulary VocabularyEntry[]
-  @@unique([blockId, number])
-}
-
-// ───────── Content library ─────────
-enum MaterialType {
-  INFO_CARD          // image(s) 9:16
-  VOCAB              // structured list or image
-  DIALOGUE           // lines ES + EN (+ audio per line)
-  STORY              // structured scenario
-  VIDEO
-  AUDIO
-  DOCUMENT           // PDF/DOC/DOCX
-  GRAMMAR            // rich text and/or image
-  EXERCISE           // template-based JSON (Section 8.3)
-  GAME               // template-based JSON (same engine as EXERCISE)
-  PRONUNCIATION
-  GRADED_READER      // document or rich text
-  CHECKPOINT         // exercise with result screen
-  HTML_EMBED         // legacy/bespoke HTML interactive in sandboxed iframe (Section 8.4)
-}
-enum MaterialStatus { DRAFT PUBLISHED ARCHIVED }
-enum MaterialOrigin { MANUAL AI_AGENT IMPORTED }
-
-model Material {
-  id            String         @id @default(cuid())
-  type          MaterialType
-  title         String                      // student-facing title (often Spanish)
-  subtitle      String?                     // "ვიდეო-დიალოგი · 2:10" style meta can be derived
-  description   String?
-  content       Json                        // validated by packages/contracts per type
-  contentSchemaVersion Int     @default(1)
-  status        MaterialStatus @default(DRAFT)
-  origin        MaterialOrigin @default(MANUAL)
-  tags          String[]
-  estMinutes    Int?
-  // personal material: exists only for one student (null = library material)
-  personalForId String?
-  personalFor   StudentProfile? @relation("PersonalMaterial", fields: [personalForId], references: [id])
-  assets        MaterialAsset[]
-  topics        MaterialTopic[]
-  assignments   Assignment[]
-  progress      MaterialProgress[]
-  revisions     MaterialRevision[]
-  createdById   String?
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-}
-
-model MaterialTopic {
-  materialId String
-  topicId    String
-  material   Material @relation(fields: [materialId], references: [id])
-  topic      Topic    @relation(fields: [topicId], references: [id])
-  @@id([materialId, topicId])
-}
-
-model MaterialRevision {                    // snapshot on each publish/AI edit; enables undo + review
-  id          String   @id @default(cuid())
-  materialId  String
-  material    Material @relation(fields: [materialId], references: [id])
-  content     Json
-  title       String
-  note        String?                       // "AI draft from thread X", "edited by Nina"
-  createdById String?
-  createdAt   DateTime @default(now())
-}
-
-// ───────── Media ─────────
-enum AssetKind { IMAGE VIDEO AUDIO DOCUMENT OTHER }
-enum AssetStatus { UPLOADING PROCESSING READY FAILED }
-
-model MediaAsset {
-  id          String      @id @default(cuid())
-  kind        AssetKind
-  originalName String
-  mime        String
-  sizeBytes   BigInt
-  storageKey  String      @unique            // e.g. "orig/2026/09/<id>.mp4"
-  checksum    String?
-  status      AssetStatus @default(UPLOADING)
-  width       Int?
-  height      Int?
-  durationSec Float?
-  pageCount   Int?
-  variants    Json?       // { webp_800: key, webp_1600: key, poster: key, mp3: key, thumb_p1: key, vtt: key }
-  alt         String?
-  tags        String[]
-  usedBy      MaterialAsset[]
-  createdAt   DateTime    @default(now())
-}
-
-model MaterialAsset {
-  materialId String
-  assetId    String
-  role       String        // "card_page" | "video" | "audio" | "line_audio" | "document" | "poster" | "image" | "captions"
-  order      Int           @default(0)
-  material   Material   @relation(fields: [materialId], references: [id])
-  asset      MediaAsset @relation(fields: [assetId], references: [id])
-  @@id([materialId, assetId, role])
-}
-
-// ───────── Lessons & assignments ─────────
-enum LessonStatusOverride { AUTO DONE }
-
-model Lesson {                              // a session with ONE student ("LECCIÓN 6")
-  id            String   @id @default(cuid())
-  studentId     String
-  student       StudentProfile @relation(fields: [studentId], references: [id])
-  number        Int                         // per-student sequence
-  title         String                      // "En el café — შეკვეთა"
-  date          DateTime                    // when it happened / will happen
-  noteFromNina  String?                     // "ნინას შენიშვნა"
-  readyForStudent Boolean @default(false)   // only ready lessons are visible
-  statusOverride LessonStatusOverride @default(AUTO)
-  isGift        Boolean  @default(false)    // one of the 2 free lessons
-  topics        LessonTopic[]
-  items         Assignment[]
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  @@unique([studentId, number])
-}
-
-model LessonTopic {
-  lessonId String
-  topicId  String
-  lesson   Lesson @relation(fields: [lessonId], references: [id])
-  topic    Topic  @relation(fields: [topicId], references: [id])
-  @@id([lessonId, topicId])
-}
-
-enum AssignmentKind { LESSON_MATERIAL HOMEWORK PERSONAL REVIEW }
-
-model Assignment {                          // "this material is given to this student"
-  id              String   @id @default(cuid())
-  studentId       String
-  student         StudentProfile @relation(fields: [studentId], references: [id])
-  materialId      String
-  material        Material @relation(fields: [materialId], references: [id])
-  lessonId        String?                   // null = outside a lesson (e.g. personal from Nina)
-  lesson          Lesson?  @relation(fields: [lessonId], references: [id])
-  kind            AssignmentKind @default(LESSON_MATERIAL)
-  groupLabel      String?                   // "1 · ვხედავთ სიტუაციას"
-  order           Int      @default(0)
-  dueAt           DateTime?                 // homework
-  readyForStudent Boolean  @default(false)
-  assignedAt      DateTime @default(now())
-  @@index([studentId, readyForStudent])
-}
-
-// ───────── Student data ─────────
-enum ProgressStatus { NOT_STARTED OPENED COMPLETED }
-
-model MaterialProgress {                    // per student per material (not per assignment)
-  studentId   String
-  materialId  String
-  status      ProgressStatus @default(NOT_STARTED)
-  openedAt    DateTime?
-  completedAt DateTime?
-  lastStep    Int?                           // exercise resume point (desktop)
-  bestScore   Float?                         // 0..1
-  student     StudentProfile @relation(fields: [studentId], references: [id])
-  material    Material @relation(fields: [materialId], references: [id])
-  @@id([studentId, materialId])
-}
-
-model ExerciseAttempt {
-  id          String   @id @default(cuid())
-  studentId   String
-  student     StudentProfile @relation(fields: [studentId], references: [id])
-  materialId  String
-  contentRevisionId String?                  // which revision was attempted
-  answers     Json                           // per-step answers
-  score       Float?                         // 0..1
-  correct     Int?
-  total       Int?
-  finishedAt  DateTime?
-  createdAt   DateTime @default(now())
-}
-
-model TeacherNote {                          // "ნინასგან" on cabinet home
-  id          String   @id @default(cuid())
-  studentId   String
-  student     StudentProfile @relation(fields: [studentId], references: [id])
-  body        String
-  materialId  String?                        // optional linked personal material
-  visibleToStudent Boolean @default(true)
-  createdAt   DateTime @default(now())
-}
-
-model ChecklistItem {                        // teacher-only per-student checklist
-  id          String   @id @default(cuid())
-  studentId   String
-  student     StudentProfile @relation(fields: [studentId], references: [id])
-  lessonId    String?
-  text        String
-  done        Boolean  @default(false)
-  order       Int      @default(0)
-}
-
-// ───────── Vocabulary ─────────
-model VocabularyEntry {
-  id            String   @id @default(cuid())
-  es            String                      // "la cuenta"
-  ka            String                      // "ანგარიში"
-  en            String?                     // "the bill"
-  pronunciation String?                     // tricky letters only, e.g. "cu", "z", "ce"
-  audioAssetId  String?
-  topicId       String?
-  topic         Topic?   @relation(fields: [topicId], references: [id])
-  category      String?                     // "მისალმება" | "რიცხვები" | "კაფეში" | "ზმნები"
-  personalForId String?                     // ★ personal words
-  personalFor   StudentProfile? @relation("PersonalVocab", fields: [personalForId], references: [id])
-  personalLabel String?                     // "პირადი · Valencia"
-}
-
-// ───────── Lesson templates (reuse a lesson plan across students) ─────────
-model LessonTemplate {
-  id        String   @id @default(cuid())
-  title     String
-  topicIds  String[]
-  items     Json      // [{ materialId, groupLabel, order, kind, dueInDays? }]
-  note      String?
-}
-
-// ───────── Site settings (editable by Nina) ─────────
-model SiteSetting {
-  key   String @id                         // "price_gel", "lesson_minutes", "gift_lessons", "contact_email",
-  value Json                               // "contact_phone", "telegram", "instagram_url", "facebook_url", "tiktok_url",
-}                                          // "lesson_platform", "faq_overrides"...
-
-// ───────── AI assistant (Section 16) ─────────
-model AgentThread {
-  id        String   @id @default(cuid())
-  title     String?
-  createdById String
-  messages  AgentMessage[]
-  runs      AgentRun[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-model AgentMessage {
-  id        String   @id @default(cuid())
-  threadId  String
-  thread    AgentThread @relation(fields: [threadId], references: [id])
-  role      String                          // "user" | "assistant" | "tool"
-  content   Json                            // text blocks, tool calls, tool results, draft refs
-  createdAt DateTime @default(now())
-}
-model AgentRun {
-  id          String   @id @default(cuid())
-  threadId    String
-  thread      AgentThread @relation(fields: [threadId], references: [id])
-  status      String                        // "running" | "done" | "failed" | "cancelled"
-  model       String
-  inputTokens Int?
-  outputTokens Int?
-  costUsd     Float?
-  error       String?
-  createdAt   DateTime @default(now())
-  finishedAt  DateTime?
-}
-model PromptTemplate {                      // Nina's saved prompts
-  id    String @id @default(cuid())
-  name  String
-  body  String
-  tags  String[]
-}
-
-// ───────── Social Studio (reserved, Section 17) ─────────
-// Tables are created in Phase 9. Keep the names reserved: BrandKit, SocialPost, SocialTemplate, SocialAsset, GenerationJob.
+```
+LIBRARY (reusable content)          CURRICULUM (what to teach, in order)          TEACHING (who, when)
+Material ──< MaterialRevision       Course ──< Unit ──< LessonPlan ──< PlanItem ──> Material
+   │                                   │                    │
+   └──< MaterialAsset >── MediaAsset   ├──< Enrollment >── Student (StudentProfile)
+                                       └──< Group ──< GroupMember >── Student
+                                                            │
+                                    Lesson (student XOR group, optional plan, date)
+                                       ├──< LessonItem (tweak of a plan item, or an extra material)
+                                       └──< LessonProgress (per student × material) / ExerciseAttempt
+LEGACY (read-only reference): LegacyMaterial ──< LegacyMaterialAsset, LegacyWord
 ```
 
-### 7.1 Derived logic (implement in `api`, unit-test it)
-- **Visible to student** = `Lesson.readyForStudent = true` for lessons; `Assignment.readyForStudent = true` for items (an item inside a ready lesson still needs its own `readyForStudent`, which defaults to true when the lesson is marked ready; Nina can hold back single items).
-- **Material status for student** = `MaterialProgress.status` (default NOT_STARTED).
-- **Lesson status** (derived unless `statusOverride = DONE`):
-  - `NEW`: no visible item opened.
-  - `IN_PROGRESS`: at least one item opened, not all non-homework items completed.
-  - `DONE`: all non-homework items completed.
-- **Lesson counter** "7 / 12 მასალა" = completed visible items / visible items (homework included in the count, as in the design).
-- **Covered topics** for a student = union of topics of their ready lessons. **Max covered topic number** drives the vocabulary "up to topic N" filter and the library topic filter.
-- **Student vocabulary** = entries whose `topic.number ≤ selected N` among covered topics, plus `personalForId = student`.
-- **Block progress** = topics covered in the block / topics in the block (e.g. "3/5"). Checkpoint "passed" = best score ≥ 0.7 (configurable in SiteSetting `checkpoint_pass`).
-- **Home "continue learning"** = the most recent ready lesson that is IN_PROGRESS (else NEW), and inside it the first item (in order) not COMPLETED.
-- **Material update propagation:** editing a library Material updates it for every student (no copies). Each publish writes a `MaterialRevision`. Exercise attempts store the revision id.
+| Object | What it is | Who sees it |
+|---|---|---|
+| **Material** (library) | One reusable piece of content: card, vocab list, dialogue, video, exercise… Typed `content` (Section 8), `level` (A1–B2), tags, status DRAFT / PUBLISHED / ARCHIVED. Never copied per student. | Admin. Students only through a published lesson, and only while PUBLISHED. |
+| **Course** | A syllabus, e.g. "A1". Has ordered Units. | Admin; students see their enrolled course as a progress map. |
+| **Unit** | A chapter of a course ("მისალმება"). Ordered LessonPlans. | Same as course. |
+| **LessonPlan** | The reusable recipe for one lesson: titles, goals, teacher notes, estimated minutes and ordered PlanItems. Can live in a unit or standalone (`unitId = null`). | Admin. Students see goals through their lesson. |
+| **PlanItem** | A material in a plan, with `section` (WARMUP · CLASS · HOMEWORK · REVIEW), order and an optional note for the student. | — |
+| **Enrollment** | Student ↔ Course (status ACTIVE / PAUSED / DONE). Drives the student's syllabus map. | — |
+| **Group / GroupMember** | Several students taught together, optionally on a course. Lessons can target a group. | — |
+| **Lesson** | A real lesson on a date for **one student or one group** (exactly one). Optional `planId`, `title` override, `durationMin`, `homeworkDueAt`, `noteToStudent`, `privateNote`, `publishedAt` (the publish gate) and `heldAt` (the lesson took place). | Students: only published lessons for themselves or their groups. |
+| **LessonItem** | A per-lesson change, either a **tweak** of a plan item (`planItemId`: hidden, held "later", own note) or an **extra** material (`materialId`, section, order). | — |
+| **LessonProgress** | Status per (student, lesson, material): NOT_STARTED / OPENED / COMPLETED, plus `lastStep`. The same material in two lessons has separate progress. | Own only. |
+| **ExerciseAttempt** | Graded submission with answers, score and the material revision. | Own only. |
+| **PersonalWord** | A word Nina adds for one student; shows in their vocabulary. | Own only. |
+| **TeacherNote / ChecklistItem** | Notes (optionally visible to the student, shown as "ნინასგან") and a private checklist. | Notes with `visibleToStudent` only. |
+| **LegacyMaterial / LegacyWord** | The first-generation content, frozen read-only. "Copy into new library" creates a new DRAFT Material sharing the same MediaAsset rows and records `legacySourceId`. | Admin only. |
+
+### 7.1 Derived logic (implemented in `apps/api/src/domain/progress.ts`, unit-tested)
+- **Effective lesson items** = the plan's items **live** (editing the plan updates every lesson that uses it), merged with the lesson's LessonItems: tweaks override hidden / held / note per plan item; extras are added into their section. Order: section order, then item order.
+- **Visible to the student** = the lesson is published (`publishedAt` set), the student is its student or a member of its group, the item is not hidden or held, and the material is PUBLISHED. Enforced in the API.
+- **Lesson status:** NEW (nothing opened) · IN_PROGRESS · DONE (every non-homework item completed; when a lesson has only homework, all of it). A held lesson with no items counts as DONE.
+- **Lesson counter** "7 / 12 მასალა" = completed visible items / visible items (homework included).
+- **Lesson numbering** = 1..n by date among the lessons the student can see.
+- **Syllabus progress** for an audience on a course: a plan is **done** when one of its lessons is held or published with a date in the past, **scheduled** when it has a future lesson, otherwise **upcoming**. A unit is done when all its plans are done; the first unit that is not done is **current**. `nextPlan` = the first upcoming plan (the "schedule next lesson" shortcut in admin).
+- **Home "continue learning"** = the most recent published lesson that is IN_PROGRESS (else NEW), and inside it the first visible item that is not COMPLETED.
+- **Student vocabulary** = entries of VOCAB materials the student can see, plus their PersonalWords.
+- **Checkpoint passed** = best score ≥ 0.7 (SiteSetting `checkpoint_pass`).
+- **Material update propagation:** editing a library Material updates it everywhere (no copies). Each publish writes a `MaterialRevision`; attempts store the revision id.
+- **Never student-facing:** textbook names, `privateNote`, teacher notes on plans, legacy references (`assertStudentSafe` guards responses in tests).
 
 ---
 
@@ -825,38 +482,39 @@ Base URL: `https://api.{DOMAIN}/v1`. JSON. zod-validated in and out. Errors: `{ 
 Sign in (email + password), sign out, session, forgot password, reset password, **accept invite** (set password from token). **No public sign-up endpoint** (disable it).
 
 ### 9.3 Student (`role = STUDENT`, only own data)
+Every progress write accepts `?lessonId=` so progress is tracked per lesson; without it the API uses the most recent published lesson that contains the material.
+
 | Method | Path | Purpose |
 |---|---|---|
-| GET | `/me` | Profile, next lesson time, counts |
-| GET | `/me/home` | Aggregated home: continue-learning, homework, latest note + personal material, path summary |
-| GET | `/me/lessons` | Ready lessons with derived status + counters (filter `all\|current\|done`) |
-| GET | `/me/lessons/:id` | Lesson with topics, note, grouped items with material summaries + progress |
-| GET | `/me/materials` | All ready assignments; filters `type[]`, `topicMax`, `q`, `kind` |
-| GET | `/me/materials/:materialId` | Full material content (only if assigned + ready), with **signed asset URLs**; includes prev/next within lesson when `?lessonId=` |
+| GET | `/me` | Profile, next lesson time |
+| GET | `/me/home` | Continue-learning, homework, latest note from Nina, recent lessons, syllabus strip |
+| GET | `/me/lessons` | Published lessons (own + group) with number, status, counter, unit, group name |
+| GET | `/me/lessons/:id` | Lesson with goals, note, homework due date and visible items grouped by section (with progress and `lastStep`) |
+| GET | `/me/materials` | Every visible material across lessons; filters by type group, section, status |
+| GET | `/me/materials/:materialId` | Full content with **signed asset URLs**; with `?lessonId=` also lesson number/title, item note, section and prev/next in that lesson |
 | POST | `/me/progress/:materialId/open` | Sets OPENED (idempotent) |
 | POST | `/me/progress/:materialId/complete` | Passive completion ("mark as done") |
 | POST | `/me/exercises/:materialId/attempts` | Submit answers → server grades → attempt + progress |
 | PATCH | `/me/exercises/:materialId/position` | Save `lastStep` |
-| GET | `/me/vocabulary` | Filters `topicMax`, `category`, `personal` |
-| GET | `/me/progress` | Stats, blocks, checkpoints |
+| POST | `/me/embeds/:materialId/complete` | HTML_EMBED completion from the `nina:*` bridge |
+| GET | `/me/vocabulary` | Word sets from visible VOCAB materials + personal words |
+| GET | `/me/progress` | Stats, syllabus timeline per enrolled course, recent attempts |
 
 ### 9.4 Admin (`role = ADMIN`)
 | Area | Endpoints |
 |---|---|
-| Leads | `GET /admin/leads`, `PATCH /admin/leads/:id` (status, note), `POST /admin/leads/:id/convert` (creates User + StudentProfile + sends invite) |
-| Students | CRUD `/admin/students`, `POST /admin/students/:id/invite` (resend), `GET /admin/students/:id/overview` (lessons, progress, attempts, notes, checklist) |
-| Curriculum | CRUD `/admin/courses`, `/admin/blocks`, `/admin/topics`; `PATCH` reorder |
-| Materials | CRUD `/admin/materials` (filters: type, status, topic, tag, origin, q), `POST /admin/materials/:id/publish`, `GET /admin/materials/:id/revisions`, `POST /admin/materials/:id/revert/:revId`, `POST /admin/materials/:id/duplicate`, `GET /admin/materials/:id/usage` (which students/lessons) |
-| Preview | `GET /admin/preview/materials/:id` (renders as student), `GET /admin/preview/students/:id/home` |
-| Lessons | CRUD `/admin/students/:id/lessons`, `PUT /admin/lessons/:id/items` (ordered items with groupLabel, kind, dueAt, ready), `POST /admin/lessons/:id/ready`, `POST /admin/lessons/from-template` |
-| Assignments | `POST /admin/assignments` (bulk: materials × students), `PATCH`, `DELETE` |
-| Notes / checklist | CRUD `/admin/students/:id/notes`, `/admin/students/:id/checklist` |
-| Vocabulary | CRUD `/admin/vocabulary`, `POST /admin/vocabulary/import` (CSV/XLSX) |
-| Media | `POST /admin/media` (multipart upload, streaming), `GET /admin/media`, `GET /admin/media/:id`, `DELETE` (only if unused) |
-| Templates | CRUD `/admin/lesson-templates` |
+| Dashboard | `GET /admin/dashboard` (new leads, counts, upcoming lessons, overdue homework, recent completions) |
+| Leads | `GET /admin/leads`, `PATCH /admin/leads/:id`, `POST /admin/leads/:id/convert` |
+| Students | `GET/POST /admin/students`, `GET/PATCH /admin/students/:id` (detail includes lessons, syllabus per course, progress, notes, checklist, words), `PUT …/:id/enrollments`, `POST …/:id/invite`, notes / checklist / words sub-resources |
+| Groups | `GET/POST /admin/groups`, `GET/PATCH /admin/groups/:id` (detail includes lessons and syllabus), `PUT /admin/groups/:id/members` |
+| Curriculum | `GET/POST /admin/courses`, `GET/PATCH /admin/courses/:id`, `POST /admin/courses/:id/units`, `PATCH/DELETE /admin/units/:id`, `POST /admin/units/:id/move` |
+| Plans | `GET/POST /admin/plans`, `GET/PATCH/DELETE /admin/plans/:id`, `PUT /admin/plans/:id/items` (full ordered list with section + note), `POST …/:id/move`, `POST …/:id/duplicate` |
+| Lessons | `GET /admin/lessons?scope=upcoming\|past\|all`, `POST /admin/lessons` (student or group, optional plan), `GET/PATCH/DELETE /admin/lessons/:id`, `PUT /admin/lessons/:id/items` (tweaks + extras), `POST …/:id/publish`, `POST …/:id/save-as-plan` |
+| Library | `GET/POST /admin/materials` (create can `attach` to a plan or lesson section), `GET/PATCH/DELETE /admin/materials/:id`, `POST …/publish`, `…/discard-draft`, `…/archive`, `…/duplicate`. Detail lists the plans and lessons that use it. |
+| Legacy | `GET /admin/legacy`, `GET /admin/legacy/:id`, `GET /admin/legacy/words`, `POST /admin/legacy/:id/copy` (→ new DRAFT material) |
+| Media | `POST /admin/media` (multipart, streaming), `GET /admin/media`, `GET/DELETE /admin/media/:id`, `POST …/:id/retry` |
 | Settings | `GET/PUT /admin/settings` |
-| AI | `POST /admin/ai/threads`, `GET /admin/ai/threads/:id`, `POST /admin/ai/threads/:id/messages` (**SSE stream**), `POST /admin/ai/runs/:id/cancel`, CRUD `/admin/ai/prompts` |
-| Social (reserved) | `/admin/social/*` (Phase 9) |
+| AI / Social | Reserved (Sections 16, 17) |
 
 ### 9.5 Media delivery
 `GET /media/:assetId/:variant?token=…&exp=…` : HMAC-signed, short-lived (e.g. 1h) URLs issued only when the requester may see the asset (student: asset belongs to a ready assigned material; admin: always; public: only assets flagged `public`, e.g. none in v1 because landing images are static in `apps/web/public`). Supports **HTTP Range** (video/audio seeking), `Content-Type`, `Accept-Ranges`, `ETag`, `Cache-Control: private, max-age=3600`.
@@ -1079,128 +737,116 @@ interface StorageDriver {
 - Data: server components call the API with forwarded cookies; interactive parts use TanStack Query.
 
 ### 14.2 C2 Home — "ჩემი ესპანური"
-- Caveat "¡Hola, {nameLatin}!" + "შემდეგი გაკვეთილი: ხუთშაბათი, 3 ოქტ. · 19:00" (from `nextLessonAt`, Tbilisi time, Georgian weekday/month).
-- **Continue learning** card: "მიმდინარე" · big lesson number · "LECCIÓN 6 · 26 სექ." · title · "7 / 12 მასალა" · "შემდეგი მასალა: …" · button "გაგრძელება".
-- **Homework** card: "2 დარჩა" · rows with title + "ვადა: 2 ოქტ." · completed rows show "შესრულებული".
-- **From Nina** card: date · quote-styled note · linked personal material chip "პირადი · Transporte en Valencia".
-- **Mini Poco a Poco path**: "Poco a Poco · შენი გზა · სრულად →" with stops (✓ done, "ახლა", upcoming, A1).
-- Empty state on first login (C10): Caveat "¡Bienvenida!" · "შენი პირველი გაკვეთილი ნინასთან მალე დაიწყება" · "გაკვეთილის შემდეგ მასალები აქ გამოჩნდება." · next lesson date chip. (Use "¡Bienvenido!" when the profile says so; add an optional `greetingForm` field, default feminine per the design.)
+- Caveat "¡Hola, {nameLatin}!" + "შემდეგი გაკვეთილი: …" (from the next scheduled lesson, Tbilisi time).
+- **Continue learning** card: status chip · big lesson number · "LECCIÓN 6 · 26 სექ." · title · unit / group · "7 / 12 მასალა" · "შემდეგი მასალა: …" · "გაგრძელება".
+- **Homework** card: rows from HOMEWORK sections of published lessons, with the lesson's due date; completed rows show "შესრულებული".
+- **From Nina** card: the latest note visible to the student (else recent lessons).
+- **Syllabus strip** per enrolled course: units as stops (done ✓ / current / upcoming) with a progress bar. Links to Progress.
+- Empty state on first login (C10): Caveat "¡Bienvenida!" (or "¡Bienvenido!" from `greetingForm`) · next lesson chip.
 
-### 14.3 C3 My lessons — "Mis lecciones / ჩემი გაკვეთილები"
-- Tabs: ყველა · N / მიმდინარე / დასრულებული.
-- Table (desktop) / cards (mobile): № · თარიღი · სათაური · თემები (chips) · სტატუსი (ახალი / მიმდინარე / ✓ დასრულებული) · მასალები "completed / assigned" · ›
-- Order: newest first; the current/new lesson row has a warm background. Only ready lessons.
+### 14.3 C3 My lessons — "ჩემი გაკვეთილები"
+- Tabs: ყველა / მიმდინარე / დასრულებული.
+- Rows: № · date · title · unit and group subtitle · status (ახალი / მიმდინარე / ✓ დასრულებული) · counter. Newest first; only published lessons for the student and their groups.
 
 ### 14.4 C4 Lesson page (core)
-- Breadcrumb "გაკვეთილები / გაკვეთილი 6".
-- Overline "LECCIÓN 6 · 26 სექტემბერი" · H1 title · topic chips "თემა 14 · საკვები და სასმელი" …
-- "ნინას შენიშვნა" callout.
-- "მასალები · 7 / 12 დასრულებული · ნინას თანმიმდევრობით".
-- Items grouped by `groupLabel` in Nina's order; each row: type icon + tint · title · meta ("ვიდეო-დიალოგი · 2:10", "ბარათი 9:16 · 4 ცალი", "ინტერაქტიული სავარჯიშო · 8 ნაბიჯი · 3/8", "PDF · 2 გვ.") · status ring (empty / half / sage ✓) · status text (არ დაწყებულა / გახსნილი / ✓ დასრულებული) · for passive opened items "✓ მონიშნე დასრულებულად" · for in-progress exercises "გაგრძელება".
-- Right rail (desktop): progress "7 / 12 მასალა · 58%", homework list with due dates, Caveat "Poco a poco" spot. Mobile: rail content moves below the list.
-- One continuous list, no pagination.
+- Breadcrumb "გაკვეთილები / გაკვეთილი 6" · overline "LECCIÓN 6 · 26 სექტემბერი" · H1 · unit / group chips.
+- Goals from the plan ("ამ გაკვეთილზე") and "ნინას შენიშვნა" callout.
+- Items grouped by **section** in teaching order: გახურება · გაკვეთილზე · საშინაო (with "ვადა: …") · გამეორება. Each row: type icon · title · meta · Nina's note for the item · status ring · "გაგრძელება" for exercises in progress.
+- Rail (desktop) / below (mobile): progress "7 / 12 · 58%" and a start / continue button.
 
 ### 14.5 C5 Material viewers
-One shared viewer header: back · type icon · title · ← → (prev/next within the same lesson) · "დასრულებულად მონიშვნა". Opening a viewer calls `/open`. Frames:
-- **Image card 9:16:** zoom (− / +, pinch on mobile), prev/next, swipe on mobile ("← გადაფურცლე → · pinch = zoom"), page "2 / 4".
-- **Video:** custom controls (time, CC, speed 1×), dialogue below with the current line highlighted (use VTT cue times or line timestamps).
-- **Audio:** waveform (precomputed peaks), speeds 0.75× · 1× · 1.25×, "TRANSCRIPCIÓN" with EN toggle.
-- **Document:** PDF preview with page thumbnails, "ჩამოტვირთვა", page "1 / 2".
-- **Dialogue:** bubbles with speaker initials, ES / ES+EN segmented toggle, ▶ per line when audio exists ("ყოველ ხაზს აქვს ▶ აუდიო (თუ ატვირთულია)").
-- **Pronunciation:** lowercase graphemes in pale-green organic circles; tap = audio; example words below.
-- **Grammar, Story, Graded reader, HTML embed:** follow the same frame (not all drawn; derive from tokens and the frames above).
-- **Exercises** open in the same frame → C6.
+Shared viewer header: back to "გაკვეთილი N" · type icon · title · ← → within the same lesson · "დასრულებულად მონიშვნა". The item note from Nina shows above the body. Opening calls `/open?lessonId=`. Frames as designed:
+- **Image card 9:16:** zoom, prev/next, swipe on mobile, page "2 / 4".
+- **Video:** controls, dialogue below with the current line highlighted.
+- **Audio:** speeds 0.75× · 1× · 1.25×, transcript with EN toggle.
+- **Document:** PDF preview + "ჩამოტვირთვა".
+- **Dialogue:** bubbles, ES / ES+EN toggle, ▶ per line when audio exists.
+- **Pronunciation:** lowercase graphemes in pale-green organic circles; tap = audio.
+- **Grammar, Story, Graded reader, HTML embed:** same frame. **Exercises** → C6.
 
 ### 14.6 C6 Exercise player
-Section 8.3. Build `ExerciseFrame` + the 9 templates + completion screen, desktop step-by-step and mobile continuous scroll with a sticky check button. Resume from `lastStep`.
+Section 8.3. `ExerciseFrame` + template bodies + completion screen; desktop step-by-step, mobile continuous scroll with a sticky check button. Resume from `lastStep` of this lesson.
 
-### 14.7 C7 My materials — "Mis materiales / ჩემი მასალები"
-- Type filter chips (multi): ყველა · ბარათები · ლექსიკა · დიალოგები · ვიდეო · აუდიო · დოკუმენტები · სავარჯიშოები · საშინაო · პირადი.
-- Topic filter "თემა: ყველა ▾" (options only up to the last covered topic) + search (title + tags).
-- Grid of material cards: title · "type · გაკვ. N · თემა N" · status · badges "პირადი", "საშინაო · 2 ოქტ.". Click → viewer.
+### 14.7 C7 My materials — "ჩემი მასალები"
+- Pill filters: type group · section (incl. საშინაო) · status. Grid of cards: title · "type · გაკვ. N" · status. Click → viewer with `lessonId`.
+- Students can always revisit anything that was published to them.
 
-### 14.8 C8 Vocabulary — "Mi vocabulario / ჩემი ლექსიკა · 142 სიტყვა"
-- "თემამდე: 16 · თავაზიანი თხოვნა ▾" filter · button "ბარათებად ვარჯიში" (flashcards mode: ES front, KA/EN back, shuffle) · category chips ყველა · მისალმება · რიცხვები · კაფეში · ზმნები · ★ პირადი.
-- Table: ესპანური · ქართული / EN · გამოთქმა (pale-green circle only for tricky letters, else "—") · თემა. Personal words marked ★ with a "პირადი · Valencia" label.
+### 14.8 C8 Vocabulary — "ჩემი ლექსიკა"
+- Word sets from vocab materials in their lessons + ★ personal words. Search, "my words" filter, hide-translation practice toggle, audio buttons.
 
-### 14.9 C9 Progress — "Poco a poco · ჩემი პროგრესი · A1"
-- 4 stat cards: lessons count · topics "16 / 45 თემა გავლილი" · materials "45 / 59 მასალა დასრულებული" · "2 checkpoint ჩაბარებული".
-- Blocks list with bars ("✓ 4/4", "3/5", "0/4"; "…ბლოკები 7–10").
-- Checkpoints: per block score ("19 / 20"), locked "გაიხსნება ბლოკის ბოლოს", final "A1 · საბოლოო შემოწმება — კურსის ბოლოს".
+### 14.9 C9 Progress — "Poco a poco · ჩემი პროგრესი"
+- Stat cards: lessons · materials completed · exercises · words.
+- Syllabus timeline per enrolled course: units with their plans (done / scheduled / upcoming).
+- Recent exercise attempts with scores.
 
 ### 14.10 C10 States
 - **Empty** (above). **Loading:** skeletons that mirror the real layout; spinners only inside buttons. **Error:** Caveat "¡Uy!" · "მასალა ვერ ჩაიტვირთა" · "შეამოწმე ინტერნეტი და სცადე თავიდან. პროგრესი შენახულია." · "თავიდან ცდა" · "გაკვეთილზე დაბრუნება".
 - Next.js `loading.tsx` / `error.tsx` per route use these components.
 
 ### 14.11 Cabinet rules (enforce in review)
-Cream/beige backgrounds only · no dark mode · printed fonts inside exercises · no textbook names · max 5 nav items · continuous scroll · restart returns to the start of the exercise · no name entry.
+Students see only published lessons for themselves or their groups, and only PUBLISHED materials · cream/beige backgrounds only · no dark mode · printed fonts inside exercises · no textbook names · max 5 nav items · continuous scroll · restart returns to the start of the exercise · no name entry.
 
 ---
 
-## 15. ADMIN PANEL: BUILD SPEC (NOT DESIGNED, BUILD FROM THIS)
+## 15. ADMIN PANEL: BUILD SPEC
 
-**Look:** Calm tone, same tokens, Montserrat/FiraGO, `paper` background, `card` surfaces, teal primary. Utility-first and dense (tables, split panes), but never generic grey SaaS. Use shadcn/ui components themed with the tokens. Georgian UI labels. Desktop-first; usable on tablet; mobile read-only is acceptable.
+**Look:** Calm tone, same tokens, Montserrat/FiraGO, `paper` background, `card` surfaces, teal primary. Dense but warm. Georgian UI labels. Desktop-first; usable on tablet; mobile has a horizontal nav.
 
-**Navigation (left sidebar):** მთავარი (Dashboard) · ლიდები (Leads) · მოსწავლეები (Students) · ბიბლიოთეკა (Library) · კურიკულუმი (Curriculum) · ლექსიკა (Vocabulary) · მედია (Media) · შაბლონები (Lesson templates) · AI ასისტენტი · Social Studio (disabled "მალე" until Phase 9) · პარამეტრები (Settings).
+**How Nina works (the mental model the admin is built around):**
+1. **Library** — make reusable materials once.
+2. **Curriculum** — arrange them into courses → units → lesson plans (warm-up / class / homework / review).
+3. **Teaching** — schedule a lesson for a student or a group from a plan, tweak it for them, publish it. Students see it; progress flows back.
 
-### 15.1 Dashboard
-New leads count, upcoming lessons (from `nextLessonAt`), students with overdue homework, recent completions, AI drafts awaiting review.
+Everything can be reached from every place it matters: a material can be created from a plan or a lesson (and returns there), a plan shows the lessons using it, a lesson links to its plan, student and group pages show syllabus maps with a "schedule next lesson" shortcut.
+
+**Navigation (left sidebar, grouped):**
+- მთავარი
+- **სწავლება:** გაკვეთილები · მოსწავლეები · ჯგუფები
+- **კონტენტი:** კურიკულუმი · ბიბლიოთეკა · მედია · ძველი ბიბლიოთეკა
+- **ბიზნესი:** ლიდები · Social Studio · AI ასისტენტი ("მალე") · პარამეტრები
+
+### 15.1 Dashboard (`/admin`)
+Counts (leads, students, groups, plans, library), upcoming lessons for two weeks with a warning for lessons not yet sent, overdue homework, recent completions, "+ გაკვეთილის დაგეგმვა".
 
 ### 15.2 Leads
-Kanban or table by status (NEW → CONTACTED → TRIAL_SCHEDULED → TRIAL_DONE → CONVERTED / LOST). Card shows name, phone (tap-to-copy, WhatsApp/Telegram deep links), channel, goal, days + time of day, note, source, created. Actions: change status, add note, **Convert to student** (prefills name/phone/email/goal → creates account → sends invite).
+Table by status (NEW → CONTACTED → TRIAL_SCHEDULED → TRIAL_DONE → CONVERTED / LOST). Convert to student creates the account and an invite link.
 
-### 15.3 Students
-- List: name, current lesson, next lesson time, progress %, last activity, invite status.
-- **Student detail** (tabs):
-  - **Overview:** profile (goal, channel, phone), gift lessons left, next lesson datetime (editable), quick actions (new lesson, add note, add personal material).
-  - **Lessons:** timeline; create lesson (number auto-increments), from template, or duplicate a previous one.
-  - **Progress:** per-material status, exercise attempts with answers and scores, checkpoints.
-  - **Notes:** "ნინასგან" notes (visible to student) and private notes.
-  - **Checklist:** teacher-only checklist items (per lesson or general). This is the "teacher-only per-student checklist" from Nina's original requirements.
-  - **Personal vocabulary** and **personal materials**.
-  - **Preview as student** (opens the cabinet in read-only impersonation mode with a banner).
+### 15.3 Lessons (`/admin/lessons`)
+- List with tabs upcoming / past / all; each row: date, title, audience (student or group), item count, state chip (მონახაზი / არ გაგზავნილა for past drafts / გაგზავნილი / ჩატარდა).
+- **New lesson** (`/admin/lessons/new`): audience (individual or group) → plan (grouped by course/unit) or a blank title → date/time (Tbilisi) → duration. Prefills from `?planId`, `?studentId`, `?groupId`.
+- **Lesson editor** (`/admin/lessons/:id`, the most important screen):
+  - Header: audience link, plan link, **"გაგზავნა მოსწავლეს"** (publish toggle) and "✓ ჩატარდა" (held) toggle.
+  - Sections with items: plan items can be hidden for this lesson or moved to "later"; extras can be added from the library picker or created new (returns here) and removed; per-item note for the student.
+  - Details: date, duration, title override, homework due date, note to the student, private note.
+  - Per-learner progress, the plan's goals and teacher notes, change plan, "save as plan" for blank lessons, delete.
+  - Editing the plan changes this lesson too (live link); changes made here apply only to this lesson.
 
-### 15.4 Lesson editor (most important admin screen)
-Split view:
-- **Left:** library browser (search, type filter, topic filter, "used by this student already" indicator) with drag handles.
-- **Right:** the lesson: title, date, topics (multi-select), note from Nina, and **groups** (add/rename/reorder group labels like "1 · ვხედავთ სიტუაციას"). Drag materials into groups; reorder (dnd-kit with keyboard). Per item: kind (lesson material / homework / review), due date for homework, ready toggle.
-- Actions: **"მოსწავლისთვის მზადაა" (Ready for student)** toggle for the whole lesson. Once ready, bookkeeping controls collapse (per Nina's original checklist requirement) and a "shown to student" badge appears. **Preview** as student. **Save as template.**
-- Quick create: "new material" inline (opens the material editor in a drawer, returns and inserts it).
+### 15.4 Students (`/admin/students`)
+- List: name, courses, groups, next lesson, account state. "New student" dialog (name, Latin name, email, phone, course, group) returns an invite link to copy.
+- **Detail** tabs: overview (syllabus map per course + upcoming/past lessons + "schedule lesson"), progress (attempts and completions), notes + checklist, personal words, profile + enrollments. Invite / resend.
 
-### 15.5 Library (materials)
-- Table/grid with type icon, title, status (draft/published/archived), origin (manual / AI / imported), topics, tags, usage count, updated.
-- Filters: type, status, origin, topic, tag, "personal for student", search.
-- **Material editor** per type (drawer or full page), always with a **live student preview** pane using the real cabinet renderer:
-  - INFO_CARD: multi-image upload, order pages, alt text.
-  - VOCAB: list editor (es / ka / en / audio / image per row) or image mode; bulk paste from spreadsheet (tab-separated).
-  - DIALOGUE: speakers (pick from Ana, Laura, Lucas, Nina, Camarero… or custom), line editor (speaker, es, en, audio), full audio.
-  - STORY: composite editor linking characters, place, context, vocab, dialogue, grammar, culture, follow-ups.
-  - VIDEO / AUDIO: upload, captions (VTT upload or generate later), transcript as dialogue.
-  - DOCUMENT / GRADED_READER: upload, download toggle.
-  - GRAMMAR: TipTap editor + examples.
-  - PRONUNCIATION: graphemes + audio per grapheme + examples.
-  - **EXERCISE / GAME / CHECKPOINT: Exercise builder** (15.6).
-  - HTML_EMBED: upload bundle, entry file, test in sandbox, completion reporting check.
-- Publish creates a revision. Show "used by N students / M lessons" before editing a published material ("changes will update for everyone").
+### 15.5 Groups (`/admin/groups`)
+Create (name, course, members). Detail: syllabus map with "schedule next lesson", upcoming/past lessons, settings (members, name, course, note, archive).
 
-### 15.6 Exercise builder
-- Pick a template (cards with meta from the registry, including variants and "best for").
-- Step editor generated from the template's zod schema (typed forms per step type), reorder steps, duplicate, delete.
-- Live preview in the real `ExerciseFrame` (desktop and mobile toggle), with a "play as student" mode.
-- Validation errors inline (zod). A draft can be saved invalid; publishing requires valid content.
-- "Ask AI" button: opens the assistant with context (topic, template, current draft) to fill or vary steps.
+### 15.6 Curriculum (`/admin/curriculum`)
+- Course cards + standalone plans. Create course.
+- **Course board:** edit/archive course; units (rename, reorder, delete when empty) with their plans (reorder, open); add plan; sidebar with enrolled students and groups.
+- **Plan editor** (`/admin/plans/:id`): titles, minutes, unit, goals (one per line, students see them), private teacher notes; sections with items (library picker, "new material", note, section, reorder, remove — saved immediately); lessons using this plan + "schedule lesson"; duplicate; delete.
 
-### 15.7 Curriculum
-Course → Blocks (order, titleEs, titleKa, checkpoint material) → Topics (number, titleKa, titleEs, internal ref). Drag reorder. Shows materials per topic. Import from the syllabus spreadsheet (Section 24).
+### 15.7 Library (`/admin/library`)
+- Grid with type, title, level, status, readiness, "from legacy" badge, and usage (plans / extra lessons). Filters and search.
+- **New material wizard:** type → basics (title, level, section when attaching) → content builder. Opened from a plan or lesson it attaches the material to that section and returns.
+- **Material studio:** content builder per type with live preview, basics, publish panel (readiness check, publish creates a revision, list of plans and lessons that use it — "changes update everywhere").
+- Exercise builder: template picker with variants, step editor from the zod schema, live preview in the real `ExerciseFrame`.
 
-### 15.8 Vocabulary (master glossary)
-Table with es / ka / en / pronunciation / topic / category / audio. Filters, inline edit, CSV/XLSX import/export, find duplicates.
+### 15.8 Legacy library (`/admin/legacy`)
+Read-only archive of the first-generation materials and glossary, grouped by their old topic. Preview in the real renderer. **"ახალ ბიბლიოთეკაში კოპირება"** creates a DRAFT material (same media, no duplication of files) and links back to it. The vocabulary builder can search the old glossary.
 
 ### 15.9 Media
-All assets with type, size, status, dimensions/duration, usage. Upload (drag and drop, multiple), retry failed processing, delete unused.
+All assets with type, size, status, usage. Upload, retry failed processing, delete unused.
 
 ### 15.10 Settings
-Price, lesson minutes, gift lessons count, checkpoint pass threshold, contacts, social URLs, lesson platform, FAQ overrides, lead notification targets (email, Telegram chat id), AI model and monthly budget cap.
+Price, lesson minutes, gift lessons count, checkpoint pass threshold, contacts, social URLs, lead notification targets, AI model and budget cap.
 
 ---
 
@@ -1395,6 +1041,10 @@ AI_MONTHLY_BUDGET_USD=
 - Lesson 6 items with groups exactly as in C4, homework ("დაწერე დიალოგი" due 2 Oct, "მოუსმინე: Diálogo 3" due 3 Oct), personal material "Transporte en Valencia", note from Nina (24 Sep).
 - Counts consistent with the design: 45 of 59 materials completed, topic 16 of 45, 142 vocabulary words, checkpoints block 1 19/20, block 2 17/20.
 - One sample of each exercise template with the design's content (C6).
+
+### 24.1a Learning model v2 (current)
+- Migration `20261003120000_learning_model_v2` moved the first-generation materials and glossary into `LegacyMaterial` / `LegacyWord` (read-only, admin "ძველი ბიბლიოთეკა"), replaced topics/blocks/assignments with Course → Unit → LessonPlan, Groups and live-linked Lessons, and drafted the A1 course (units and empty plans from the old blocks/topics, no textbook names).
+- `pnpm --filter @nina/api seed:demo` (safe to re-run) adds demo students (მარიამი, გიორგი), a group, fills the first three plans with copies of legacy materials (tagged `demo`) and creates a few lessons when there are none. It never modifies the legacy tables. **Do not run the old `packages/db` seed** — it wipes data.
 
 ### 24.2 Real content migration (Nina's existing materials)
 | Existing | Import as |

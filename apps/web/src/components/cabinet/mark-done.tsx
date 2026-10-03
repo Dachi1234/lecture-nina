@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@nina/ui";
+import { withLesson } from "@/lib/materials";
 
-export function MarkDone({ materialId }: { materialId: string }) {
+export function MarkDone({ materialId, lessonId }: { materialId: string; lessonId?: string | null }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -14,7 +15,7 @@ export function MarkDone({ materialId }: { materialId: string }) {
     event.stopPropagation();
     setLoading(true);
     setError("");
-    const response = await fetch(`/v1/me/progress/${materialId}/complete`, { method: "POST", credentials: "include" });
+    const response = await fetch(withLesson(`/v1/me/progress/${materialId}/complete`, lessonId), { method: "POST", credentials: "include" });
     setLoading(false);
     if (!response.ok) {
       const body = (await response.json().catch(() => null)) as { error?: { messageKa?: string } } | null;

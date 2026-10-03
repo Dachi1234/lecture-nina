@@ -64,7 +64,7 @@ export async function adminLeadRoutes(app: FastifyInstance) {
     }
     const taken = await prisma.user.findUnique({ where: { email } });
     if (taken) return reply.code(409).send({ error: { code: "CONFLICT", messageKa: "ეს ელ-ფოსტა უკვე გამოყენებულია." } });
-    const course = await prisma.course.findFirst({ orderBy: { order: "asc" } });
+    const course = await prisma.course.findFirst({ where: { isArchived: false }, orderBy: { order: "asc" } });
     const user = await prisma.user.create({
       data: {
         email,
@@ -90,8 +90,8 @@ export async function adminLeadRoutes(app: FastifyInstance) {
         preferredChannel: lead.channel,
         goal: lead.goal,
         goalNote: lead.note,
-        courseId: course?.id,
         leadId: lead.id,
+        ...(course ? { enrollments: { create: { courseId: course.id } } } : {}),
       },
     });
     await prisma.lead.update({ where: { id: lead.id }, data: { status: "CONVERTED", email } });

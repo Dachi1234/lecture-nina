@@ -5,7 +5,6 @@ import { apiGet } from "@/lib/api";
 import { shortDate } from "@/lib/dates";
 import { groupTone, materialIcon, materialLabel, templateLabel } from "@/lib/materials";
 
-type Usage = { studentName: string; lessonNumber: number | null; readyForStudent: boolean };
 type Item = {
   id: string;
   type: string;
@@ -15,11 +14,12 @@ type Item = {
   estMinutes: number | null;
   templateId: string | null;
   hasDraft: boolean;
-  personalFor: string | null;
+  level: string | null;
+  fromLegacy: boolean;
   readiness: { ready: boolean; empty: boolean; requiredDone: number; requiredTotal: number; summaryKa: string };
   updatedAt: string;
-  topics: { number: number; titleKa: string }[];
-  usage: Usage[];
+  plans: { id: string; titleKa: string }[];
+  extraLessons: number;
 };
 type Counts = { all: number; empty: number; partial: number; ready: number; changes: number };
 
@@ -135,8 +135,10 @@ function MaterialCard({ item }: { item: Item }) {
   const tone = groupTone(item.type);
   const { readiness } = item;
   const percent = readiness.requiredTotal ? Math.round((readiness.requiredDone / readiness.requiredTotal) * 100) : 0;
-  const students = [...new Set(item.usage.map((use) => use.studentName))];
-  const lessons = item.usage.filter((use) => use.lessonNumber !== null).map((use) => use.lessonNumber);
+  const usage = [
+    item.plans.length ? `${item.plans.length} გეგმაში` : null,
+    item.extraLessons ? `${item.extraLessons} გაკვეთილში დამატებით` : null,
+  ].filter(Boolean);
   const kindLine = [materialLabel(item.type, item.estMinutes), templateLabel(item.templateId)].filter(Boolean).join(" · ");
   return (
     <Link
@@ -161,10 +163,10 @@ function MaterialCard({ item }: { item: Item }) {
         {item.status === "ARCHIVED" ? <span className="rounded-full bg-sand-soft px-2.5 py-1">არქივი</span> : null}
         {item.status === "DRAFT" ? <span className="rounded-full bg-teal-soft px-2.5 py-1 text-teal-deep">მონახაზი</span> : null}
         {item.hasDraft ? <span className="rounded-full bg-mustard-soft px-2.5 py-1 text-mustard-ink">გამოუქვეყნებელი ცვლილებები</span> : null}
-        {item.personalFor ? <span className="rounded-full bg-burgundy-soft px-2.5 py-1 text-burgundy">პირადი · {item.personalFor}</span> : null}
-        {item.topics.length ? <span className="rounded-full bg-paper-deep px-2.5 py-1 text-ink-muted">თემა {item.topics.map((topic) => topic.number).join(", ")}</span> : null}
+        {item.level ? <span className="rounded-full bg-paper-deep px-2.5 py-1 text-ink">{item.level}</span> : null}
+        {item.fromLegacy ? <span className="rounded-full bg-sand-soft px-2.5 py-1 text-ink">ძველიდან</span> : null}
         <span className="ml-auto font-medium text-ink-muted">
-          {students.length ? `${students.join(", ")}${lessons.length ? ` · გაკვ. ${lessons.join(", ")}` : ""}` : "არავის აქვს"} · {shortDate(item.updatedAt)}
+          {usage.length ? usage.join(" · ") : "ჯერ არსად"} · {shortDate(item.updatedAt)}
         </span>
       </div>
     </Link>

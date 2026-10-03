@@ -36,6 +36,19 @@ export function progressLabel(status: "NOT_STARTED" | "OPENED" | "COMPLETED") {
   return "არ დაწყებულა";
 }
 
+export function withLesson(path: string, lessonId: string | null | undefined) {
+  return lessonId ? `${path}?lessonId=${encodeURIComponent(lessonId)}` : path;
+}
+
+export const SECTION_LABELS: Record<string, string> = {
+  WARMUP: "გახურება",
+  CLASS: "გაკვეთილზე",
+  HOMEWORK: "საშინაო",
+  REVIEW: "გამეორება",
+};
+
+export const SECTION_ORDER = ["WARMUP", "CLASS", "HOMEWORK", "REVIEW"] as const;
+
 export function ringFor(status: "NOT_STARTED" | "OPENED" | "COMPLETED") {
   if (status === "COMPLETED") return "done" as const;
   if (status === "OPENED") return "opened" as const;

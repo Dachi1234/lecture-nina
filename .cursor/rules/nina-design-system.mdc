@@ -39,7 +39,7 @@ Design source of truth: `design/` (README.md, screens/*.html, tokens/, docs/). W
 
 ## Cabinet
 - Calm tone only. Nav max 5: მთავარი · გაკვეთილები · მასალები · ლექსიკა · პროგრესი (desktop sidebar 248px, mobile bottom tab bar).
-- Student sees only assignments with ready_for_student = true. No sign-up.
+- Student sees only lessons Nina has published to them (or their group). No sign-up.
 - Exercises: shared Exercise Frame (header/progress/check/restart/completion) + pluggable body per `template_id`. Beige #F3EAD6 surface, printed fonts, thin tile outlines, no name entry.
 - Status colors: new = teal-soft, in progress = mustard-soft (#7A4A00 text), done = sage-soft (#34605A text), homework = burgundy-soft.
 

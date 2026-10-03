@@ -1,21 +1,23 @@
 import Link from "next/link";
 import { StatusChip } from "@nina/ui";
 import { apiGet, redirectAdminHome } from "@/lib/api";
-import { shortDate } from "@/lib/dates";
+import { lessonWhen, shortDate } from "@/lib/dates";
 
 type Lesson = {
   id: string;
   number: number;
   title: string;
+  titleEs: string | null;
   date: string;
   status: "NEW" | "IN_PROGRESS" | "DONE";
   counter: { completed: number; total: number };
-  topics: { id: string; number: number; titleKa: string }[];
+  unit: { titleKa: string } | null;
+  group: { name: string } | null;
 };
 
 const chip = { NEW: "new", IN_PROGRESS: "progress", DONE: "done" } as const;
 const tile = {
-  NEW: "bg-mustard text-navy",
+  NEW: "bg-mustard-soft text-mustard-ink",
   IN_PROGRESS: "bg-teal-soft text-teal-deep",
   DONE: "bg-sage-soft text-sage-ink",
 } as const;
@@ -24,9 +26,9 @@ export default async function LessonsPage({ searchParams }: { searchParams: Prom
   const { filter } = await searchParams;
   const selected = filter === "current" || filter === "done" ? filter : "all";
   await redirectAdminHome();
-  const { items } = await apiGet<{ items: Lesson[] }>("/v1/me/lessons");
+  const { items, nextLessonAt } = await apiGet<{ items: Lesson[]; nextLessonAt: string | null }>("/v1/me/lessons");
   const current = items.filter((lesson) => lesson.status !== "DONE").length;
-  const done = items.filter((lesson) => lesson.status === "DONE").length;
+  const done = items.length - current;
   const visible = items.filter((lesson) => {
     if (selected === "current") return lesson.status !== "DONE";
     if (selected === "done") return lesson.status === "DONE";
@@ -45,6 +47,7 @@ export default async function LessonsPage({ searchParams }: { searchParams: Prom
         <div>
           <p className="font-hand text-[32px] leading-none text-burgundy">Mis lecciones</p>
           <h1 className="text-[34px] font-bold">ჩემი გაკვეთილები</h1>
+          {nextLessonAt ? <p className="mt-1 text-ink-muted">შემდეგი გაკვეთილი: {lessonWhen(nextLessonAt)}</p> : null}
         </div>
         <div className="flex flex-wrap gap-2">
           {tabs.map((tab) => (
@@ -52,7 +55,7 @@ export default async function LessonsPage({ searchParams }: { searchParams: Prom
               key={tab.id}
               href={tab.href}
               aria-current={selected === tab.id ? "page" : undefined}
-              className={`inline-flex h-10 items-center rounded-[10px] px-4 text-sm ${selected === tab.id ? "bg-teal-deep font-semibold text-on-dark" : "border-[1.5px] border-sand"}`}
+              className={`inline-flex h-11 items-center rounded-[10px] px-4 text-sm ${selected === tab.id ? "bg-teal-deep font-semibold text-on-dark" : "border-[1.5px] border-sand"}`}
             >
               {tab.label}
             </Link>
@@ -60,25 +63,23 @@ export default async function LessonsPage({ searchParams }: { searchParams: Prom
         </div>
       </div>
       <div className="overflow-hidden rounded-2xl border-[1.5px] border-line bg-card">
-        {visible.length === 0 ? <p className="p-6 text-ink-muted">ამ ფილტრში გაკვეთილი არ არის.</p> : null}
+        {visible.length === 0 ? <p className="p-6 text-ink-muted">{items.length === 0 ? "გაკვეთილები აქ გამოჩნდება, როგორც კი ნინა გამოგიგზავნის." : "ამ ფილტრში გაკვეთილი არ არის."}</p> : null}
         {visible.map((lesson) => (
           <Link
             key={lesson.id}
             href={`/app/lessons/${lesson.id}`}
-            className={`flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-line-soft px-4 py-3.5 last:border-b-0 ${lesson.status === "DONE" ? "" : "bg-paper-deep"}`}
+            className={`flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-line-soft px-4 py-3.5 last:border-b-0 hover:bg-paper-deep ${lesson.status === "DONE" ? "" : "bg-paper-deep/60"}`}
           >
             <span className={`flex size-11 items-center justify-center rounded-xl text-lg font-bold ${tile[lesson.status]}`}>{lesson.number}</span>
             <span className="w-16 text-sm">{shortDate(lesson.date)}</span>
-            <span className="min-w-40 flex-1 font-bold">{lesson.title}</span>
-            <span className="flex flex-wrap gap-1.5">
-              {lesson.topics.slice(0, 3).map((topic) => (
-                <span key={topic.id} className="rounded-lg bg-sand-soft px-2.5 py-1 text-[13px]">
-                  {topic.titleKa}
-                </span>
-              ))}
+            <span className="min-w-40 flex-1">
+              <span className="block font-bold">{lesson.title}</span>
+              {lesson.unit || lesson.group ? (
+                <span className="block text-[13px] text-ink-muted">{[lesson.unit?.titleKa, lesson.group?.name].filter(Boolean).join(" · ")}</span>
+              ) : null}
             </span>
-            <StatusChip status={chip[lesson.status]}>{lesson.status === "DONE" ? "✓ დასრულებული" : undefined}</StatusChip>
-            <span className="text-sm text-ink-muted">
+            <StatusChip status={chip[lesson.status]} />
+            <span className="w-14 text-right text-sm text-ink-muted">
               {lesson.counter.completed} / {lesson.counter.total}
             </span>
           </Link>

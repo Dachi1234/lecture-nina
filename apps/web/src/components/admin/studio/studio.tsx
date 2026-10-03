@@ -7,12 +7,10 @@ import { EXERCISE_MATERIAL_TYPES, MATERIAL_CATALOG, materialReadiness, starterCo
 import { Button, ChoiceChip, Icon, IconTile } from "@nina/ui";
 import { MaterialStage, type MaterialPayload } from "@/components/cabinet/viewers";
 import { shortDate } from "@/lib/dates";
-import { groupTone, materialIcon, materialLabel, templateLabel } from "@/lib/materials";
+import { SECTION_LABELS, groupTone, materialIcon, materialLabel, templateLabel } from "@/lib/materials";
 import { ContentBuilder } from "./builders";
 import { ExerciseBuilder } from "./exercise-builder";
 import { AssetsContext, Section, TextField, rec, str, type Rec } from "./kit";
-
-type Topic = { id: string; number: number; titleKa: string };
 
 export type StudioMaterial = {
   id: string;
@@ -26,18 +24,11 @@ export type StudioMaterial = {
   tags: string[];
   estMinutes: number | null;
   updatedAt: string;
-  personalFor: { id: string; name: string } | null;
+  level: string | null;
+  legacySourceId: string | null;
   assets: Record<string, string>;
-  topics: Topic[];
-  usage: {
-    id: string;
-    kind: string;
-    groupLabel: string | null;
-    readyForStudent: boolean;
-    studentId: string;
-    studentName: string;
-    lesson: { id: string; number: number; title: string } | null;
-  }[];
+  plans: { id: string; titleKa: string; section: string; unitTitle: string | null; courseTitle: string | null; lessons: number }[];
+  lessons: { id: string; title: string; date: string; section: string; audience: { kind: "group" | "student"; id: string; name: string } | null }[];
   stats: { opened: number; completed: number };
   revisions: { id: string; title: string; note: string | null; createdAt: string }[];
 };
@@ -45,23 +36,15 @@ export type StudioMaterial = {
 type Tab = "basics" | "content" | "publish";
 type SaveState = "saved" | "dirty" | "saving" | "error";
 
-const kindLabel: Record<string, string> = {
-  LESSON_MATERIAL: "გაკვეთილის მასალა",
-  HOMEWORK: "საშინაო",
-  PERSONAL: "პირადი",
-  REVIEW: "გამეორება",
-};
-
 const MINUTES = [3, 5, 10, 15, 20];
+const LEVELS = ["A1", "A2", "B1", "B2"];
 
 export function MaterialStudio({
   material,
-  topics,
   initialTab,
   returnTo,
 }: {
   material: StudioMaterial;
-  topics: Topic[];
   initialTab: Tab;
   returnTo: { href: string; label: string } | null;
 }) {
@@ -75,7 +58,7 @@ export function MaterialStudio({
   const [description, setDescription] = useState(material.description ?? "");
   const [estMinutes, setEstMinutes] = useState<number | null>(material.estMinutes);
   const [tags, setTags] = useState(material.tags.join(", "));
-  const [topicIds, setTopicIds] = useState(material.topics.map((topic) => topic.id));
+  const [level, setLevel] = useState<string | null>(material.level);
   const [content, setContent] = useState<Rec>(() => {
     const stored = rec(material.content);
     return { ...starterContent(material.type, str(stored.templateId) || undefined), ...stored };
@@ -101,10 +84,10 @@ export function MaterialStudio({
       description,
       estMinutes,
       tags: tags.split(",").map((tag) => tag.trim()).filter(Boolean),
-      topicIds,
+      level,
       content: isExercise ? { ...content, title } : content,
     }),
-    [title, subtitle, description, estMinutes, tags, topicIds, content, isExercise],
+    [title, subtitle, description, estMinutes, tags, level, content, isExercise],
   );
   const serialized = JSON.stringify(payload);
   const lastSaved = useRef(serialized);
@@ -188,7 +171,7 @@ export function MaterialStudio({
     if (!result) return;
     setStatus("PUBLISHED");
     setHasDraft(false);
-    setMessage(material.usage.length ? "გამოქვეყნდა. მოსწავლეები ახლა ახალ ვერსიას ხედავენ." : "გამოქვეყნდა. ახლა შეგიძლია გაკვეთილში ჩასვა.");
+    setMessage(material.plans.length || material.lessons.length ? "გამოქვეყნდა. მოსწავლეები ახლა ახალ ვერსიას ხედავენ." : "გამოქვეყნდა. ახლა შეგიძლია გეგმაში ან გაკვეთილში ჩასვა.");
     router.refresh();
   }
 
@@ -254,7 +237,7 @@ export function MaterialStudio({
             <p className={`text-sm font-semibold ${tone.ink}`}>
               {materialLabel(material.type, null)}
               {templateLabel(templateId) ? ` · ${templateLabel(templateId)}` : ""}
-              {material.personalFor ? ` · პირადი: ${material.personalFor.name}` : ""}
+              {material.legacySourceId ? " · ძველი ბიბლიოთეკიდან" : ""}
             </p>
             <h1 className="mt-1 text-3xl leading-tight font-bold break-words">{title || "უსათაურო"}</h1>
           </div>
@@ -287,7 +270,7 @@ export function MaterialStudio({
                   <TextField label="მოკლე აღწერა სიაში" hint="(არასავალდებულო)" placeholder="ვიდეო-დიალოგი · 2:10" value={subtitle} onChange={setSubtitle} />
                   <TextField label="შენიშვნა მოსწავლისთვის" hint="(ჩანს მასალის ბოლოს)" placeholder="ჯერ მოუსმინე, მერე წაიკითხე ხმამაღლა." rows={2} value={description} onChange={setDescription} />
                 </Section>
-                <Section title="დრო და თემა" hint="თემა ეხმარება ბიბლიოთეკაში ძებნას და მოსწავლის ლექსიკის ფილტრს.">
+                <Section title="დრო და დონე" hint="დონე და თეგები ეხმარება ბიბლიოთეკაში ძებნას.">
                   <div className="flex flex-col gap-2">
                     <p className="text-sm font-semibold">დაახლოებით რამდენი წუთი</p>
                     <div className="flex flex-wrap gap-2">
@@ -297,16 +280,11 @@ export function MaterialStudio({
                     </div>
                   </div>
                   <div className="flex flex-col gap-2">
-                    <p className="text-sm font-semibold">თემები · {topicIds.length}</p>
-                    <div className="flex max-h-64 flex-wrap gap-2 overflow-y-auto">
-                      {topics.map((topic) => {
-                        const pressed = topicIds.includes(topic.id);
-                        return (
-                          <ChoiceChip key={topic.id} pressed={pressed} className="h-10 text-sm" onClick={() => setTopicIds(pressed ? topicIds.filter((id) => id !== topic.id) : [...topicIds, topic.id])}>
-                            {topic.number} · {topic.titleKa}
-                          </ChoiceChip>
-                        );
-                      })}
+                    <p className="text-sm font-semibold">დონე</p>
+                    <div className="flex flex-wrap gap-2">
+                      {LEVELS.map((value) => (
+                        <ChoiceChip key={value} pressed={level === value} onClick={() => setLevel(level === value ? null : value)}>{value}</ChoiceChip>
+                      ))}
                     </div>
                   </div>
                   <TextField label="თეგები" hint="(მძიმით, მხოლოდ შენთვის)" placeholder="კაფე, შეკვეთა, querer" value={tags} onChange={setTags} />
@@ -333,7 +311,8 @@ export function MaterialStudio({
                 status={status}
                 hasDraft={hasDraft}
                 busy={busy}
-                usage={material.usage}
+                plans={material.plans}
+                lessons={material.lessons}
                 stats={material.stats}
                 revisions={material.revisions}
                 message={message}
@@ -438,7 +417,8 @@ function PublishPanel({
   status,
   hasDraft,
   busy,
-  usage,
+  plans,
+  lessons,
   stats,
   revisions,
   message,
@@ -454,7 +434,8 @@ function PublishPanel({
   status: string;
   hasDraft: boolean;
   busy: boolean;
-  usage: StudioMaterial["usage"];
+  plans: StudioMaterial["plans"];
+  lessons: StudioMaterial["lessons"];
   stats: StudioMaterial["stats"];
   revisions: StudioMaterial["revisions"];
   message: string;
@@ -469,7 +450,7 @@ function PublishPanel({
   const live = status === "PUBLISHED";
   const upToDate = live && !hasDraft;
   const missing = readiness.checks.filter((check) => check.required && !check.done);
-  const students = new Set(usage.map((item) => item.studentName));
+  const used = plans.length + lessons.length > 0;
   return (
     <div className="flex flex-col gap-5">
       <Section title={upToDate ? "გამოქვეყნებულია" : live ? "ცვლილებების გამოქვეყნება" : "გამოქვეყნება"}>
@@ -477,10 +458,10 @@ function PublishPanel({
           <p className="text-[15px] leading-relaxed">მოსწავლეები ხედავენ ბოლო ვერსიას. ახალი ცვლილებები ჯერ მონახაზად შეინახება და შენ გადაწყვეტ, როდის გამოჩნდეს.</p>
         ) : live ? (
           <p className="text-[15px] leading-relaxed">
-            შენი ცვლილებები შენახულია მონახაზად. {students.size ? `${[...students].join(", ")} ჯერ ძველ ვერსიას ხედავს.` : ""} გამოქვეყნების შემდეგ ახალი ვერსია ყველას გამოუჩნდება, ვისაც ეს მასალა აქვს.
+            შენი ცვლილებები შენახულია მონახაზად — მოსწავლეები ჯერ ძველ ვერსიას ხედავენ. გამოქვეყნების შემდეგ ახალი ვერსია ყველას გამოუჩნდება, ვისაც ეს მასალა აქვს.
           </p>
         ) : (
-          <p className="text-[15px] leading-relaxed">გამოქვეყნებული მასალა შეგიძლია ჩასვა ნებისმიერი მოსწავლის გაკვეთილში. ერთი მასალა — ბევრ გაკვეთილში, ასლების გარეშე.</p>
+          <p className="text-[15px] leading-relaxed">მოსწავლე მასალას დაინახავს მხოლოდ გამოქვეყნების შემდეგ. ერთი მასალა — ბევრ გეგმასა და გაკვეთილში, ასლების გარეშე.</p>
         )}
         {missing.length && !upToDate ? (
           <div className="rounded-xl bg-mustard-soft px-4 py-3 text-sm text-mustard-ink">
@@ -503,22 +484,27 @@ function PublishPanel({
         {error ? <p className="text-sm font-medium text-burgundy" aria-live="polite">{error}</p> : null}
       </Section>
 
-      <Section title="სად გამოიყენება" hint={usage.length ? `${students.size} მოსწავლე · ${usage.length} გაკვეთილი · გახსნა ${stats.opened} · დაასრულა ${stats.completed}` : undefined}>
-        {usage.length === 0 ? (
-          <p className="text-sm text-ink-muted">ჯერ არც ერთ გაკვეთილში არ არის. გაკვეთილის რედაქტორში მოძებნე სათაურით და დაამატე.</p>
+      <Section title="სად გამოიყენება" hint={used ? `${plans.length} გეგმა · ${lessons.length} გაკვეთილი დამატებით · გახსნა ${stats.opened} · დაასრულა ${stats.completed}` : undefined}>
+        {!used ? (
+          <p className="text-sm text-ink-muted">ჯერ არცერთ გეგმაში არ არის. გახსენი გეგმა კურიკულუმში და დაამატე „ბიბლიოთეკიდან“.</p>
         ) : (
           <ul className="flex flex-col gap-2">
-            {usage.map((item) => (
-              <li key={item.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-paper px-4 py-3 text-sm">
+            {plans.map((plan) => (
+              <li key={plan.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-paper px-4 py-3 text-sm">
                 <span>
-                  <b>{item.studentName}</b>
-                  {item.lesson ? ` · გაკვეთილი ${item.lesson.number} · ${item.lesson.title}` : " · გაკვეთილის გარეთ"}
-                  {` · ${kindLabel[item.kind] ?? item.kind}`}
+                  <b>გეგმა · {plan.titleKa}</b>
+                  {plan.unitTitle ? ` · ${plan.unitTitle}` : ""} · {SECTION_LABELS[plan.section] ?? plan.section}
+                  {plan.lessons ? ` · ${plan.lessons} გაკვეთილი` : ""}
                 </span>
-                <span className="flex items-center gap-3">
-                  <span className={item.readyForStudent ? "text-sage-ink" : "text-ink-muted"}>{item.readyForStudent ? "უჩანს" : "დამალულია"}</span>
-                  {item.lesson ? <Link href={`/admin/students/${item.studentId}/lessons/${item.lesson.id}`} className="font-semibold text-teal-deep">გაკვეთილი →</Link> : null}
+                <Link href={`/admin/plans/${plan.id}`} className="font-semibold text-teal-deep">გეგმა →</Link>
+              </li>
+            ))}
+            {lessons.map((lesson) => (
+              <li key={lesson.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-paper px-4 py-3 text-sm">
+                <span>
+                  <b>{lesson.audience?.name ?? "გაკვეთილი"}</b> · {shortDate(lesson.date)} · {lesson.title} · {SECTION_LABELS[lesson.section] ?? lesson.section}
                 </span>
+                <Link href={`/admin/lessons/${lesson.id}`} className="font-semibold text-teal-deep">გაკვეთილი →</Link>
               </li>
             ))}
           </ul>
@@ -543,11 +529,11 @@ function PublishPanel({
           ) : (
             <Button type="button" variant="outline" size="s" disabled={busy} onClick={() => onArchive(true)}>არქივში გადატანა</Button>
           )}
-          {usage.length === 0 ? (
+          {!used ? (
             <button type="button" disabled={busy} onClick={onDelete} className="h-10 px-3 text-sm font-semibold text-burgundy">წაშლა</button>
           ) : null}
         </div>
-        <p className="text-sm text-ink-muted">ასლი გამოგადგება, თუ სხვა მოსწავლისთვის ოდნავ განსხვავებული ვერსია გინდა.</p>
+        <p className="text-sm text-ink-muted">ასლი გამოგადგება, თუ სხვა გეგმისთვის ოდნავ განსხვავებული ვერსია გინდა.</p>
       </Section>
     </div>
   );

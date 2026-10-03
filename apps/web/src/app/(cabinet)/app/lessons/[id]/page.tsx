@@ -2,14 +2,15 @@ import Link from "next/link";
 import { MarkDone } from "@/components/cabinet/mark-done";
 import { MaterialRow, StatusChip } from "@nina/ui";
 import { apiGet, redirectAdminHome } from "@/lib/api";
-import { lessonOverline } from "@/lib/dates";
-import { materialIcon, materialLabel, progressLabel, ringFor } from "@/lib/materials";
+import { lessonOverline, shortDate } from "@/lib/dates";
+import { SECTION_LABELS, SECTION_ORDER, materialIcon, materialLabel, progressLabel, ringFor, withLesson } from "@/lib/materials";
 
 type Item = {
   materialId: string;
   title: string;
   type: string;
-  groupLabel: string | null;
+  section: string;
+  noteKa: string | null;
   estMinutes: number | null;
   steps: number | null;
   lastStep: number | null;
@@ -21,25 +22,19 @@ type Lesson = {
   id: string;
   number: number;
   title: string;
+  titleEs: string | null;
   date: string;
   note: string | null;
+  goalsKa: string[];
+  homeworkDueAt: string | null;
   status: "NEW" | "IN_PROGRESS" | "DONE";
   counter: { completed: number; total: number };
-  topics: { id: string; number: number; titleKa: string }[];
+  unit: { titleKa: string } | null;
+  group: { name: string } | null;
   items: Item[];
 };
 
 const chip = { NEW: "new", IN_PROGRESS: "progress", DONE: "done" } as const;
-
-function groups(items: Item[]) {
-  const rows: { label: string | null; items: Item[] }[] = [];
-  for (const item of items) {
-    const last = rows.at(-1);
-    if (!last || last.label !== item.groupLabel) rows.push({ label: item.groupLabel, items: [item] });
-    else last.items.push(item);
-  }
-  return rows;
-}
 
 export default async function LessonPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -47,6 +42,7 @@ export default async function LessonPage({ params }: { params: Promise<{ id: str
   const lesson = await apiGet<Lesson>(`/v1/me/lessons/${id}`);
   const ratio = lesson.counter.total > 0 ? Math.round((lesson.counter.completed / lesson.counter.total) * 100) : 0;
   const next = lesson.items.find((item) => item.status !== "COMPLETED");
+  const sections = SECTION_ORDER.map((section) => ({ section, items: lesson.items.filter((item) => item.section === section) })).filter((group) => group.items.length > 0);
 
   return (
     <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_280px]">
@@ -61,11 +57,8 @@ export default async function LessonPage({ params }: { params: Promise<{ id: str
           <p className="text-sm font-semibold tracking-wide text-teal-deep">{lessonOverline(lesson.number, lesson.date)}</p>
           <h1 className="text-4xl leading-tight font-bold">{lesson.title}</h1>
           <div className="flex flex-wrap gap-2">
-            {lesson.topics.map((topic) => (
-              <span key={topic.id} className="rounded-lg bg-sand-soft px-3 py-1.5 text-sm">
-                თემა {topic.number} · {topic.titleKa}
-              </span>
-            ))}
+            {lesson.unit ? <span className="rounded-lg bg-sand-soft px-3 py-1.5 text-sm">{lesson.unit.titleKa}</span> : null}
+            {lesson.group ? <span className="rounded-lg bg-sand-soft px-3 py-1.5 text-sm">{lesson.group.name}</span> : null}
           </div>
         </div>
         {lesson.note ? (
@@ -77,31 +70,35 @@ export default async function LessonPage({ params }: { params: Promise<{ id: str
             </div>
           </div>
         ) : null}
-        <section className="flex flex-col gap-3">
-          <div className="flex items-center justify-between gap-3">
-            <h2 className="text-[22px] font-bold">მასალები</h2>
-            <span className="text-sm text-ink-muted">
-              {lesson.counter.completed} / {lesson.counter.total} დასრულებული · ნინას თანმიმდევრობით
-            </span>
-          </div>
-          <div className="overflow-hidden rounded-2xl border-[1.5px] border-line bg-card">
-            {groups(lesson.items).map((group) => (
-              <div key={group.label ?? "ungrouped"}>
-                {group.label ? <p className="bg-paper-deep px-5 py-2.5 text-[13px] font-semibold text-ink-muted">{group.label}</p> : null}
-                {group.items.map((item) => {
-                  const markable = item.canMarkDone && item.status !== "COMPLETED";
-                  const resumable = !item.canMarkDone && item.status === "OPENED";
-                  return (
+        {lesson.items.length === 0 ? <p className="rounded-2xl border-[1.5px] border-line bg-card p-6 text-ink-muted">მასალები ჯერ არ არის.</p> : null}
+        {sections.map((group) => (
+          <section key={group.section} className="flex flex-col gap-3">
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="text-[22px] font-bold">{SECTION_LABELS[group.section]}</h2>
+              {group.section === "HOMEWORK" && lesson.homeworkDueAt ? (
+                <span className="rounded-lg bg-burgundy-soft px-2.5 py-1 text-[13px] font-semibold text-burgundy">ვადა: {shortDate(lesson.homeworkDueAt)}</span>
+              ) : null}
+            </div>
+            <div className="overflow-hidden rounded-2xl border-[1.5px] border-line bg-card">
+              {group.items.map((item) => {
+                const markable = item.canMarkDone && item.status !== "COMPLETED";
+                const href = withLesson(`/app/m/${item.materialId}`, lesson.id);
+                return (
                   <div key={item.materialId} className={`relative ${next?.materialId === item.materialId ? "bg-paper-deep" : ""}`}>
-                    <Link href={`/app/m/${item.materialId}?lessonId=${lesson.id}`} className="block">
+                    <Link href={href} className="block">
                       <MaterialRow
                         icon={materialIcon(item.type)}
                         title={item.title}
-                        meta={item.steps ? `სავარჯიშო · ${item.steps} ნაბიჯი${item.lastStep ? ` · ${Math.min(item.lastStep, item.steps)}/${item.steps}` : ""}` : materialLabel(item.type, item.estMinutes)}
+                        meta={[
+                          item.steps ? `სავარჯიშო · ${item.steps} ნაბიჯი${item.lastStep ? ` · ${Math.min(item.lastStep, item.steps)}/${item.steps}` : ""}` : materialLabel(item.type, item.estMinutes),
+                          item.noteKa,
+                        ]
+                          .filter(Boolean)
+                          .join(" · ")}
                         ring={ringFor(item.status)}
                         action={
-                          markable || resumable ? (
-                            <span aria-hidden className={`hidden sm:block ${markable ? "w-52" : "w-28"}`} />
+                          markable ? (
+                            <span aria-hidden className="hidden w-52 sm:block" />
                           ) : (
                             <span className={`hidden text-[13px] font-semibold sm:inline ${item.status === "COMPLETED" ? "text-sage-ink" : "text-ink-muted"}`}>{progressLabel(item.status)}</span>
                           )
@@ -110,23 +107,15 @@ export default async function LessonPage({ params }: { params: Promise<{ id: str
                     </Link>
                     {markable ? (
                       <div className="absolute top-1/2 right-14 hidden -translate-y-1/2 sm:block">
-                        <MarkDone materialId={item.materialId} />
-                      </div>
-                    ) : null}
-                    {resumable ? (
-                      <div className="absolute top-1/2 right-14 hidden -translate-y-1/2 sm:block">
-                        <Link href={`/app/m/${item.materialId}?lessonId=${lesson.id}`} className="inline-flex h-10 items-center rounded-[10px] bg-teal-deep px-4 text-sm font-semibold text-on-dark">
-                          გაგრძელება
-                        </Link>
+                        <MarkDone materialId={item.materialId} lessonId={lesson.id} />
                       </div>
                     ) : null}
                   </div>
-                  );
-                })}
-              </div>
-            ))}
-          </div>
-        </section>
+                );
+              })}
+            </div>
+          </section>
+        ))}
       </div>
       <aside className="flex flex-col gap-5 xl:pt-11">
         <div className="flex flex-col gap-3 rounded-2xl border-[1.5px] border-line bg-card p-5">
@@ -138,7 +127,22 @@ export default async function LessonPage({ params }: { params: Promise<{ id: str
           <p className="text-sm text-ink-muted">
             {lesson.counter.completed} / {lesson.counter.total} მასალა · {ratio}%
           </p>
+          {next ? (
+            <Link href={withLesson(`/app/m/${next.materialId}`, lesson.id)} className="inline-flex h-11 items-center justify-center rounded-xl bg-teal-deep px-4 text-sm font-semibold text-on-dark">
+              {lesson.counter.completed === 0 ? "დაწყება" : "გაგრძელება"}
+            </Link>
+          ) : null}
         </div>
+        {lesson.goalsKa.length > 0 ? (
+          <div className="flex flex-col gap-2 rounded-2xl border-[1.5px] border-line bg-card p-5">
+            <p className="font-bold">ამ გაკვეთილზე</p>
+            <ul className="flex list-disc flex-col gap-1.5 pl-5 text-[15px] leading-relaxed">
+              {lesson.goalsKa.map((goal) => (
+                <li key={goal}>{goal}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
       </aside>
     </div>
   );

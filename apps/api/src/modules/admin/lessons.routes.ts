@@ -1,202 +1,268 @@
 import type { FastifyInstance } from "fastify";
-import { materialReadiness } from "@nina/contracts";
+import type { Prisma } from "@nina/db";
 import { prisma } from "../../db.js";
 import { requireRole } from "../auth/guard.js";
+import { SECTIONS, lessonCounter, lessonStatus, type Section } from "../../domain/progress.js";
+import { audienceOf, bad, itemHealth, lessonInclude, lessonTitle, resolveItems, visibleToStudent } from "../lessons/load.js";
 
-const kinds = new Set(["LESSON_MATERIAL", "HOMEWORK", "PERSONAL", "REVIEW"]);
+const sections = new Set<string>(SECTIONS);
+
+function optionalDate(value: unknown) {
+  if (value === null) return null;
+  if (typeof value !== "string" || !value) return undefined;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? undefined : date;
+}
+
+function nullableText(value: unknown) {
+  if (value === null) return null;
+  return typeof value === "string" ? value.trim() || null : undefined;
+}
 
 export async function adminLessonRoutes(app: FastifyInstance) {
-  app.post("/v1/admin/students/:id/lessons", async (request, reply) => {
-    const admin = await requireRole(request, reply, "ADMIN");
-    if (!admin) return;
-    const { id } = request.params as { id: string };
-    const body = request.body as { title?: string; date?: string; topicIds?: string[] };
-    if (!body.title?.trim() || !body.date) {
-      return reply.code(400).send({ error: { code: "VALIDATION", messageKa: "სათაური და თარიღი საჭიროა." } });
-    }
-    const last = await prisma.lesson.findFirst({ where: { studentId: id }, orderBy: { number: "desc" } });
+  app.get("/v1/admin/lessons", async (request, reply) => {
+    if (!(await requireRole(request, reply, "ADMIN"))) return;
+    const query = request.query as { from?: string; to?: string; studentId?: string; groupId?: string; scope?: string };
+    const now = new Date();
+    const where: Prisma.LessonWhereInput = {
+      ...(query.studentId ? { studentId: query.studentId } : {}),
+      ...(query.groupId ? { groupId: query.groupId } : {}),
+      ...(query.scope === "past" ? { date: { lt: now } } : query.scope === "all" ? {} : { date: { gte: new Date(now.getTime() - 1000 * 60 * 60 * 3) } }),
+      ...(query.from || query.to ? { date: { ...(query.from ? { gte: new Date(query.from) } : {}), ...(query.to ? { lte: new Date(query.to) } : {}) } } : {}),
+    };
+    const rows = await prisma.lesson.findMany({
+      where,
+      orderBy: { date: query.scope === "past" ? "desc" : "asc" },
+      take: 200,
+      include: lessonInclude,
+    });
+    return {
+      items: rows.map((lesson) => {
+        const items = resolveItems(lesson);
+        const visible = visibleToStudent(items);
+        return {
+          id: lesson.id,
+          title: lessonTitle(lesson),
+          date: lesson.date.toISOString(),
+          durationMin: lesson.durationMin,
+          published: lesson.publishedAt !== null,
+          held: lesson.heldAt !== null,
+          audience: audienceOf(lesson),
+          plan: lesson.plan ? { id: lesson.plan.id, titleKa: lesson.plan.titleKa, unitTitle: lesson.plan.unit?.titleKa ?? null } : null,
+          items: visible.length,
+          problems: items.filter((item) => !item.hidden && item.material.status !== "PUBLISHED").length,
+        };
+      }),
+    };
+  });
+
+  app.post("/v1/admin/lessons", async (request, reply) => {
+    if (!(await requireRole(request, reply, "ADMIN"))) return;
+    const body = (request.body ?? {}) as { studentId?: unknown; groupId?: unknown; planId?: unknown; title?: unknown; date?: unknown; durationMin?: unknown };
+    const studentId = typeof body.studentId === "string" && body.studentId ? body.studentId : null;
+    const groupId = typeof body.groupId === "string" && body.groupId ? body.groupId : null;
+    const date = optionalDate(body.date);
+    if ((studentId ? 1 : 0) + (groupId ? 1 : 0) !== 1) return reply.code(400).send(bad("აირჩიე ერთი მოსწავლე ან ერთი ჯგუფი."));
+    if (!date) return reply.code(400).send(bad("თარიღი საჭიროა."));
+    const planId = typeof body.planId === "string" && body.planId ? body.planId : null;
+    const title = nullableText(body.title) ?? null;
+    if (!planId && !title) return reply.code(400).send(bad("აირჩიე გეგმა ან დაწერე სათაური."));
     const lesson = await prisma.lesson.create({
       data: {
-        studentId: id,
-        number: (last?.number ?? 0) + 1,
-        title: body.title.trim(),
-        date: new Date(body.date),
-        topics: body.topicIds?.length ? { create: body.topicIds.map((topicId) => ({ topicId })) } : undefined,
+        studentId,
+        groupId,
+        planId,
+        title,
+        date,
+        durationMin: typeof body.durationMin === "number" && body.durationMin > 0 ? Math.round(body.durationMin) : 75,
       },
     });
-    return { id: lesson.id, number: lesson.number };
+    return { id: lesson.id };
   });
 
   app.get("/v1/admin/lessons/:id", async (request, reply) => {
-    const admin = await requireRole(request, reply, "ADMIN");
-    if (!admin) return;
+    if (!(await requireRole(request, reply, "ADMIN"))) return;
     const { id } = request.params as { id: string };
-    const lesson = await prisma.lesson.findUnique({
-      where: { id },
-      include: {
-        student: { include: { user: { select: { name: true } } } },
-        topics: { include: { topic: true } },
-        items: { orderBy: { order: "asc" }, include: { material: { select: { id: true, title: true, type: true, status: true, content: true, draft: true } } } },
-      },
+    const lesson = await prisma.lesson.findUnique({ where: { id }, include: lessonInclude });
+    if (!lesson) return reply.code(404).send(bad("გაკვეთილი ვერ მოიძებნა.", "NOT_FOUND"));
+    const items = resolveItems(lesson);
+    const visible = visibleToStudent(items);
+    const learners = lesson.group
+      ? lesson.group.members.map((row) => ({ id: row.studentId, name: row.student.user.name }))
+      : lesson.student
+        ? [{ id: lesson.student.id, name: lesson.student.user.name }]
+        : [];
+    const progressRows = await prisma.lessonProgress.findMany({ where: { lessonId: id } });
+    const progress = learners.map((learner) => {
+      const mine = new Map(progressRows.filter((row) => row.studentId === learner.id).map((row) => [row.materialId, row]));
+      const rows = visible.map((item) => ({ section: item.section, status: mine.get(item.materialId)?.status ?? "NOT_STARTED" }));
+      return {
+        studentId: learner.id,
+        name: learner.name,
+        status: lessonStatus(rows, lesson.heldAt !== null),
+        counter: lessonCounter(rows),
+        items: Object.fromEntries(visible.map((item) => [item.materialId, { status: mine.get(item.materialId)?.status ?? "NOT_STARTED", bestScore: mine.get(item.materialId)?.bestScore ?? null }])),
+      };
     });
-    if (!lesson) return reply.code(404).send({ error: { code: "NOT_FOUND", messageKa: "გაკვეთილი ვერ მოიძებნა." } });
     return {
       id: lesson.id,
-      studentId: lesson.studentId,
-      studentName: lesson.student.user.name,
-      number: lesson.number,
       title: lesson.title,
+      displayTitle: lessonTitle(lesson),
       date: lesson.date.toISOString(),
-      noteFromNina: lesson.noteFromNina,
-      readyForStudent: lesson.readyForStudent,
+      durationMin: lesson.durationMin,
+      noteKa: lesson.noteKa,
+      privateNote: lesson.privateNote,
+      homeworkDueAt: lesson.homeworkDueAt?.toISOString() ?? null,
+      publishedAt: lesson.publishedAt?.toISOString() ?? null,
+      heldAt: lesson.heldAt?.toISOString() ?? null,
       isGift: lesson.isGift,
-      topics: lesson.topics.map((link) => ({ id: link.topic.id, number: link.topic.number, titleKa: link.topic.titleKa })),
-      items: lesson.items.map((item) => ({
-        id: item.id,
+      audience: audienceOf(lesson),
+      plan: lesson.plan
+        ? {
+            id: lesson.plan.id,
+            titleKa: lesson.plan.titleKa,
+            goalsKa: lesson.plan.goalsKa,
+            teacherNotes: lesson.plan.teacherNotes,
+            unit: lesson.plan.unit ? { id: lesson.plan.unit.id, titleKa: lesson.plan.unit.titleKa, course: lesson.plan.unit.course } : null,
+          }
+        : null,
+      items: items.map((item) => ({
+        key: item.key,
+        source: item.source,
+        planItemId: item.planItemId,
         materialId: item.materialId,
+        section: item.section,
+        noteKa: item.noteKa,
+        planNoteKa: item.planItemId ? (lesson.plan?.items.find((row) => row.id === item.planItemId)?.noteKa ?? null) : null,
+        hidden: item.hidden,
+        held: item.held,
         title: item.material.title,
         type: item.material.type,
-        status: item.material.status,
-        hasDraft: item.material.draft !== null,
-        filled: materialReadiness(item.material.type, item.material.content).ready,
-        kind: item.kind,
-        groupLabel: item.groupLabel,
-        order: item.order,
-        dueAt: item.dueAt?.toISOString() ?? null,
-        readyForStudent: item.readyForStudent,
+        estMinutes: item.material.estMinutes,
+        health: itemHealth(item.material),
       })),
+      progress,
     };
   });
 
   app.patch("/v1/admin/lessons/:id", async (request, reply) => {
-    const admin = await requireRole(request, reply, "ADMIN");
-    if (!admin) return;
+    if (!(await requireRole(request, reply, "ADMIN"))) return;
     const { id } = request.params as { id: string };
-    const body = request.body as { title?: string; date?: string; noteFromNina?: string | null; topicIds?: string[]; isGift?: boolean };
-    const lesson = await prisma.lesson.findUnique({ where: { id } });
-    if (!lesson) return reply.code(404).send({ error: { code: "NOT_FOUND", messageKa: "გაკვეთილი ვერ მოიძებნა." } });
+    const body = (request.body ?? {}) as Record<string, unknown>;
+    const date = optionalDate(body.date);
+    const due = optionalDate(body.homeworkDueAt);
+    const lesson = await prisma.lesson.findUnique({ where: { id }, select: { id: true, planId: true, title: true } });
+    if (!lesson) return reply.code(404).send(bad("გაკვეთილი ვერ მოიძებნა.", "NOT_FOUND"));
+    const planId = body.planId === null ? null : typeof body.planId === "string" ? body.planId : undefined;
+    const title = nullableText(body.title);
+    if ((planId === null || (planId === undefined && !lesson.planId)) && (title === null || (title === undefined && !lesson.title))) {
+      return reply.code(400).send(bad("გეგმის გარეშე გაკვეთილს სათაური სჭირდება."));
+    }
     await prisma.lesson.update({
       where: { id },
       data: {
-        ...(body.title ? { title: body.title.trim() } : {}),
-        ...(body.date ? { date: new Date(body.date) } : {}),
-        ...(body.noteFromNina === null || typeof body.noteFromNina === "string" ? { noteFromNina: body.noteFromNina } : {}),
+        ...(title !== undefined ? { title } : {}),
+        ...(date ? { date } : {}),
+        ...(due !== undefined ? { homeworkDueAt: due } : {}),
+        ...(nullableText(body.noteKa) !== undefined ? { noteKa: nullableText(body.noteKa) } : {}),
+        ...(nullableText(body.privateNote) !== undefined ? { privateNote: nullableText(body.privateNote) } : {}),
+        ...(body.durationMin === null ? { durationMin: null } : typeof body.durationMin === "number" && body.durationMin > 0 ? { durationMin: Math.round(body.durationMin) } : {}),
         ...(typeof body.isGift === "boolean" ? { isGift: body.isGift } : {}),
+        ...(typeof body.held === "boolean" ? { heldAt: body.held ? new Date() : null } : {}),
+        ...(planId !== undefined ? { planId } : {}),
       },
     });
-    if (body.topicIds) {
-      await prisma.lessonTopic.deleteMany({ where: { lessonId: id } });
-      if (body.topicIds.length) {
-        await prisma.lessonTopic.createMany({ data: body.topicIds.map((topicId) => ({ lessonId: id, topicId })) });
-      }
+    if (planId !== undefined && planId !== lesson.planId) {
+      await prisma.lessonItem.deleteMany({ where: { lessonId: id, planItemId: { not: null } } });
     }
     return { ok: true };
   });
 
+  /** Replaces this lesson's own layer on top of the plan: tweaks to plan items and extra items. */
   app.put("/v1/admin/lessons/:id/items", async (request, reply) => {
-    const admin = await requireRole(request, reply, "ADMIN");
-    if (!admin) return;
+    if (!(await requireRole(request, reply, "ADMIN"))) return;
     const { id } = request.params as { id: string };
-    const body = request.body as {
-      items?: { materialId: string; kind?: string; groupLabel?: string | null; dueAt?: string | null; readyForStudent?: boolean }[];
-    };
-    const lesson = await prisma.lesson.findUnique({ where: { id } });
-    if (!lesson) return reply.code(404).send({ error: { code: "NOT_FOUND", messageKa: "გაკვეთილი ვერ მოიძებნა." } });
-    if (!Array.isArray(body.items)) return reply.code(400).send({ error: { code: "VALIDATION", messageKa: "სია არასწორია." } });
-    await prisma.assignment.deleteMany({ where: { lessonId: id } });
-    if (body.items.length) {
-      await prisma.assignment.createMany({
-        data: body.items.map((item, order) => ({
-          studentId: lesson.studentId,
-          materialId: item.materialId,
-          lessonId: id,
-          kind: (item.kind && kinds.has(item.kind) ? item.kind : "LESSON_MATERIAL") as "LESSON_MATERIAL",
-          groupLabel: item.groupLabel || null,
-          dueAt: item.dueAt ? new Date(item.dueAt) : null,
-          readyForStudent: item.readyForStudent !== false,
-          order,
-        })),
-      });
-    }
+    const body = (request.body ?? {}) as { tweaks?: unknown; extras?: unknown };
+    const lesson = await prisma.lesson.findUnique({ where: { id }, include: { plan: { select: { items: { select: { id: true, materialId: true } } } } } });
+    if (!lesson) return reply.code(404).send(bad("გაკვეთილი ვერ მოიძებნა.", "NOT_FOUND"));
+    const planItemIds = new Set(lesson.plan?.items.map((item) => item.id) ?? []);
+    const planMaterials = new Set(lesson.plan?.items.map((item) => item.materialId) ?? []);
+    const tweaks = (Array.isArray(body.tweaks) ? body.tweaks : []).flatMap((raw) => {
+      const row = raw as { planItemId?: unknown; hidden?: unknown; held?: unknown; noteKa?: unknown };
+      if (typeof row.planItemId !== "string" || !planItemIds.has(row.planItemId)) return [];
+      const hidden = row.hidden === true;
+      const held = row.held === true;
+      const noteKa = nullableText(row.noteKa) ?? null;
+      if (!hidden && !held && !noteKa) return [];
+      return [{ lessonId: id, planItemId: row.planItemId, hidden, held, noteKa }];
+    });
+    const seen = new Set<string>();
+    const perSection = new Map<string, number>();
+    const extras = (Array.isArray(body.extras) ? body.extras : []).flatMap((raw) => {
+      const row = raw as { materialId?: unknown; section?: unknown; held?: unknown; noteKa?: unknown };
+      if (typeof row.materialId !== "string" || planMaterials.has(row.materialId) || seen.has(row.materialId)) return [];
+      seen.add(row.materialId);
+      const section = (typeof row.section === "string" && sections.has(row.section) ? row.section : "CLASS") as Section;
+      const order = perSection.get(section) ?? 0;
+      perSection.set(section, order + 1);
+      return [{ lessonId: id, materialId: row.materialId, section, order, held: row.held === true, noteKa: nullableText(row.noteKa) ?? null }];
+    });
+    await prisma.$transaction([
+      prisma.lessonItem.deleteMany({ where: { lessonId: id } }),
+      ...(tweaks.length ? [prisma.lessonItem.createMany({ data: tweaks })] : []),
+      ...(extras.length ? [prisma.lessonItem.createMany({ data: extras })] : []),
+    ]);
     return { ok: true };
   });
 
-  app.post("/v1/admin/lessons/:id/ready", async (request, reply) => {
-    const admin = await requireRole(request, reply, "ADMIN");
-    if (!admin) return;
+  app.post("/v1/admin/lessons/:id/publish", async (request, reply) => {
+    if (!(await requireRole(request, reply, "ADMIN"))) return;
     const { id } = request.params as { id: string };
-    const body = request.body as { ready?: boolean };
-    const ready = body.ready !== false;
-    await prisma.lesson.update({ where: { id }, data: { readyForStudent: ready } });
-    if (ready) await prisma.assignment.updateMany({ where: { lessonId: id }, data: { readyForStudent: true } });
-    return { readyForStudent: ready };
+    const published = (request.body as { published?: unknown } | undefined)?.published !== false;
+    const lesson = await prisma.lesson.update({
+      where: { id },
+      data: { publishedAt: published ? new Date() : null },
+      select: { publishedAt: true },
+    });
+    return { publishedAt: lesson.publishedAt?.toISOString() ?? null };
   });
 
-  app.post("/v1/admin/lessons/:id/template", async (request, reply) => {
-    const admin = await requireRole(request, reply, "ADMIN");
-    if (!admin) return;
+  app.delete("/v1/admin/lessons/:id", async (request, reply) => {
+    if (!(await requireRole(request, reply, "ADMIN"))) return;
     const { id } = request.params as { id: string };
-    const body = request.body as { title?: string };
-    const lesson = await prisma.lesson.findUnique({ where: { id }, include: { topics: true, items: { orderBy: { order: "asc" } } } });
-    if (!lesson) return reply.code(404).send({ error: { code: "NOT_FOUND", messageKa: "გაკვეთილი ვერ მოიძებნა." } });
-    const template = await prisma.lessonTemplate.create({
+    const progress = await prisma.lessonProgress.count({ where: { lessonId: id, status: { not: "NOT_STARTED" } } });
+    if (progress > 0) return reply.code(409).send(bad("მოსწავლემ ამ გაკვეთილზე უკვე იმუშავა. წაშლის ნაცვლად დამალე (გამოქვეყნების მოხსნა).", "IN_USE"));
+    await prisma.lesson.delete({ where: { id } });
+    return { ok: true };
+  });
+
+  /** Turns what this lesson shows into a reusable plan (for lessons built without one). */
+  app.post("/v1/admin/lessons/:id/save-as-plan", async (request, reply) => {
+    if (!(await requireRole(request, reply, "ADMIN"))) return;
+    const { id } = request.params as { id: string };
+    const body = (request.body ?? {}) as { titleKa?: unknown; unitId?: unknown };
+    const lesson = await prisma.lesson.findUnique({ where: { id }, include: lessonInclude });
+    if (!lesson) return reply.code(404).send(bad("გაკვეთილი ვერ მოიძებნა.", "NOT_FOUND"));
+    const items = resolveItems(lesson).filter((item) => !item.hidden);
+    const titleKa = (typeof body.titleKa === "string" && body.titleKa.trim()) || lessonTitle(lesson);
+    const unitId = typeof body.unitId === "string" && body.unitId ? body.unitId : null;
+    const last = await prisma.lessonPlan.findFirst({ where: { unitId }, orderBy: { order: "desc" }, select: { order: true } });
+    const perSection = new Map<string, number>();
+    const plan = await prisma.lessonPlan.create({
       data: {
-        title: body.title?.trim() || lesson.title,
-        topicIds: lesson.topics.map((link) => link.topicId),
-        note: lesson.noteFromNina,
-        items: lesson.items.map((item) => ({
-          materialId: item.materialId,
-          kind: item.kind,
-          groupLabel: item.groupLabel,
-          readyForStudent: item.readyForStudent,
-        })),
+        titleKa,
+        unitId,
+        order: (last?.order ?? 0) + 1,
+        goalsKa: lesson.plan?.goalsKa ?? [],
+        items: {
+          create: items.map((item) => {
+            const order = perSection.get(item.section) ?? 0;
+            perSection.set(item.section, order + 1);
+            return { materialId: item.materialId, section: item.section, order, noteKa: item.noteKa };
+          }),
+        },
       },
     });
-    return { id: template.id };
-  });
-
-  app.get("/v1/admin/lesson-templates", async (request, reply) => {
-    const admin = await requireRole(request, reply, "ADMIN");
-    if (!admin) return;
-    const rows = await prisma.lessonTemplate.findMany({ orderBy: { title: "asc" } });
-    return { items: rows.map((row) => ({ id: row.id, title: row.title, note: row.note })) };
-  });
-
-  app.post("/v1/admin/lessons/from-template", async (request, reply) => {
-    const admin = await requireRole(request, reply, "ADMIN");
-    if (!admin) return;
-    const body = request.body as { studentId?: string; templateId?: string; date?: string };
-    if (!body.studentId || !body.templateId || !body.date) {
-      return reply.code(400).send({ error: { code: "VALIDATION", messageKa: "მოსწავლე, შაბლონი და თარიღი საჭიროა." } });
-    }
-    const template = await prisma.lessonTemplate.findUnique({ where: { id: body.templateId } });
-    if (!template) return reply.code(404).send({ error: { code: "NOT_FOUND", messageKa: "შაბლონი ვერ მოიძებნა." } });
-    const last = await prisma.lesson.findFirst({ where: { studentId: body.studentId }, orderBy: { number: "desc" } });
-    const lesson = await prisma.lesson.create({
-      data: {
-        studentId: body.studentId,
-        number: (last?.number ?? 0) + 1,
-        title: template.title,
-        date: new Date(body.date),
-        noteFromNina: template.note,
-        topics: { create: template.topicIds.map((topicId) => ({ topicId })) },
-      },
-    });
-    const items = Array.isArray(template.items) ? template.items : [];
-    const rows = items.flatMap((item, order) => {
-      const row = item as { materialId?: string; kind?: string; groupLabel?: string | null; readyForStudent?: boolean };
-      if (!row.materialId) return [];
-      return [{
-        studentId: body.studentId!,
-        materialId: row.materialId,
-        lessonId: lesson.id,
-        kind: (row.kind && kinds.has(row.kind) ? row.kind : "LESSON_MATERIAL") as "LESSON_MATERIAL",
-        groupLabel: row.groupLabel ?? null,
-        readyForStudent: row.readyForStudent !== false,
-        order,
-      }];
-    });
-    if (rows.length) await prisma.assignment.createMany({ data: rows });
-    return { id: lesson.id };
+    return { id: plan.id };
   });
 }

@@ -2,18 +2,20 @@
 
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { withLesson } from "@/lib/materials";
 
-export function RememberOpen({ materialId }: { materialId: string }) {
+export function RememberOpen({ materialId, lessonId }: { materialId: string; lessonId: string | null }) {
   const router = useRouter();
   const sent = useRef<string | null>(null);
 
   useEffect(() => {
-    if (sent.current === materialId) return;
-    sent.current = materialId;
-    void fetch(`/v1/me/progress/${materialId}/open`, { method: "POST", credentials: "include" }).then((response) => {
+    const key = `${lessonId}:${materialId}`;
+    if (sent.current === key) return;
+    sent.current = key;
+    void fetch(withLesson(`/v1/me/progress/${materialId}/open`, lessonId), { method: "POST", credentials: "include" }).then((response) => {
       if (response.ok) router.refresh();
     });
-  }, [materialId, router]);
+  }, [materialId, lessonId, router]);
 
   return null;
 }

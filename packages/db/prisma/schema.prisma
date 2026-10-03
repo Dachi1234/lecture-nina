@@ -14,16 +14,16 @@ enum Role {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
+  id            String          @id @default(cuid())
+  email         String          @unique
   name          String
   nameLatin     String?
-  emailVerified Boolean   @default(false)
+  emailVerified Boolean         @default(false)
   image         String?
-  role          Role      @default(STUDENT)
-  isActive      Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  role          Role            @default(STUDENT)
+  isActive      Boolean         @default(true)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
   sessions      Session[]
   accounts      Account[]
   invites       Invite[]
@@ -114,33 +114,30 @@ enum LeadStatus {
 }
 
 model StudentProfile {
-  id               String          @id @default(cuid())
-  userId           String          @unique
-  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id               String            @id @default(cuid())
+  userId           String            @unique
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   phone            String?
   preferredChannel ContactChannel?
   goal             Goal?
   goalNote         String?
-  courseId         String?
-  course           Course?         @relation(fields: [courseId], references: [id])
-  nextLessonAt     DateTime?
-  giftLessonsLeft  Int             @default(2)
-  greetingForm     String          @default("feminine")
-  leadId           String?         @unique
-  lead             Lead?           @relation(fields: [leadId], references: [id])
+  giftLessonsLeft  Int               @default(2)
+  greetingForm     String            @default("feminine")
+  leadId           String?           @unique
+  lead             Lead?             @relation(fields: [leadId], references: [id])
   onboardedAt      DateTime?
+  enrollments      Enrollment[]
+  memberships      GroupMember[]
   lessons          Lesson[]
-  assignments      Assignment[]
-  progress         MaterialProgress[]
+  progress         LessonProgress[]
   attempts         ExerciseAttempt[]
   notes            TeacherNote[]
   checklist        ChecklistItem[]
-  personalVocab    VocabularyEntry[] @relation("PersonalVocab")
-  personalMaterials Material[]      @relation("PersonalMaterial")
+  words            PersonalWord[]
 }
 
 model Lead {
-  id        String         @id @default(cuid())
+  id        String          @id @default(cuid())
   name      String
   phone     String
   email     String?
@@ -152,49 +149,122 @@ model Lead {
   consentAt DateTime
   source    String?
   utm       Json?
-  status    LeadStatus     @default(NEW)
+  status    LeadStatus      @default(NEW)
   adminNote String?
   student   StudentProfile?
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
 }
+
+// ---------- Curriculum: Course → Unit → LessonPlan → PlanItem ----------
 
 model Course {
-  id       String           @id @default(cuid())
-  slug     String           @unique
-  title    String
-  level    String?
-  order    Int              @default(0)
-  blocks   Block[]
-  students StudentProfile[]
+  id            String       @id @default(cuid())
+  slug          String       @unique
+  title         String
+  level         String?
+  descriptionKa String?
+  order         Int          @default(0)
+  isArchived    Boolean      @default(false)
+  units         Unit[]
+  enrollments   Enrollment[]
+  groups        Group[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
 }
 
-model Block {
-  id                   String  @id @default(cuid())
-  courseId             String
-  course               Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  order                Int
-  titleEs              String
-  titleKa              String
-  checkpointMaterialId String?
-  topics               Topic[]
+model Unit {
+  id        String       @id @default(cuid())
+  courseId  String
+  course    Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  order     Int
+  titleKa   String
+  titleEs   String?
+  summaryKa String?
+  plans     LessonPlan[]
 
-  @@unique([courseId, order])
+  @@index([courseId, order])
 }
 
-model Topic {
-  id          String             @id @default(cuid())
-  blockId     String
-  block       Block              @relation(fields: [blockId], references: [id], onDelete: Cascade)
-  number      Int
-  titleKa     String
-  titleEs     String?
-  internalRef String?
-  materials   MaterialTopic[]
-  lessons     LessonTopic[]
-  vocabulary  VocabularyEntry[]
+enum PlanSection {
+  WARMUP
+  CLASS
+  HOMEWORK
+  REVIEW
+}
 
-  @@unique([blockId, number])
+model LessonPlan {
+  id           String     @id @default(cuid())
+  unitId       String?
+  unit         Unit?      @relation(fields: [unitId], references: [id], onDelete: SetNull)
+  order        Int        @default(0)
+  titleKa      String
+  titleEs      String?
+  goalsKa      String[]
+  teacherNotes String?
+  estMinutes   Int?
+  items        PlanItem[]
+  lessons      Lesson[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([unitId, order])
+}
+
+model PlanItem {
+  id         String       @id @default(cuid())
+  planId     String
+  plan       LessonPlan   @relation(fields: [planId], references: [id], onDelete: Cascade)
+  materialId String
+  material   Material     @relation(fields: [materialId], references: [id])
+  section    PlanSection  @default(CLASS)
+  order      Int          @default(0)
+  noteKa     String?
+  overrides  LessonItem[]
+
+  @@unique([planId, materialId])
+}
+
+// ---------- Audience: enrollments and groups ----------
+
+enum EnrollmentStatus {
+  ACTIVE
+  PAUSED
+  COMPLETED
+}
+
+model Enrollment {
+  id        String           @id @default(cuid())
+  studentId String
+  student   StudentProfile   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  courseId  String
+  course    Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  status    EnrollmentStatus @default(ACTIVE)
+  startedAt DateTime         @default(now())
+
+  @@unique([studentId, courseId])
+}
+
+model Group {
+  id         String        @id @default(cuid())
+  name       String
+  courseId   String?
+  course     Course?       @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  noteKa     String?
+  isArchived Boolean       @default(false)
+  members    GroupMember[]
+  lessons    Lesson[]
+  createdAt  DateTime      @default(now())
+}
+
+model GroupMember {
+  groupId   String
+  group     Group          @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  studentId String
+  student   StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  joinedAt  DateTime       @default(now())
+
+  @@id([groupId, studentId])
 }
 
 enum MaterialType {
@@ -238,26 +308,17 @@ model Material {
   status               MaterialStatus     @default(DRAFT)
   origin               MaterialOrigin     @default(MANUAL)
   tags                 String[]
+  level                String?
   estMinutes           Int?
-  personalForId        String?
-  personalFor          StudentProfile?    @relation("PersonalMaterial", fields: [personalForId], references: [id])
+  legacySourceId       String?
   assets               MaterialAsset[]
-  topics               MaterialTopic[]
-  assignments          Assignment[]
-  progress             MaterialProgress[]
+  planItems            PlanItem[]
+  lessonItems          LessonItem[]
+  progress             LessonProgress[]
   revisions            MaterialRevision[]
   createdById          String?
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
-}
-
-model MaterialTopic {
-  materialId String
-  topicId    String
-  material   Material @relation(fields: [materialId], references: [id], onDelete: Cascade)
-  topic      Topic    @relation(fields: [topicId], references: [id], onDelete: Cascade)
-
-  @@id([materialId, topicId])
 }
 
 model MaterialRevision {
@@ -287,14 +348,14 @@ enum AssetStatus {
 }
 
 model MediaAsset {
-  id           String          @id @default(cuid())
+  id           String                @id @default(cuid())
   kind         AssetKind
   originalName String
   mime         String
   sizeBytes    BigInt
-  storageKey   String          @unique
+  storageKey   String                @unique
   checksum     String?
-  status       AssetStatus     @default(UPLOADING)
+  status       AssetStatus           @default(UPLOADING)
   width        Int?
   height       Int?
   durationSec  Float?
@@ -303,7 +364,8 @@ model MediaAsset {
   alt          String?
   tags         String[]
   usedBy       MaterialAsset[]
-  createdAt    DateTime        @default(now())
+  legacyUsedBy LegacyMaterialAsset[]
+  createdAt    DateTime              @default(now())
 }
 
 model MaterialAsset {
@@ -317,62 +379,52 @@ model MaterialAsset {
   @@id([materialId, assetId, role])
 }
 
-enum LessonStatusOverride {
-  AUTO
-  DONE
-}
+// ---------- Delivery: a Lesson is one dated session for one student or one group ----------
 
 model Lesson {
-  id              String               @id @default(cuid())
-  studentId       String
-  student         StudentProfile       @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  number          Int
-  title           String
-  date            DateTime
-  noteFromNina    String?
-  readyForStudent Boolean              @default(false)
-  statusOverride  LessonStatusOverride @default(AUTO)
-  isGift          Boolean              @default(false)
-  topics          LessonTopic[]
-  items           Assignment[]
-  createdAt       DateTime             @default(now())
-  updatedAt       DateTime             @updatedAt
+  id            String           @id @default(cuid())
+  planId        String?
+  plan          LessonPlan?      @relation(fields: [planId], references: [id], onDelete: SetNull)
+  studentId     String?
+  student       StudentProfile?  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  groupId       String?
+  group         Group?           @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  title         String?
+  date          DateTime
+  durationMin   Int?
+  noteKa        String?
+  privateNote   String?
+  homeworkDueAt DateTime?
+  publishedAt   DateTime?
+  heldAt        DateTime?
+  isGift        Boolean          @default(false)
+  items         LessonItem[]
+  progress      LessonProgress[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
 
-  @@unique([studentId, number])
+  @@index([studentId, date])
+  @@index([groupId, date])
 }
 
-model LessonTopic {
-  lessonId String
-  topicId  String
-  lesson   Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-  topic    Topic  @relation(fields: [topicId], references: [id])
+// Plan items show up in a lesson automatically. A LessonItem either tweaks one of them
+// (planItemId set: hide or hold it) or adds an extra item (materialId set).
+model LessonItem {
+  id         String      @id @default(cuid())
+  lessonId   String
+  lesson     Lesson      @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  planItemId String?
+  planItem   PlanItem?   @relation(fields: [planItemId], references: [id], onDelete: Cascade)
+  materialId String?
+  material   Material?   @relation(fields: [materialId], references: [id])
+  section    PlanSection @default(CLASS)
+  order      Int         @default(0)
+  noteKa     String?
+  hidden     Boolean     @default(false)
+  held       Boolean     @default(false)
 
-  @@id([lessonId, topicId])
-}
-
-enum AssignmentKind {
-  LESSON_MATERIAL
-  HOMEWORK
-  PERSONAL
-  REVIEW
-}
-
-model Assignment {
-  id              String         @id @default(cuid())
-  studentId       String
-  student         StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  materialId      String
-  material        Material       @relation(fields: [materialId], references: [id])
-  lessonId        String?
-  lesson          Lesson?        @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-  kind            AssignmentKind @default(LESSON_MATERIAL)
-  groupLabel      String?
-  order           Int            @default(0)
-  dueAt           DateTime?
-  readyForStudent Boolean        @default(false)
-  assignedAt      DateTime       @default(now())
-
-  @@index([studentId, readyForStudent])
+  @@unique([lessonId, planItemId])
+  @@unique([lessonId, materialId])
 }
 
 enum ProgressStatus {
@@ -381,8 +433,9 @@ enum ProgressStatus {
   COMPLETED
 }
 
-model MaterialProgress {
+model LessonProgress {
   studentId   String
+  lessonId    String
   materialId  String
   status      ProgressStatus @default(NOT_STARTED)
   openedAt    DateTime?
@@ -390,9 +443,11 @@ model MaterialProgress {
   lastStep    Int?
   bestScore   Float?
   student     StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  lesson      Lesson         @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   material    Material       @relation(fields: [materialId], references: [id], onDelete: Cascade)
 
-  @@id([studentId, materialId])
+  @@id([studentId, lessonId, materialId])
+  @@index([studentId, materialId])
 }
 
 model ExerciseAttempt {
@@ -400,6 +455,7 @@ model ExerciseAttempt {
   studentId         String
   student           StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
   materialId        String
+  lessonId          String?
   contentRevisionId String?
   answers           Json
   score             Float?
@@ -429,27 +485,57 @@ model ChecklistItem {
   order     Int            @default(0)
 }
 
-model VocabularyEntry {
-  id            String          @id @default(cuid())
+model PersonalWord {
+  id        String         @id @default(cuid())
+  studentId String
+  student   StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  es        String
+  ka        String
+  en        String?
+  noteKa    String?
+  createdAt DateTime       @default(now())
+}
+
+// ---------- Legacy library: read-only reference of the first content set ----------
+
+model LegacyMaterial {
+  id          String                @id
+  type        MaterialType
+  title       String
+  subtitle    String?
+  description String?
+  content     Json
+  status      MaterialStatus
+  tags        String[]
+  estMinutes  Int?
+  unitLabel   String?
+  topicLabel  String?
+  topicOrder  Int?
+  assets      LegacyMaterialAsset[]
+  createdAt   DateTime
+  migratedAt  DateTime              @default(now())
+}
+
+model LegacyMaterialAsset {
+  legacyMaterialId String
+  assetId          String
+  role             String
+  order            Int            @default(0)
+  material         LegacyMaterial @relation(fields: [legacyMaterialId], references: [id], onDelete: Cascade)
+  asset            MediaAsset     @relation(fields: [assetId], references: [id])
+
+  @@id([legacyMaterialId, assetId, role])
+}
+
+model LegacyWord {
+  id            String  @id
   es            String
   ka            String
   en            String?
   pronunciation String?
-  audioAssetId  String?
-  topicId       String?
-  topic         Topic?          @relation(fields: [topicId], references: [id])
   category      String?
-  personalForId String?
-  personalFor   StudentProfile? @relation("PersonalVocab", fields: [personalForId], references: [id])
-  personalLabel String?
-}
-
-model LessonTemplate {
-  id       String   @id @default(cuid())
-  title    String
-  topicIds String[]
-  items    Json
-  note     String?
+  topicLabel    String?
+  topicOrder    Int?
 }
 
 model SiteSetting {

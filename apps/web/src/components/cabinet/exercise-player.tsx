@@ -6,6 +6,7 @@ import type { ExerciseContent } from "@nina/contracts";
 import { gradeExercise, gradeStep, templateRegistry } from "@nina/exercise-engine";
 import { Button } from "@nina/ui";
 import type { MaterialPayload } from "./viewers";
+import { withLesson } from "@/lib/materials";
 
 type Answer = Record<string, unknown> | null;
 
@@ -33,7 +34,7 @@ export function ExercisePlayer({ material, content }: { material: MaterialPayloa
 
   async function savePosition(step: number) {
     if (material.preview) return;
-    await fetch(`/v1/me/exercises/${material.id}/position`, {
+    await fetch(withLesson(`/v1/me/exercises/${material.id}/position`, material.lessonId), {
       method: "PATCH",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
@@ -49,7 +50,7 @@ export function ExercisePlayer({ material, content }: { material: MaterialPayloa
     }
     setBusy(true);
     setError("");
-    const response = await fetch(`/v1/me/exercises/${material.id}/attempts`, {
+    const response = await fetch(withLesson(`/v1/me/exercises/${material.id}/attempts`, material.lessonId), {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },

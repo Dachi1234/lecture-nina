@@ -2,151 +2,132 @@ import { describe, expect, it } from "vitest";
 import { leadInputSchema } from "@nina/contracts";
 import {
   assertStudentSafe,
-  blockProgress,
   checkpointPassed,
-  continueLearning,
-  coveredTopicNumbers,
+  effectiveItems,
   lessonCounter,
   lessonStatus,
-  toStudentTopic,
-  vocabularyVisible,
-  type LessonSnapshot,
-  type ProgressItem,
+  numberLessons,
+  studentItems,
+  syllabusProgress,
+  type OverrideRow,
+  type PlanItemRow,
 } from "./progress.js";
 
-function item(partial: Partial<ProgressItem> & Pick<ProgressItem, "id" | "status">): ProgressItem {
-  return {
-    kind: "LESSON_MATERIAL",
-    readyForStudent: true,
-    order: 0,
-    title: partial.id,
-    ...partial,
-  };
+const plan: PlanItemRow[] = [
+  { id: "p1", materialId: "vocab", section: "CLASS", order: 1, noteKa: null },
+  { id: "p0", materialId: "warm", section: "WARMUP", order: 0, noteKa: null },
+  { id: "p2", materialId: "hw", section: "HOMEWORK", order: 0, noteKa: "plan note" },
+];
+
+function override(partial: Partial<OverrideRow> & Pick<OverrideRow, "id">): OverrideRow {
+  return { planItemId: null, materialId: null, section: "CLASS", order: 0, noteKa: null, hidden: false, held: false, ...partial };
 }
 
-function lesson(partial: Partial<LessonSnapshot> & Pick<LessonSnapshot, "id">): LessonSnapshot {
-  return {
-    number: 1,
-    date: "2026-09-26T00:00:00.000Z",
-    readyForStudent: true,
-    statusOverride: "AUTO",
-    topicNumbers: [],
-    items: [],
-    ...partial,
-  };
-}
+describe("effective lesson items", () => {
+  it("follows the plan live and orders by section", () => {
+    expect(effectiveItems(plan, []).map((item) => item.materialId)).toEqual(["warm", "vocab", "hw"]);
+  });
+
+  it("applies hides, holds and extras without touching the plan", () => {
+    const items = effectiveItems(plan, [
+      override({ id: "o1", planItemId: "p0", hidden: true }),
+      override({ id: "o2", planItemId: "p2", held: true, noteKa: "after class" }),
+      override({ id: "o3", materialId: "extra", section: "CLASS", order: 5 }),
+    ]);
+    expect(items.map((item) => item.materialId)).toEqual(["warm", "vocab", "extra", "hw"]);
+    expect(items.find((item) => item.materialId === "hw")?.noteKa).toBe("after class");
+    expect(studentItems(items).map((item) => item.materialId)).toEqual(["vocab", "extra"]);
+  });
+
+  it("ignores an extra that duplicates a plan item", () => {
+    expect(effectiveItems(plan, [override({ id: "o", materialId: "vocab" })])).toHaveLength(3);
+  });
+});
 
 describe("lesson status", () => {
-  it("is new when nothing is opened", () => {
-    expect(lessonStatus(lesson({ id: "l", items: [item({ id: "a", status: "NOT_STARTED" })] }))).toBe("NEW");
+  it("is new until something is opened", () => {
+    expect(lessonStatus([{ section: "CLASS", status: "NOT_STARTED" }])).toBe("NEW");
   });
 
-  it("is in progress after an item is opened", () => {
+  it("is done when class work is complete even if homework is open", () => {
     expect(
-      lessonStatus(
-        lesson({
-          id: "l",
-          items: [item({ id: "a", status: "OPENED" }), item({ id: "b", status: "NOT_STARTED", order: 1 })],
-        }),
-      ),
-    ).toBe("IN_PROGRESS");
-  });
-
-  it("is done when every non-homework item is completed", () => {
-    expect(
-      lessonStatus(
-        lesson({
-          id: "l",
-          items: [
-            item({ id: "a", status: "COMPLETED" }),
-            item({ id: "h", status: "OPENED", kind: "HOMEWORK", order: 1 }),
-          ],
-        }),
-      ),
+      lessonStatus([
+        { section: "CLASS", status: "COMPLETED" },
+        { section: "HOMEWORK", status: "NOT_STARTED" },
+      ]),
     ).toBe("DONE");
   });
 
-  it("honors a manual done override", () => {
-    expect(lessonStatus(lesson({ id: "l", statusOverride: "DONE", items: [item({ id: "a", status: "NOT_STARTED" })] }))).toBe(
-      "DONE",
-    );
+  it("counts homework-only lessons by their homework", () => {
+    expect(lessonStatus([{ section: "HOMEWORK", status: "OPENED" }])).toBe("IN_PROGRESS");
   });
 
-  it("ignores items that are not ready", () => {
-    expect(
-      lessonStatus(
-        lesson({
-          id: "l",
-          items: [item({ id: "hidden", status: "OPENED", readyForStudent: false })],
-        }),
-      ),
-    ).toBe("NEW");
+  it("is done for an empty lesson that took place", () => {
+    expect(lessonStatus([], true)).toBe("DONE");
+    expect(lessonCounter([{ section: "CLASS", status: "COMPLETED" }, { section: "REVIEW", status: "OPENED" }])).toEqual({ completed: 1, total: 2 });
   });
 });
 
-describe("counters and curriculum filters", () => {
-  it("counts homework in the lesson counter", () => {
-    expect(
-      lessonCounter([
-        item({ id: "a", status: "COMPLETED" }),
-        item({ id: "h", status: "NOT_STARTED", kind: "HOMEWORK", order: 1 }),
-      ]),
-    ).toEqual({ completed: 1, total: 2 });
-  });
-
-  it("uses only ready lessons for covered topics", () => {
-    const lessons = [
-      lesson({ id: "a", topicNumbers: [1, 14] }),
-      lesson({ id: "b", readyForStudent: false, topicNumbers: [30] }),
-    ];
-    expect(coveredTopicNumbers(lessons)).toEqual([1, 14]);
-  });
-
-  it("filters vocabulary up to a covered topic and keeps personal words", () => {
-    const entries = [
-      { es: "hola", topicNumber: 1, personal: false },
-      { es: "metro", topicNumber: 20, personal: false },
-      { es: "Valencia", topicNumber: null, personal: true },
-    ];
-    expect(vocabularyVisible(entries, 16, [1, 14, 16]).map((entry) => entry.es)).toEqual(["hola", "Valencia"]);
-  });
-
-  it("computes block progress and checkpoint pass", () => {
-    expect(blockProgress([1, 2, 3, 4], [1, 2, 3])).toEqual({ done: 3, total: 4 });
-    expect(checkpointPassed(0.95)).toBe(true);
-    expect(checkpointPassed(0.5)).toBe(false);
-  });
-
-  it("continues the newest in-progress lesson at the first unfinished item", () => {
-    const older = lesson({
-      id: "old",
-      date: "2026-09-01T00:00:00.000Z",
-      items: [item({ id: "old-item", status: "OPENED" })],
-    });
-    const current = lesson({
-      id: "now",
-      date: "2026-09-26T00:00:00.000Z",
-      items: [
-        item({ id: "done", status: "COMPLETED" }),
-        item({ id: "next", status: "OPENED", order: 1 }),
+describe("syllabus progress", () => {
+  const units = [
+    { id: "u2", order: 2, titleKa: "კაფეში", titleEs: null, plans: [{ id: "c", order: 1, titleKa: "c", titleEs: null }] },
+    {
+      id: "u1",
+      order: 1,
+      titleKa: "მისალმება",
+      titleEs: null,
+      plans: [
+        { id: "a", order: 1, titleKa: "a", titleEs: null },
+        { id: "b", order: 2, titleKa: "b", titleEs: null },
       ],
-    });
-    expect(continueLearning([older, current])?.nextItem?.id).toBe("next");
+    },
+  ];
+  const now = new Date("2026-10-03T12:00:00Z");
+
+  it("marks past published lessons done and finds the next plan", () => {
+    const result = syllabusProgress(
+      units,
+      [
+        { id: "l1", planId: "a", date: new Date("2026-10-01"), publishedAt: new Date("2026-10-01"), heldAt: null },
+        { id: "l2", planId: "b", date: new Date("2026-10-08"), publishedAt: null, heldAt: null },
+      ],
+      now,
+    );
+    expect(result.units.map((unit) => unit.state)).toEqual(["current", "upcoming"]);
+    expect(result.units[0]?.plans.map((p) => p.state)).toEqual(["done", "scheduled"]);
+    expect(result.nextPlan?.id).toBe("c");
+    expect(result.done).toBe(1);
+  });
+
+  it("completes a unit when every plan was held", () => {
+    const result = syllabusProgress(
+      units,
+      ["a", "b"].map((planId) => ({ id: planId, planId, date: new Date("2026-11-01"), publishedAt: null, heldAt: new Date("2026-10-02") })),
+      now,
+    );
+    expect(result.units.map((unit) => unit.state)).toEqual(["done", "current"]);
   });
 });
 
-describe("student safety", () => {
-  it("drops the textbook mapping before a topic reaches a student", () => {
-    const safe = toStudentTopic({
-      id: "t",
-      number: 14,
-      titleKa: "საკვები და სასმელი",
-      titleEs: "comida",
-      internalRef: "Nuevo Sueña 4",
-    });
-    expect(safe).not.toHaveProperty("internalRef");
-    expect(() => assertStudentSafe(safe)).not.toThrow();
-    expect(() => assertStudentSafe({ internalRef: "unit 4" })).toThrow(/leaked/);
+describe("helpers", () => {
+  it("numbers lessons by date", () => {
+    const numbers = numberLessons([
+      { id: "late", date: new Date("2026-10-10") },
+      { id: "early", date: new Date("2026-10-01") },
+    ]);
+    expect(numbers.get("early")).toBe(1);
+    expect(numbers.get("late")).toBe(2);
+  });
+
+  it("passes a checkpoint at the threshold", () => {
+    expect(checkpointPassed(0.7)).toBe(true);
+    expect(checkpointPassed(null)).toBe(false);
+  });
+
+  it("blocks internal fields from student payloads", () => {
+    expect(() => assertStudentSafe({ titleKa: "მისალმება" })).not.toThrow();
+    expect(() => assertStudentSafe({ teacherNotes: "x" })).toThrow(/leaked/);
+    expect(() => assertStudentSafe({ privateNote: "x" })).toThrow(/leaked/);
   });
 });
 

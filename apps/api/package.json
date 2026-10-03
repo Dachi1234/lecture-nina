@@ -10,7 +10,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint .",
     "test": "vitest run",
-    "seed:content": "tsx scripts/seed-content/run.ts"
+    "seed:demo": "tsx scripts/seed-demo.ts"
   },
   "dependencies": {
     "@fastify/cors": "^11.3.0",
