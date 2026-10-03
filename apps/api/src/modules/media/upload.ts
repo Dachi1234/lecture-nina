@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { Readable, Transform } from "node:stream";
+import { Readable } from "node:stream";
 import { prisma } from "../../db.js";
 import { enqueueMediaProcess } from "../../jobs/boss.js";
 import { getStorage } from "../../storage/index.js";
@@ -44,6 +44,7 @@ export async function splitHead(stream: AsyncIterable<Buffer | Uint8Array | stri
 }
 
 export async function saveUpload(fileName: string, stream: Readable) {
+  stream.on("error", () => undefined);
   const { head, rest } = await splitHead(stream, 4100);
   const mime = sniffMime(head);
   const classified = mime ? classifyMime(mime) : null;
@@ -91,16 +92,21 @@ export async function saveUpload(fileName: string, stream: Readable) {
   }
 }
 
-function limitStream(stream: Readable, maxBytes: number) {
-  let size = 0;
-  return stream.pipe(
-    new Transform({
-      transform(chunk, _encoding, callback) {
-        const buf = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
-        size += buf.length;
-        if (size > maxBytes) callback(new UploadError("FILE_TOO_LARGE", "ფაილი ძალიან დიდია.", 413));
-        else callback(null, buf);
-      },
-    }),
+function limitStream(stream: AsyncIterable<Buffer | Uint8Array | string>, maxBytes: number) {
+  return Readable.from(
+    (async function* () {
+      let size = 0;
+      try {
+        for await (const chunk of stream) {
+          const buf = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
+          size += buf.length;
+          if (size > maxBytes) throw new UploadError("FILE_TOO_LARGE", "ფაილი ძალიან დიდია.", 413);
+          yield buf;
+        }
+      } catch (error) {
+        if (error instanceof UploadError) throw error;
+        throw new UploadError("UPLOAD_INTERRUPTED", "ატვირთვა შეწყდა. სცადე თავიდან.", 400);
+      }
+    })(),
   );
 }
